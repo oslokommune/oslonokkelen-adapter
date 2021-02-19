@@ -14,6 +14,7 @@ repositories {
 
 tasks {
     "asciidoctor"(AsciidoctorTask::class) {
+        setOutputDir(file("../site"))
         outputOptions {
             if (project.hasProperty("pdf")) {
                 backends("pdf")
