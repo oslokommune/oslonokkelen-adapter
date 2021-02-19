@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"><svg xmlns:inkspace='http://www.inkscape.org/namespaces/inkscape' preserveAspectRatio='xMidYMid meet' viewBox='0 0 694 452' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg'>
+  <defs id='defs_block'>
+    <filter inkspace:collect='always' height='1.504' id='filter_blur' width='1.1575' x='-0.07875' y='-0.252'>
+      <feGaussianBlur inkspace:collect='always' id='feGaussianBlur3780' stdDeviation='4.2'/>
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>seqdiag {
+  backend; config-db; third-party-adapter;
+
+  backend =&gt; third-party-adapter [ label = "GET .../manifest", return = "Manifest", note = "This will be repeated\nevery n minutes" ] {
+    backend =&gt; config-db [ label = "Manifest update" ]
+  }
+
+}</desc>
+  <rect fill='rgb(0,0,0)' height='290' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='127' y='140'/>
+  <rect fill='rgb(0,0,0)' height='65' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='319' y='209'/>
+  <rect fill='rgb(0,0,0)' height='229' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='511' y='140'/>
+  <polygon fill='rgb(0,0,0)' points='531,126 673,126 681,134 681,154 531,154 531,126' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='67' y='46'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='259' y='46'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='451' y='46'/>
+  <path d='M 128 80 L 128 440' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='290' stroke='rgb(0,0,0)' width='8' x='124' y='134'/>
+  <path d='M 320 80 L 320 440' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='65' stroke='rgb(0,0,0)' width='8' x='316' y='203'/>
+  <path d='M 512 80 L 512 440' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='229' stroke='rgb(0,0,0)' width='8' x='508' y='134'/>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='64' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='42' x='128.0' y='66'>backend</text>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='256' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='54' x='320.0' y='66'>config-db</text>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='448' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='114' x='512.0' y='66'>third-party-adapter</text>
+  <path d='M 136 134 L 504 134' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='496,130 504,134 496,138' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(255,182,193)' points='528,120 670,120 678,128 678,148 528,148 528,120' stroke='rgb(0,0,0)'/>
+  <path d='M 670 120 L 670 128' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 670 128 L 678 128' fill='none' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='126' x='599.0' y='133'>This will be repeated</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='90' x='581.0' y='146'>every n minutes</text>
+  <path d='M 136 203 L 312 203' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='304,199 312,203 304,207' stroke='rgb(0,0,0)'/>
+  <path d='M 136 268 L 312 268' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='144,264 136,268 144,272' stroke='rgb(0,0,0)'/>
+  <path d='M 136 363 L 504 363' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='144,359 136,363 144,367' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='96' x='188.0' y='132'>GET .../manifest</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='90' x='185.0' y='201'>Manifest update</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='48' x='480.0' y='361'>Manifest</text>
+</svg>

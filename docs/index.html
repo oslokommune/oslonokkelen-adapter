@@ -436,16 +436,184 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Oslonøkkelen adapter</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_target_audience">Target audience</a>
+<ul class="sectlevel2">
+<li><a href="#_overview">Overview</a></li>
+<li><a href="#_manifests">Manifests</a>
+<ul class="sectlevel3">
+<li><a href="#_example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_protocol">Protocol</a>
+<ul class="sectlevel2">
+<li><a href="#_polling_manifests">Polling manifests</a></li>
+<li><a href="#_executing_a_request">Executing a request</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
-
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
+we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
+Oslonøkkelen and existing systems without modifications to either system.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_target_audience">Target audience</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The target audience for this document is developers who want to add support for new such systems using our adapter api.
+Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
+examples of what this api has been used for so far:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Opening doors controlled by system x, y or z</p>
+</li>
+<li>
+<p>Authenticating Deichman library users</p>
+</li>
+<li>
+<p>Dropping beer from cotton clouds</p>
+</li>
+<li>
+<p>Lowering gingerbread castle drawbridge</p>
+</li>
+<li>
+<p>Fetching QR / bar codes</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_overview">Overview</h3>
+<div class="paragraph">
+<p>This is a high level view. The goal is to allow others to publish locks / doors in Oslonøkkelen using a generic api.
+Oslonøkkelen will periodically poll your adapter for what we call a manifest. The manifest is a description of what
+your adapter can do. The manifest will contain a list of <em>things</em> and <em>actions</em> that can be performed on those things.
+This is described in more detail further down. These actions can be mapped to operations available to users of
+Oslonøkkelen and when a user decides to trigger one of these operations our backend will send a request to your adapter
+that in turn will talk to your system to perform it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="224">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manifests">Manifests</h3>
+<div class="paragraph">
+<p>The manifest is loosely inspired by Mozillas <a href="https://www.w3.org/TR/wot-thing-description/">WoT RFC</a>, although the RFC has evolved a bit since.
+The important thing is that each adapter can expose a number of actions and those actions can be mapped to operations users of Oslonøkkelen can execute from the app.</p>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="literalblock">
+<div class="content">
+<pre>things:
+  - id: front-door
+    description: The front door
+    actions:
+      - id: open
+        description: Opens the front door (door pump)
+      - id: unlock
+        description: Unlocks the bolt
+        requiredParameters:
+          - fodselsnummer
+  - id: outdoor-lights
+    description: 5 outdoor lamps
+    actions:
+      - id: turn-off
+      - id: dim-30-percent
+      - id: dim-50-percent</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This manifest tells Oslonøkkelen what the adapter can do. An administrator in Oslonøkkelen can map these actions to operations in the
+app. We support chaining multiple actions to allow one action to work as authorization for another and to support scenarios
+like unlocking a door and turning on the lights with a single operation in Oslonøkkelen.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication">Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The mechanism we use for authentication is similar to the one used in openid connect.</p>
+</div>
+<div class="paragraph">
+<p>All requests from Oslonøkkelen to your adapter will be signed <a href="https://auth0.com/docs/tokens/json-web-tokens">JWTs</a> and
+your adapter is responsible for downloading (and cache) the public keys from Oslonøkkelen and verify the signature of
+these tokens. Each request contains the id of the key used for signing (KID) and this id can be used to cache public keys
+to avoid looking up the same key multiple times.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_protocol">Protocol</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_polling_manifests">Polling manifests</h3>
+<div class="paragraph">
+<p>After the new adapter has been registered in our configuration, backend will start polling its manifest every n minutes.
+This also doubles as monitoring / alerting in case a third party system starts misbehaving or goes offline.
+It is important that the third party system has a proper TLS certificate and that we verify it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="adapter-manifest-poll.svg" alt="adapter manifest poll" width="694" height="452">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_executing_a_request">Executing a request</h3>
+<div class="paragraph">
+<p>This is the fun part!
+The user has pressed a button in the app and expects a door to open.
+When the user hits the big open button the app will make a request to backend that runs authorization, figures out what adapters are involved with the request and forwards the request to the endpoint registered in the process described above.</p>
+</div>
+<div class="paragraph">
+<p>All this is might be easier to visualize with a sequence diagram:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="adapter-execute.svg" alt="adapter execute" width="964" height="961">
+</div>
+</div>
+<div class="paragraph">
+<p>The important part here is that the adapter is responsible for downloading the correct key (the signed token contains a key id)
+from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
+Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.</p>
+</div>
+<div class="paragraph">
+<p>It is also really important that all the information is a part of the signed token. Example: If the door id is passed as
+a query parameter it would be theoretically possible to intercept a valid request, alter the query parameter and use the
+valid request to open a different door. Doing this is a lot harder if the door id is part of the signed token.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-02-19 10:25:26 +0100
+Last updated 2021-02-19 11:16:40 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

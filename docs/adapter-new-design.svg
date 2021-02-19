@@ -1,0 +1,159 @@
+<svg height='224' preserveAspectRatio='xMidYMid meet' viewBox='0 0 848 224' width='848' xmlns='http://www.w3.org/2000/svg'>
+    <style>line, path, circle,rect,polygon {
+                          stroke: black;
+                          stroke-width: 2;
+                          stroke-opacity: 1;
+                          fill-opacity: 1;
+                          stroke-linecap: round;
+                          stroke-linejoin: miter;
+                        }
+
+                    text {
+                        fill: black;
+                        }
+                        rect.backdrop{
+                            stroke: none;
+                            fill: white;
+                        }
+                        .broken{
+                            stroke-dasharray: 8;
+                        }
+                        .filled{
+                            fill: black;
+                        }
+                        .bg_filled{
+                            fill: white;
+                        }
+                        .nofill{
+                            fill: white;
+                        }
+
+                        text {
+                         font-family: monospace;
+                         font-size: 14px;
+                        }
+
+                        .end_marked_arrow{
+                            marker-end: url(#arrow);
+                         }
+                        .start_marked_arrow{
+                            marker-start: url(#arrow);
+                         }
+
+                        .end_marked_diamond{
+                            marker-end: url(#diamond);
+                         }
+                        .start_marked_diamond{
+                            marker-start: url(#diamond);
+                         }
+
+                        .end_marked_circle{
+                            marker-end: url(#circle);
+                         }
+                        .start_marked_circle{
+                            marker-start: url(#circle);
+                         }
+
+                        .end_marked_open_circle{
+                            marker-end: url(#open_circle);
+                         }
+                        .start_marked_open_circle{
+                            marker-start: url(#open_circle);
+                         }
+
+                        .end_marked_big_open_circle{
+                            marker-end: url(#big_open_circle);
+                         }
+                        .start_marked_big_open_circle{
+                            marker-start: url(#big_open_circle);
+                         }
+
+                         
+                        </style>
+    <defs>
+        <marker id='arrow' markerHeight='7' markerWidth='7' orient='auto-start-reverse' refX='4' refY='2' viewBox='-2 -2 8 8'>
+            <polygon points='0,0 0,4 4,2 0,0'/>
+        </marker>
+        <marker id='diamond' markerHeight='7' markerWidth='7' orient='auto-start-reverse' refX='4' refY='2' viewBox='-2 -2 8 8'>
+            <polygon points='0,2 2,0 4,2 2,4 0,2'/>
+        </marker>
+        <marker id='circle' markerHeight='7' markerWidth='7' orient='auto-start-reverse' refX='4' refY='4' viewBox='0 0 8 8'>
+            <circle class='filled' cx='4' cy='4' r='2'/>
+        </marker>
+        <marker id='open_circle' markerHeight='7' markerWidth='7' orient='auto-start-reverse' refX='4' refY='4' viewBox='0 0 8 8'>
+            <circle class='bg_filled' cx='4' cy='4' r='2'/>
+        </marker>
+        <marker id='big_open_circle' markerHeight='7' markerWidth='7' orient='auto-start-reverse' refX='4' refY='4' viewBox='0 0 8 8'>
+            <circle class='bg_filled' cx='4' cy='4' r='3'/>
+        </marker>
+    </defs>
+    <rect class='backdrop' height='224' width='848' x='0' y='0'/>
+    <rect class='broken nofill' height='176' rx='4' width='272' x='124' y='8'/>
+    <text x='322' y='44'>API</text>
+    <line class='solid' x1='328' x2='332' y1='48' y2='56'/>
+    <line class='solid end_marked_arrow' x1='332' x2='332' y1='56' y2='96'/>
+    <line class='solid end_marked_arrow' x1='128' x2='144' y1='120' y2='120'/>
+    <text x='162' y='124'>API</text>
+    <text x='330' y='124'>API</text>
+    <line class='solid end_marked_arrow' x1='384' x2='368' y1='120' y2='120'/>
+    <line class='solid' x1='384' x2='392' y1='120' y2='120'/>
+    <text x='258' y='44'>Adapter</text>
+    <rect class='solid nofill' height='32' rx='0' width='120' x='476' y='104'/>
+    <text x='490' y='124'>Your</text>
+    <text x='530' y='124'>adapter</text>
+    <line class='solid' x1='640' x2='636' y1='48' y2='56'/>
+    <line class='solid end_marked_arrow' x1='636' x2='636' y1='56' y2='112'/>
+    <text x='66' y='108'>https</text>
+    <text x='410' y='108'>https</text>
+    <text x='18' y='124'>App</text>
+    <line class='solid end_marked_arrow' x1='400' x2='472' y1='120' y2='120'/>
+    <line class='solid end_marked_arrow' x1='616' x2='600' y1='120' y2='120'/>
+    <line class='solid end_marked_arrow' x1='616' x2='672' y1='120' y2='120'/>
+    <text x='690' y='124'>API</text>
+    <text x='738' y='124'>Your</text>
+    <text x='778' y='124'>system</text>
+    <line class='solid end_marked_arrow' x1='540' x2='540' y1='168' y2='144'/>
+    <line class='solid' x1='540' x2='552' y1='168' y2='192'/>
+    <text x='42' y='44'>Internet</text>
+    <text x='410' y='44'>Internet</text>
+    <text x='650' y='44'>Any</text>
+    <text x='650' y='60'>you</text>
+    <text x='682' y='44'>protocol</text>
+    <text x='682' y='60'>need</text>
+    <text x='562' y='188'>Implemented</text>
+    <text x='658' y='188'>using</text>
+    <text x='706' y='188'>the</text>
+    <text x='562' y='204'>language</text>
+    <text x='634' y='204'>you</text>
+    <text x='666' y='204'>prefer</text>
+    <g>
+        <path class='nofill' d='M 8,104 A 4,4 0,0,0 4,108'/>
+        <line class='solid' x1='4' x2='4' y1='108' y2='132'/>
+        <line class='solid' x1='8' x2='48' y1='104' y2='104'/>
+        <path class='nofill' d='M 48,104 A 4,4 0,0,1 52,108'/>
+        <line class='solid' x1='52' x2='52' y1='108' y2='132'/>
+        <line class='solid' x1='52' x2='120' y1='120' y2='120'/>
+        <path class='nofill' d='M 4,132 A 4,4 0,0,0 8,136'/>
+        <line class='solid' x1='8' x2='48' y1='136' y2='136'/>
+        <path class='nofill' d='M 52,132 A 4,4 0,0,1 48,136'/>
+    </g>
+    <g>
+        <line class='solid' x1='148' x2='364' y1='104' y2='104'/>
+        <line class='solid' x1='148' x2='148' y1='104' y2='136'/>
+        <line class='solid' x1='196' x2='196' y1='104' y2='136'/>
+        <line class='solid' x1='316' x2='316' y1='104' y2='136'/>
+        <line class='solid' x1='364' x2='364' y1='104' y2='136'/>
+        <line class='solid' x1='148' x2='364' y1='136' y2='136'/>
+    </g>
+    <g>
+        <line class='solid' x1='676' x2='836' y1='104' y2='104'/>
+        <line class='solid' x1='676' x2='676' y1='104' y2='136'/>
+        <line class='solid' x1='724' x2='724' y1='104' y2='136'/>
+        <line class='solid' x1='836' x2='836' y1='104' y2='136'/>
+        <line class='solid' x1='676' x2='836' y1='136' y2='136'/>
+    </g>
+    <g>
+        <text x='210' y='124'>Oslonø</text>
+        <text x='258' y='124'>kkelen</text>
+    </g>
+</svg>

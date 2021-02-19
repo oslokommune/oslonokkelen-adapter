@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"><svg xmlns:inkspace='http://www.inkscape.org/namespaces/inkscape' preserveAspectRatio='xMidYMid meet' viewBox='0 0 964 961' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg'>
+  <defs id='defs_block'>
+    <filter inkspace:collect='always' height='1.504' id='filter_blur' width='1.1575' x='-0.07875' y='-0.252'>
+      <feGaussianBlur inkspace:collect='always' id='feGaussianBlur3780' stdDeviation='4.2'/>
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>seqdiag {
+  app; backend; auth; third-party-adapter;
+
+  app =&gt; backend [ label = "Open door A", return = "OK", note = "Device is signed\nwith device key" ] {
+    backend =&gt; auth [ label = "Verify device key", return = "OK" ]
+    backend =&gt; third-party-adapter [ label = "execute: action-door-a", return = "ack", note = "Request is signed\nwith kid=backend-key-123" ] {
+      third-party-adapter =&gt; backend [ label = "Fetch key: backend-key-123", return = "JWK\n(json web key)", note = "Will only have to fetch key\nif not already in cache.\nThis is to verify that the request\nactually is sent by Oslonøkkelen." ]
+      third-party-adapter -&gt; third-party-adapter [ label = "Verify signature" ]
+      third-party-adapter -&gt; third-party-adapter [ label = "Open door" ]
+    }
+  }
+
+}</desc>
+  <rect fill='rgb(0,0,0)' height='799' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='127' y='140'/>
+  <rect fill='rgb(0,0,0)' height='738' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='319' y='140'/>
+  <rect fill='rgb(0,0,0)' height='95' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='323' y='461'/>
+  <rect fill='rgb(0,0,0)' height='80' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='511' y='209'/>
+  <rect fill='rgb(0,0,0)' height='429' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='703' y='369'/>
+  <polygon fill='rgb(0,0,0)' points='339,126 451,126 459,134 459,154 339,154 339,126' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1'/>
+  <polygon fill='rgb(0,0,0)' points='723,355 883,355 891,363 891,383 723,383 723,355' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1'/>
+  <polygon fill='rgb(0,0,0)' points='723,434 943,434 951,442 951,488 723,488 723,434' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='67' y='46'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='259' y='46'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='451' y='46'/>
+  <rect fill='rgb(0,0,0)' height='40' stroke='rgb(0,0,0)' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='128' x='643' y='46'/>
+  <path d='M 128 80 L 128 949' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='799' stroke='rgb(0,0,0)' width='8' x='124' y='134'/>
+  <path d='M 320 80 L 320 949' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='738' stroke='rgb(0,0,0)' width='8' x='316' y='134'/>
+  <rect fill='moccasin' height='95' stroke='rgb(0,0,0)' width='8' x='320' y='455'/>
+  <path d='M 512 80 L 512 949' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='80' stroke='rgb(0,0,0)' width='8' x='508' y='203'/>
+  <path d='M 704 80 L 704 949' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='8 4'/>
+  <rect fill='moccasin' height='429' stroke='rgb(0,0,0)' width='8' x='700' y='363'/>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='64' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='18' x='128.0' y='66'>app</text>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='256' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='42' x='320.0' y='66'>backend</text>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='448' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='24' x='512.0' y='66'>auth</text>
+  <rect fill='rgb(255,255,255)' height='40' stroke='rgb(0,0,0)' width='128' x='640' y='40'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='114' x='704.0' y='66'>third-party-adapter</text>
+  <path d='M 136 134 L 312 134' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='304,130 312,134 304,138' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(255,182,193)' points='336,120 448,120 456,128 456,148 336,148 336,120' stroke='rgb(0,0,0)'/>
+  <path d='M 448 120 L 448 128' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 448 128 L 456 128' fill='none' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='96' x='392.0' y='133'>Device is signed</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='90' x='389.0' y='146'>with device key</text>
+  <path d='M 328 203 L 504 203' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='496,199 504,203 496,207' stroke='rgb(0,0,0)'/>
+  <path d='M 328 283 L 504 283' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='336,279 328,283 336,287' stroke='rgb(0,0,0)'/>
+  <path d='M 328 363 L 696 363' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='688,359 696,363 688,367' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(255,182,193)' points='720,349 880,349 888,357 888,377 720,377 720,349' stroke='rgb(0,0,0)'/>
+  <path d='M 880 349 L 880 357' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 880 357 L 888 357' fill='none' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='102' x='779.0' y='362'>Request is signed</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='144' x='800.0' y='375'>with kid=backend-key-123</text>
+  <path d='M 332 455 L 696 455' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='340,451 332,455 340,459' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(255,182,193)' points='720,428 940,428 948,436 948,482 720,482 720,428' stroke='rgb(0,0,0)'/>
+  <path d='M 940 428 L 940 436' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 940 436 L 948 436' fill='none' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='162' x='809.0' y='441'>Will only have to fetch key</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='144' x='800.0' y='454'>if not already in cache.</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='204' x='830.0' y='467'>This is to verify that the request</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='198' x='827.0' y='480'>actually is sent by Oslonøkkelen.</text>
+  <path d='M 328 550 L 696 550' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='688,546 696,550 688,554' stroke='rgb(0,0,0)'/>
+  <path d='M 712 630 L 792 630' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 792 630 L 792 646' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 792 646 L 712 646' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='720,642 712,646 720,650' stroke='rgb(0,0,0)'/>
+  <path d='M 712 711 L 792 711' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 792 711 L 792 727' fill='none' stroke='rgb(0,0,0)'/>
+  <path d='M 792 727 L 712 727' fill='none' stroke='rgb(0,0,0)'/>
+  <polygon fill='rgb(0,0,0)' points='720,723 712,727 720,731' stroke='rgb(0,0,0)'/>
+  <path d='M 328 792 L 696 792' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='336,788 328,792 336,796' stroke='rgb(0,0,0)'/>
+  <path d='M 136 872 L 312 872' fill='none' stroke='rgb(0,0,0)' stroke-dasharray='4'/>
+  <polygon fill='rgb(0,0,0)' points='144,868 136,872 144,876' stroke='rgb(0,0,0)'/>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='66' x='173.0' y='132'>Open door A</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='102' x='383.0' y='201'>Verify device key</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='12' x='498.0' y='281'>OK</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='132' x='398.0' y='361'>execute: action-door-a</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='156' x='618.0' y='453'>Fetch key: backend-key-123</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='18' x='341.0' y='535'>JWK</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='84' x='374.0' y='548'>(json web key)</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='96' x='760.0' y='622'>Verify signature</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='54' x='739.0' y='709'>Open door</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='18' x='687.0' y='790'>ack</text>
+  <text fill='rgb(0,0,0)' font-family='sans-serif' font-size='11' font-style='normal' font-weight='normal' text-anchor='middle' textLength='12' x='306.0' y='870'>OK</text>
+</svg>
