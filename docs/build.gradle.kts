@@ -1,9 +1,6 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
-import java.util.concurrent.TimeUnit.SECONDS
-import org.gradle.api.GradleException
-import java.io.File
 import java.io.InputStream
-import kotlin.text.Charsets.UTF_8
+import java.util.concurrent.TimeUnit.SECONDS
 
 plugins {
     id("org.asciidoctor.jvm.convert") version "3.3.1"
@@ -27,11 +24,13 @@ tasks {
         resources {
             include("images/**")
         }
-        attributes(mapOf(
+        attributes(
+            mapOf(
                 "toc" to "left",
                 "toclevels" to "3",
                 "source-highlighter" to "highlightjs"
-        ))
+            )
+        )
         setBaseDir(file("src/docs/asciidoc"))
 
         dependsOn("docs-verify-graphviz")
@@ -43,7 +42,7 @@ tasks {
 
 
 asciidoctorj {
-    modules.diagram.setVersion("1.5.16")
+    modules.diagram.setVersion("2.1.0")
     logLevel = LogLevel.INFO
 }
 
@@ -83,7 +82,7 @@ tasks.register<DefaultTask>("docs-verify-bob") {
         try {
             ProcessUtil.execute("svgbob", "--help")
         } catch (ignored: Exception) {
-            throw GradleException("Unable to find 'svgbob'. Please install it.\nThis is required for generating documentation diagrams.\n\n\u001B[91mcargo install --git https://github.com/ivanceras/svgbob\u001B[0m")
+            throw GradleException("Unable to find 'svgbob'. Please install it.\nThis is required for generating documentation diagrams.\n\n\u001B[91mcargo install --git https://github.com/ivanceras/svgbob --rev 2bf94a2eddff2215b5f43e21658502c98d945941\u001B[0m")
         }
     }
 }
@@ -129,15 +128,15 @@ object ProcessUtil {
     }
 
     private fun readStream(stream: InputStream): String {
-        return stream.reader(kotlin.text.Charsets.UTF_8).readText().trim()
+        return stream.reader(Charsets.UTF_8).readText().trim()
     }
 
 }
 
 data class ProcessOutput(
-    val out :String,
+    val out: String,
     val err: String
 )
 
-class ProcessException(command: String, exitCode: Int, details: String)
-    : GradleException("$command failed with exit code $exitCode\n-------------------------------\n$details")
+class ProcessException(command: String, exitCode: Int, details: String) :
+    GradleException("$command failed with exit code $exitCode\n-------------------------------\n$details")
