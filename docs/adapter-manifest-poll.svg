@@ -12,7 +12,6 @@
   backend =&gt; third-party-adapter [ label = "GET .../manifest", return = "Manifest", note = "This will be repeated\nevery n minutes" ] {
     backend =&gt; config-db [ label = "Manifest update" ]
   }
-
 }</desc>
   <rect fill='rgb(0,0,0)' height='290' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='127' y='140'/>
   <rect fill='rgb(0,0,0)' height='65' style='filter:url(#filter_blur);opacity:0.7;fill-opacity:1' width='8' x='319' y='209'/>

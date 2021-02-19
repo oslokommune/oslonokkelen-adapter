@@ -101,7 +101,6 @@ seqdiag {
   backend => third-party-adapter [ label = "GET .../manifest", return = "Manifest", note = "This will be repeated\nevery n minutes" ] {
     backend => config-db [ label = "Manifest update" ]
   }
-
 }
 ....
 
@@ -135,8 +134,13 @@ The important part here is that the adapter is responsible for downloading the c
 from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
 Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.
 
-It is also really important that all the information is a part of the signed token. Example: If the door id is passed as
-a query parameter it would be theoretically possible to intercept a valid request, alter the query parameter and use the
-valid request to open a different door. Doing this is a lot harder if the door id is part of the signed token.
 
+== Protobuf definition
 
+[%collapsible]
+====
+[source,protobuf]
+----
+include::../../../../adapter-protobuf-java/src/main/proto/adapter.proto[]
+----
+====
