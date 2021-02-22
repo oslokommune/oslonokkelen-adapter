@@ -40,8 +40,8 @@ examples of what this api has been used for so far:
 
 The list below is order by recommended reading order.
 
-* link:overview.adoc[Overview] - High level view of how an adapter works
-* link:protocol.adoc[Protocol] - How Oslonøkkelen and your adapter will communicate
-* link:authentication.adoc[Authentication] - How your adapter verifies request
-* link:protobuf.adoc[Protobuf] - Message definitions
-* link:implementation-checklist.adoc[Implementation checklist] - Things to keep in mind when implementing an adapter
+* xref:overview.adoc[Overview] - High level view of how an adapter works
+* xref:protocol.adoc[Protocol] - How Oslonøkkelen and your adapter will communicate
+* xref:authentication.adoc[Authentication] - How your adapter verifies request
+* xref:protobuf.adoc[Protobuf] - Message definitions
+* xref:implementation-checklist.adoc[Implementation checklist] - Things to keep in mind when implementing an adapter

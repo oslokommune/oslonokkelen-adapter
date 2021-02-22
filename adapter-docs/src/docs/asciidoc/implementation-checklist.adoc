@@ -6,7 +6,7 @@ from this list.
 == HTTP endpoints
 
 Your adapter must implement the following http endpoints. You can choose your own `<path>`, but it must be the same
-for all endpoints. Details can be found on the page describing the link:protocol.adoc[protocol] and link:protobuf.adoc[message format].
+for all endpoints. Details can be found on the page describing the xref:protocol.adoc[protocol] and link:protobuf.adoc[message format].
 
 * [ ] Expose endpoints on port 443 with a valid tls certificate
 * [ ] Manifest: `GET <path>/manifest`

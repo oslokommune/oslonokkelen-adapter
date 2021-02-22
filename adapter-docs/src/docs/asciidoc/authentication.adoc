@@ -36,7 +36,7 @@ Your adapter is responsible for:
 Each token has a body containing *all* important information related to the request. This information is signed and is
 why it is important that your adapter verifies the signature.
 
-==== Example: Scrape manifest
+=== Example: Scrape manifest
 [source,json]
 ----
 {
