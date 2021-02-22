@@ -445,15 +445,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_polling_manifests">Polling manifests</a></li>
-<li><a href="#_executing_a_request">Executing a request</a></li>
+<li><a href="#_polling_manifests">Polling manifests</a>
+<ul class="sectlevel2">
+<li><a href="#_sample_token">Sample token</a></li>
+</ul>
+</li>
+<li><a href="#_executing_a_request">Executing a request</a>
+<ul class="sectlevel2">
+<li><a href="#_sample_token_2">Sample token</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will have to implement support for these http endpoints. All endpoints must implement authorization as described
+on the <a href="authentication.html">authentication</a> page. Each request will contain a <code>Authorization: bearer &lt;jwt&gt;</code> header
+and you have to extract, parse and validate the token.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_polling_manifests">Polling manifests</h2>
 <div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>GET &lt;path&gt;/manifest</pre>
+</div>
+</div>
 <div class="paragraph">
 <p>After the new adapter has been registered in our configuration, backend will start polling its manifest every n minutes.
 This also doubles as monitoring / alerting in case a third party system starts misbehaving or goes offline.
@@ -464,11 +486,22 @@ It is important that the third party system has a proper TLS certificate and tha
 <img src="adapter-manifest-poll.svg" alt="adapter manifest poll" width="694" height="452">
 </div>
 </div>
+<div class="sect2">
+<h3 id="_sample_token">Sample token</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_executing_a_request">Executing a request</h2>
 <div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>POST &lt;path&gt;/execute</pre>
+</div>
+</div>
 <div class="paragraph">
 <p>This is the fun part!
 The user has pressed a button in the app and expects a door to open.
@@ -487,13 +520,19 @@ When the user hits the big open button the app will make a request to backend th
 from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
 Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.</p>
 </div>
+<div class="sect2">
+<h3 id="_sample_token_2">Sample token</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-21 10:25:29 +0100
+Last updated 2021-02-22 12:55:49 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

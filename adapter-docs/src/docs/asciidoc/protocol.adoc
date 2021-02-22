@@ -1,7 +1,12 @@
 = Protocol
 
+You will have to implement support for these http endpoints. All endpoints must implement authorization as described
+on the xref:authentication.adoc[authentication] page. Each request will contain a `Authorization: bearer <jwt>` header
+and you have to extract, parse and validate the token.
 
 == Polling manifests
+
+    GET <path>/manifest
 
 After the new adapter has been registered in our configuration, backend will start polling its manifest every n minutes.
 This also doubles as monitoring / alerting in case a third party system starts misbehaving or goes offline.
@@ -19,7 +24,13 @@ seqdiag {
 ....
 
 
+=== Sample token
+
+TODO
+
 == Executing a request
+
+    POST <path>/execute
 
 This is the fun part!
 The user has pressed a button in the app and expects a door to open.
@@ -47,3 +58,7 @@ seqdiag {
 The important part here is that the adapter is responsible for downloading the correct key (the signed token contains a key id)
 from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
 Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.
+
+=== Sample token
+
+TODO
