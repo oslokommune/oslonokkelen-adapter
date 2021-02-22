@@ -5,5 +5,6 @@ object DependencyVersions {
     const val protobuf = "3.15.0"
     const val junit5 = "5.7.1"
     const val assertj = "3.19.0"
+    const val slf4j = "1.7.30"
 
 }
