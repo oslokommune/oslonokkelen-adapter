@@ -23,8 +23,8 @@ Your adapter is responsible for:
 [source,json]
 ----
 {
-"kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <1>
-"alg": "ES256" <2>
+  "kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <1>
+  "alg": "ES256" <2>
 }
 ----
 <1> *Key id:* Identifies the key used to sign the token. Use this to cache keys.
@@ -48,9 +48,11 @@ why it is important that your adapter verifies the signature.
   "iat": 1613739136 <6>
 }
 ----
-<1> *Audience:* Verify that the token is intended for your adapter.
-<2> *Scope:* The intention
-<3> *Issuer:* Who issued the token.
-<4> *Token id:* Unique token id. Should be used to prevent replay attacks.
-<5> *Expire:* Verify that the expiration date has not passed
-<6> *Issued at:* When the token was issued
+<1> *Audience:* Verify that the token is intended for your adapter. Nobody should be able to take a valid token intended
+for a different adapter and use it on your adapter.
+<2> *Scope:* It should not be possible to take a valid token and use it for something else then it was intended for.
+<3> *Issuer:* Who issued the token. This will probably only be Oslonøkkelen backend, but nothing is stopping you from using
+your adapter with other clients.
+<4> *Token id:* Unique token id. Used to prevent replay attacks. You need to keep track of this until the token expires.
+<5> *Expire:* Verify that the expiration date has not passed.
+<6> *Issued at:* When the token was issued.

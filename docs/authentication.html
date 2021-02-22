@@ -498,8 +498,8 @@ Your adapter is responsible for:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-"kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <i class="conum" data-value="1"></i><b>(1)</b>
-"alg": "ES256" <i class="conum" data-value="2"></i><b>(2)</b>
+  "kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <i class="conum" data-value="1"></i><b>(1)</b>
+  "alg": "ES256" <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -543,27 +543,29 @@ why it is important that your adapter verifies the signature.</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><strong>Audience:</strong> Verify that the token is intended for your adapter.</td>
+<td><strong>Audience:</strong> Verify that the token is intended for your adapter. Nobody should be able to take a valid token intended
+for a different adapter and use it on your adapter.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><strong>Scope:</strong> The intention</td>
+<td><strong>Scope:</strong> It should not be possible to take a valid token and use it for something else then it was intended for.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><strong>Issuer:</strong> Who issued the token.</td>
+<td><strong>Issuer:</strong> Who issued the token. This will probably only be Oslonøkkelen backend, but nothing is stopping you from using
+your adapter with other clients.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td><strong>Token id:</strong> Unique token id. Should be used to prevent replay attacks.</td>
+<td><strong>Token id:</strong> Unique token id. Used to prevent replay attacks. You need to keep track of this until the token expires.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td><strong>Expire:</strong> Verify that the expiration date has not passed</td>
+<td><strong>Expire:</strong> Verify that the expiration date has not passed.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td><strong>Issued at:</strong> When the token was issued</td>
+<td><strong>Issued at:</strong> When the token was issued.</td>
 </tr>
 </table>
 </div>
@@ -574,7 +576,7 @@ why it is important that your adapter verifies the signature.</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 10:57:13 +0100
+Last updated 2021-02-22 14:16:27 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
