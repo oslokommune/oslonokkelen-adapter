@@ -1,0 +1,56 @@
+= Authentication
+:icons: font
+
+The mechanism we use for authentication is similar to the one used in openid connect.
+
+All requests from Oslonøkkelen to your adapter will be signed https://auth0.com/docs/tokens/json-web-tokens[JWTs] and
+your adapter is responsible for downloading (and cache) the public keys from Oslonøkkelen and verify the signature of
+these tokens. Each request contains the id of the key used for signing (KID) and this id can be used to cache public keys
+to avoid looking up the same key multiple times.
+
+
+
+== Token header
+
+Each request will have a header like this indicating the algorithm used plus an id identifying the key used for signing.
+Your adapter is responsible for:
+
+1. Verifying that the algorithm is acceptable
+2. Fetching the key from Oslonøkkelen backend (over https)
+3. Verifying the signature
+
+=== Example
+[source,json]
+----
+{
+"kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <1>
+"alg": "ES256" <2>
+}
+----
+<1> *Key id:* Identifies the key used to sign the token. Use this to cache keys.
+<2> *Algorithm:* The algorithm used for signing. Keep a list of approved algorithms.
+
+
+== Token body
+
+Each token has a body containing *all* important information related to the request. This information is signed and is
+why it is important that your adapter verifies the signature.
+
+==== Example: Scrape manifest
+[source,json]
+----
+{
+  "aud": "https://third-party-system.com", <1>
+  "scope": [ "manifest:scrape" ], <2>
+  "iss": "https://oslonokkelen.oslo.kommune.no", <3>
+  "jti": "922aab41-af21-4d92-93e9-0f26764d1576", <4>
+  "exp": 1613739166, <5>
+  "iat": 1613739136 <6>
+}
+----
+<1> *Audience:* Verify that the token is intended for your adapter.
+<2> *Scope:* The intention
+<3> *Issuer:* Who issued the token.
+<4> *Token id:* Unique token id. Should be used to prevent replay attacks.
+<5> *Expire:* Verify that the expiration date has not passed
+<6> *Issued at:* When the token was issued

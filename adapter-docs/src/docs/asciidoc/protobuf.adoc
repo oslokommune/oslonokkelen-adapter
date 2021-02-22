@@ -1,0 +1,10 @@
+= Protobuf definition
+
+
+
+====
+[source,protobuf]
+----
+include::../../../../adapter-protobuf-java/src/main/proto/adapter.proto[]
+----
+====

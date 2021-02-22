@@ -1,0 +1,38 @@
+= Implementation checklist
+
+List of things you must remember when implementing an adapter. We appreciate a heads up if you find anything is missing
+from this list.
+
+== HTTP endpoints
+
+Your adapter must implement the following http endpoints. You can choose your own `<path>`, but it must be the same
+for all endpoints. Details can be found on the page describing the link:protocol.adoc[protocol] and link:protobuf.adoc[message format].
+
+* [ ] Expose endpoints on port 443 with a valid tls certificate
+* [ ] Manifest: `GET <path>/manifest`
+* [ ] Execute: `GET <path>/execute`
+
+
+== Authentication
+
+Please note that this will never be an exhaustive list. The details can be found on the page describing
+link:authentication.adoc[authentication]. You will get a lot of these "for free" if you are able to use our Kotlin SDK.
+
+* [ ] Fetch public keys from Oslonøkkelen backend
+* [ ] Cache public keys by `kid` for at least 24 hours
+* [ ] Make sure your http client verifies tls certificate when fetching public keys
+* [ ] Validate token signature against cached public keys
+* [ ] Only accept tokens signed with an approved algorithm
+* [ ] Use `jti` to guard against token replays
+* [ ] Use `exp` to ensure you don't accept expired tokens
+* [ ] Use `aud` to ensure the token is intended for your adapter
+* [ ] Use `iss` to verify that the token originates from the expected environment
+
+
+== Registering your adapter
+
+After implementing everything described above, you can get in touch with us with the following information:
+
+* [ ] Your adapters public uri like `https://dev.example.com/api/oslonokkelen`
+* [ ] At least one email address for alerts if something fails
+* [ ] ..

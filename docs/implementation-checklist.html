@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Implementation checklist</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,15 +438,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Implementation checklist</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
+<li><a href="#_http_endpoints">HTTP endpoints</a></li>
+<li><a href="#_authentication">Authentication</a></li>
+<li><a href="#_registering_your_adapter">Registering your adapter</a></li>
 </ul>
 </div>
 </div>
@@ -454,68 +455,89 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
-</div>
+<p>List of things you must remember when implementing an adapter. We appreciate a heads up if you find anything is missing
+from this list.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
+<h2 id="_http_endpoints">HTTP endpoints</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
+<p>Your adapter must implement the following http endpoints. You can choose your own <code>&lt;path&gt;</code>, but it must be the same
+for all endpoints. Details can be found on the page describing the <a href="protocol.adoc">protocol</a> and <a href="protobuf.adoc">message format</a>.</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>Opening doors controlled by system x, y or z</p>
+<p>&#10063; Expose endpoints on port 443 with a valid tls certificate</p>
 </li>
 <li>
-<p>Authenticating Deichman library users</p>
+<p>&#10063; Manifest: <code>GET &lt;path&gt;/manifest</code></p>
 </li>
 <li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
+<p>&#10063; Execute: <code>GET &lt;path&gt;/execute</code></p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_documentation">Documentation</h2>
+<h2 id="_authentication">Authentication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
+<p>Please note that this will never be an exhaustive list. The details can be found on the page describing
+<a href="authentication.adoc">authentication</a>. You will get a lot of these "for free" if you are able to use our Kotlin SDK.</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
+<p>&#10063; Fetch public keys from Oslonøkkelen backend</p>
 </li>
 <li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
+<p>&#10063; Cache public keys by <code>kid</code> for at least 24 hours</p>
 </li>
 <li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
+<p>&#10063; Make sure your http client verifies tls certificate when fetching public keys</p>
 </li>
 <li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
+<p>&#10063; Validate token signature against cached public keys</p>
 </li>
 <li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
+<p>&#10063; Only accept tokens signed with an approved algorithm</p>
+</li>
+<li>
+<p>&#10063; Use <code>jti</code> to guard against token replays</p>
+</li>
+<li>
+<p>&#10063; Use <code>exp</code> to ensure you don&#8217;t accept expired tokens</p>
+</li>
+<li>
+<p>&#10063; Use <code>aud</code> to ensure the token is intended for your adapter</p>
+</li>
+<li>
+<p>&#10063; Use <code>iss</code> to verify that the token originates from the expected environment</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_registering_your_adapter">Registering your adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After implementing everything described above, you can get in touch with us with the following information:</p>
+</div>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10063; Your adapters public uri like <code><a href="https://dev.example.com/api/oslonokkelen" class="bare">https://dev.example.com/api/oslonokkelen</a></code></p>
+</li>
+<li>
+<p>&#10063; At least one email address for alerts if something fails</p>
+</li>
+<li>
+<p>&#10063; ..</p>
 </li>
 </ul>
 </div>
@@ -525,7 +547,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-21 10:59:07 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

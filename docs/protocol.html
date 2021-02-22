@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Protocol</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,86 +438,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Protocol</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
+<li><a href="#_polling_manifests">Polling manifests</a></li>
+<li><a href="#_executing_a_request">Executing a request</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_polling_manifests">Polling manifests</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
+<p>After the new adapter has been registered in our configuration, backend will start polling its manifest every n minutes.
+This also doubles as monitoring / alerting in case a third party system starts misbehaving or goes offline.
+It is important that the third party system has a proper TLS certificate and that we verify it.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
+<img src="adapter-manifest-poll.svg" alt="adapter manifest poll" width="694" height="452">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
+<h2 id="_executing_a_request">Executing a request</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
+<p>This is the fun part!
+The user has pressed a button in the app and expects a door to open.
+When the user hits the big open button the app will make a request to backend that runs authorization, figures out what adapters are involved with the request and forwards the request to the endpoint registered in the process described above.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Opening doors controlled by system x, y or z</p>
-</li>
-<li>
-<p>Authenticating Deichman library users</p>
-</li>
-<li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_documentation">Documentation</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
+<p>All this is might be easier to visualize with a sequence diagram:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
-</li>
-<li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
-</li>
-<li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
-</li>
-<li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
-</li>
-<li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
-</li>
-</ul>
+<div class="imageblock">
+<div class="content">
+<img src="adapter-execute.svg" alt="adapter execute" width="964" height="961">
+</div>
+</div>
+<div class="paragraph">
+<p>The important part here is that the adapter is responsible for downloading the correct key (the signed token contains a key id)
+from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
+Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.</p>
 </div>
 </div>
 </div>
@@ -525,7 +493,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-21 10:25:29 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

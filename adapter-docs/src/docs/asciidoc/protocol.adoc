@@ -1,0 +1,49 @@
+= Protocol
+
+
+== Polling manifests
+
+After the new adapter has been registered in our configuration, backend will start polling its manifest every n minutes.
+This also doubles as monitoring / alerting in case a third party system starts misbehaving or goes offline.
+It is important that the third party system has a proper TLS certificate and that we verify it.
+
+[seqdiag,adapter-manifest-poll,svg]
+....
+seqdiag {
+  backend; config-db; third-party-adapter;
+
+  backend => third-party-adapter [ label = "GET .../manifest", return = "Manifest", note = "This will be repeated\nevery n minutes" ] {
+    backend => config-db [ label = "Manifest update" ]
+  }
+}
+....
+
+
+== Executing a request
+
+This is the fun part!
+The user has pressed a button in the app and expects a door to open.
+When the user hits the big open button the app will make a request to backend that runs authorization, figures out what adapters are involved with the request and forwards the request to the endpoint registered in the process described above.
+
+All this is might be easier to visualize with a sequence diagram:
+
+[seqdiag,adapter-execute,svg]
+....
+seqdiag {
+  app; backend; auth; third-party-adapter;
+
+  app => backend [ label = "Open door A", return = "OK", note = "Device is signed\nwith device key" ] {
+    backend => auth [ label = "Verify device key", return = "OK" ]
+    backend => third-party-adapter [ label = "execute: action-door-a", return = "ack", note = "Request is signed\nwith kid=backend-key-123" ] {
+      third-party-adapter => backend [ label = "Fetch key: backend-key-123", return = "JWK\n(json web key)", note = "Will only have to fetch key\nif not already in cache.\nThis is to verify that the request\nactually is sent by Oslonøkkelen." ]
+      third-party-adapter -> third-party-adapter [ label = "Verify signature" ]
+      third-party-adapter -> third-party-adapter [ label = "Open door" ]
+    }
+  }
+
+}
+....
+
+The important part here is that the adapter is responsible for downloading the correct key (the signed token contains a key id)
+from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
+Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.

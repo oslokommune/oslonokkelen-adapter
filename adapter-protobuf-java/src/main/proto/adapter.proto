@@ -146,6 +146,8 @@ enum AttachmentType {
 
   END_USER_MESSAGE = 3;
 
+  ERROR_DESCRIPTION = 4;
+
 }
 
 // Action requests and responses can contain attachments.

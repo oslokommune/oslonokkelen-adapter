@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Overview</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,18 +435,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Overview</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
+<li><a href="#_the_manifest">The manifest</a>
+<ul class="sectlevel2">
+<li><a href="#_things">Things</a></li>
+<li><a href="#_actions">Actions</a></li>
+</ul>
+</li>
+<li><a href="#_operations_things_and_actions">Operations, things and actions</a></li>
+<li><a href="#_high_level_architecture">High level architecture</a></li>
+<li><a href="#_action_request_and_response">Action request and response</a>
+<ul class="sectlevel2">
+<li><a href="#_the_action_request">The action request</a></li>
+<li><a href="#_the_response">The response</a></li>
+<li><a href="#_attachments">Attachments</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -454,70 +468,275 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
+<p>This should give you a high level view of the terminology we use.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_manifest">The manifest</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A manifest is a declaration of what your adapter can do and what state it has. The terminology was originally inspired
+by Mozillas <a href="https://www.w3.org/TR/wot-thing-description/">WoT RFC</a> (although the rfc has evolved quite a bit since).
+The basic idea is that your adapter contains any number of <code>things</code> that can perform various <code>actions</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you have used <a href="https://prometheus.io/">Prometheus</a> then this should feel somewhat familiar. Our backend will
+periodically scrape your adapter for its manifest. This doubles as a health check as we can use scraping errors to
+trigger alerting.</p>
+</div>
+<div class="sect2">
+<h3 id="_things">Things</h3>
+<div class="paragraph">
+<p>Things can physical things like doors or lamps, but they can also represent more abstract things like apis for access control.
+A thing in our model can have state and actions. State can be used for things like triggering alerts if a door is left unlocked
+at certain times of the day. An action represents something your adapter can do and is what will be triggered when a user
+triggers something in Oslonøkkelen.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
+<img src="things.svg" alt="things" width="464" height="208">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_actions">Actions</h3>
+<div class="paragraph">
+<p>An action represents what the adapter can do. This can be everything from opening a door to invoking a remote api to
+provide access control. Further down you can read more about action requests and responses.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="chain-example.svg" alt="chain example" width="784" height="304">
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
+<h2 id="_operations_things_and_actions">Operations, things and actions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
+<p>Users of Oslonøkkelen can execute <code>operations</code>. Each operation is mapped to a chain of <code>actions</code>. The chain can consist
+of one or more actions executed sequentially. A single failing action will break the entire chain. Actions are allowed to
+deny requests making it possible to use actions to provide authorization for other actions.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Opening doors controlled by system x, y or z</p>
-</li>
-<li>
-<p>Authenticating Deichman library users</p>
-</li>
-<li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
-</li>
-</ul>
+<div class="imageblock">
+<div class="content">
+<img src="model.svg" alt="model" width="496" height="256">
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_documentation">Documentation</h2>
+<h2 id="_high_level_architecture">High level architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
+<p>When someone has developed a new adapter and registered it with Oslonøkkelen a periodical manifest scraping job will start.
+Actions found in the manifest can be mapped to operations visisible to users of Oslonøkkelen. Each time someone executes
+an operation in Oslonøkkelen our backend will create a chain of the relevant actions and invoke the adapters in sequence.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="adapter-parts.svg" alt="adapter parts" width="808" height="368">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_action_request_and_response">Action request and response</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When a user triggers an <code>operation</code> in the app one or more actions will be executed in a chain. The job of the
+adapter is to take the request, process it and produce a response indicating how it went. If one action results in
+an <code>error</code> or <code>denied</code> response the chain will be broken and no further actions executed.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="request-response.svg" alt="request response" width="424" height="160">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_action_request">The action request</h3>
+<div class="paragraph">
+<p>A request consists of the following fields.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Request id</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Each request has an id that can be used for tracing / correlating errors.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Thing + action id</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifies the target action.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attachments</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any number of attachments. See table below for a list of possible request attachments.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Time budget</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The app will use a time out if no response is received within x seconds after the user triggered an operation.
+Each action request will contain an estimated time budget the adapter should strive to respond within.</p>
+<p class="tableblock">Returning a <code>temporary error</code> within the allocated time is so much better than not returning at all leaving backend to
+wonder if your adapter is alive and processing requests.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_the_response">The response</h3>
+<div class="paragraph">
+<p>A response consists of the following fields.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Status</strong></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Each response must have one of the following status codes.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
-</li>
+<p><strong>Success</strong></p>
+<div class="ulist">
+<ul>
 <li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
-</li>
-<li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
-</li>
-<li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
-</li>
-<li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
+<p>All good</p>
 </li>
 </ul>
+</div>
+</li>
+<li>
+<p><strong>Access denied:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adapter refused access</p>
+</li>
+<li>
+<p>Trying again will probably produce the same result</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Temporary error:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Temporary errors like network timeouts etc</p>
+</li>
+<li>
+<p>Trying again in a few seconds might work</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Permanent error:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unexpected technical errors</p>
+</li>
+<li>
+<p>These errors will probably trigger alerting</p>
+</li>
+<li>
+<p>Trying the same request again is likely to produce the same result</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attachments</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any number of attachments. See table below for a list of possible response attachments.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_attachments">Attachments</h3>
+<div class="paragraph">
+<p>We support various <code>attachments</code> on both the request and response. The manifest can declare required request attachments.
+This is particularly useful for actions that work as access control as they have to know something about the end user.
+Such actions can declare in their manifest that they require various user data (remember gdpr).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attachment</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-center valign-top">Request</th>
+<th class="tableblock halign-center valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Fødselsnummer</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gives the adapter access to the users fødselsnummer. Intended for Oslo kommunes services like Gjenbruksid.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-check-circle fa-2x"></i></span></p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Code</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Some adapters might produce various codes. These codes can be rendered as QR or bar-codes on the users device.</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-check-circle fa-2x"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Punch card</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to indicate how much of a limited resource is left. "You have used x of y visits".</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-check-circle fa-2x"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>End user message</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Format a message that will be displayed to the end user. Can be very useful for explaining errors.</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-check-circle fa-2x"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Error description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Technical error description. Can contain a <code>code</code> and a technical debug message. The code can be used for mapping
+error codes to human-readable messages.</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon green"><i class="fa fa-check-circle fa-2x"></i></span></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -525,7 +744,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-22 10:52:18 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

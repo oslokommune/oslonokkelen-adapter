@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Protobuf definition</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -436,88 +436,348 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Protobuf definition</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
-</div>
-<div class="imageblock">
+<div class="exampleblock">
 <div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="protobuf" class="language-protobuf hljs">syntax = "proto3";
+
+package com.github.oslokommune.oslonokkelen.adapter.proto;
+
+// The role of the manifest is to describe what the adapter can
+// do and the state things are in right now.
+message AdapterManifest {
+
+  // Can be used to optimize scraping. Backend can pass last known version
+  // when scraping and if nothing has changed the adapter is allowed to return
+  // an empty 304 not modified response to avoid re-transferring the same data
+  // Oslonøkkelen already knows.
+  int64 version = 1;
+
+  repeated Thing things = 2;
+
+
+
+  // Examples:
+  //  * front-door
+  //  * outdoor-lighting
+  message Thing {
+
+    // Url safe id
+    string id = 1;
+
+    // Short one line description of what it does
+    string description = 2;
+
+    // Optional.
+    // Determines who can administer this thing in Oslonøkkelen key studio.
+    string admin_role = 3;
+
+    // Supported states.
+    // That a state is supported does not require it to be present at all times.
+    repeated ThingStateType supported_state_types = 4;
+
+    // What the thing can do
+    repeated Action actions = 5;
+
+    repeated ThingState state = 6;
+
+  }
+
+  // Examples:
+  //  * unlock
+  //  * open
+  message Action {
+
+    // Url safe id
+    string id = 1;
+
+    // Short one line description of what it does
+    string description = 2;
+
+    // Required input
+    repeated AttachmentType required_input_attachment_types = 3;
+
+    // Possible output
+    repeated AttachmentType possible_output_attachment_types = 4;
+
+    // By declaring possible error codes we can help / force
+    // administrators to map helpful error messages.
+    repeated PossibleErrorCode possible_error_codes = 5;
+
+
+    message PossibleErrorCode {
+
+      // Url safe code.
+      // Example: im-a-teapot
+      string code = 1;
+
+      // Really short human readable description explaining
+      // when this code will be returned.
+      string description = 2;
+
+    }
+
+  }
+
+
+}
+
+
+
+message ActionRequest {
+
+  // Useful for correlation of requests across systems
+  string request_id = 5;
+
+  string thing_id = 1;
+  string action_id = 2;
+
+  // Any attachments produced by the action
+  repeated Attachment attachments = 3;
+
+  // The app will have enforce a timeout. The adapter should try
+  // hard to return within this time budget. Returning a timeout
+  // error is better then not returning anything.
+  int32 time_budget_millis = 4;
+
+}
+
+
+message ActionResponse {
+
+  Status status = 1;
+
+  // Any attachments produced by the action
+  repeated Attachment attachments = 2;
+
+
+
+  enum Status {
+
+    // All good!
+    SUCCESS = 0;
+
+    // Something really crashed bad..
+    // No need to automatically try again.
+    ERROR_PERMANENT = 1;
+
+    // Something like temporary network exceptions.
+    // Automatic retry might work!
+    ERROR_TEMPORARY = 2;
+
+    // Access denied.
+    // No need retrying with the same input.
+    DENIED = 3;
+
+  }
+
+}
+
+// Different actions can require certain input
+enum AttachmentType {
+
+  // Useful for authorization.
+  // Try to avoid depending on this if possible as it comes
+  // with a lot of GDPR related requirements.
+  NORWEGIAN_FODSELSNUMMER = 0;
+
+  CODE = 1;
+
+  PUNCH_CARD = 2;
+
+  END_USER_MESSAGE = 3;
+
+  ERROR_DESCRIPTION = 4;
+
+}
+
+// Action requests and responses can contain attachments.
+message Attachment {
+
+  oneof value {
+    Code code = 1;
+    PunchCard punch_card = 2;
+    ErrorDescription error_description = 3;
+    EndUserMessage end_user_message = 4;
+    NorwegianFodselsnummer norwegian_fodselsnummer = 5;
+  }
+
+  message Code {
+
+    // Url safe string identifying the code.
+    //
+    // Examples:
+    //  * gjenbruksid
+    //  * lånekortnummer
+    string id = 1;
+
+    // The actual code
+    string code = 2;
+
+    // ISO-8601
+    string expires_at = 3;
+
+    // Is the app required to verify a cached code? Or can it assume
+    // that it never expires before the expire date?
+    bool must_verify = 4;
+
+  }
+
+  // Some actions represents consumable resources.
+  // This attachment indicates how many "clips" are left.
+  message PunchCard {
+
+    // How many of the "resource" has
+    // been used so far this period.
+    int32 used = 1;
+
+    // Hoe many of the "resource" is
+    // still remaining this period.
+    int32 remaining = 2;
+
+    // ISO-8601
+    string expires_at = 3;
+
+  }
+
+  message ErrorDescription {
+
+    // Something like: unknown-user or db-connection-error
+    // Should be declared in the action manifest to allow
+    // admins to map error codes to human readable messages.
+    string code = 1;
+
+    string debugMessage = 2;
+
+  }
+
+  // Provides an option to send a message back to the
+  // person who executed the action. Keep it short.
+  message EndUserMessage {
+
+    // Human readable message for end user.
+    TextContent message = 1;
+
+    // Optional link (to website)
+    string link = 2;
+
+  }
+
+  message NorwegianFodselsnummer {
+    string number = 1;
+  }
+
+}
+
+message TextContent {
+
+  string message = 1;
+  ContentType contentType = 2;
+
+  enum ContentType {
+    PLAIN_TEXT = 0;
+    MARKDOWN = 1;
+  }
+
+}
+
+enum ThingStateType {
+
+  // The door, window.. is in open or closed position
+  OPEN = 0;
+
+  // The door, window.. is in lock or unlocked state
+  LOCKED = 1;
+
+  QUEUE_LENGTH_ESTIMATE = 2;
+
+  // Can be repeated multiple times
+  // for things with more then one action.
+  ACTION_HEALTH = 3;
+
+  // Are we connected to some external system?
+  REMOTE_CONNECTION = 4;
+
+  // Temperature..
+  // Light
+  //
+
+}
+
+message ThingState {
+
+  // ISO-8601
+  string last_update = 1;
+
+  oneof value {
+    Open open = 2;
+    Locked locked = 3;
+    QueueEstimate queue_estimate = 4;
+    ActionHealth action_health = 5;
+    RemoteConnection remote_connection = 6;
+  }
+
+
+  enum Open {
+    OPEN = 0;
+    CLOSED = 1;
+  }
+
+  enum Locked {
+    LOCKED = 0;
+    UNLOCKED = 1;
+  }
+
+  message QueueEstimate {
+    int32 minutes = 1;
+  }
+
+  //
+  message ActionHealth {
+
+    // Must match the id of one of the actions of the thing
+    string action_id = 1;
+
+    // True if everything seems to be working
+    bool healthy = 2;
+
+    // Debug message to help administrators debug the problem.
+    // Will never be presented to end users.
+    string debug_message = 3;
+
+  }
+
+  // Most adapters will work as a bridge between Oslonøkkelen
+  // and one or more remote systems. This message can be used to
+  // communicate the status of a connection between the adapter
+  // and one of those remote systems.
+  message RemoteConnection {
+
+    // Short id of the remote system
+    string systemId = 4;
+
+    // True if the connection is healthy
+    bool connected = 1;
+
+    // When we was connected / disconnected
+    // depending on the 'connected' property.
+    int64 timestamp_epoch_seconds = 2;
+
+    // Short one liner describing the connection status.
+    string debug_message = 3;
+  }
+
+}</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Opening doors controlled by system x, y or z</p>
-</li>
-<li>
-<p>Authenticating Deichman library users</p>
-</li>
-<li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_documentation">Documentation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
-</li>
-<li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
-</li>
-<li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
-</li>
-<li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
-</li>
-<li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -525,7 +785,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-21 19:38:12 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

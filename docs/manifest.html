@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Manifests</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,15 +438,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Manifests</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
+<li><a href="#_example">Example</a></li>
 </ul>
 </div>
 </div>
@@ -454,70 +453,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
+<p>The manifest is loosely inspired by Mozillas <a href="https://www.w3.org/TR/wot-thing-description/">WoT RFC</a>, although the RFC has evolved a bit since.
+The important thing is that each adapter can expose a number of actions and those actions can be mapped to operations users of Oslonøkkelen can execute from the app.</p>
 </div>
-<div class="imageblock">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TODO: Replace yaml sample with json to avoid confusion</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">things:
+
+  # Thing 1
+  - id: front-door
+    description: The front door
+    actions:
+      - id: open
+        description: Opens the front door (door pump)
+      - id: unlock
+        description: Unlocks the bolt
+        requiredParameters:
+          - fodselsnummer
+
+  # Thing 2
+  - id: outdoor-lights
+    description: 5 outdoor lamps
+    actions:
+      - id: turn-off
+      - id: dim-30-percent
+      - id: dim-50-percent</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Opening doors controlled by system x, y or z</p>
-</li>
-<li>
-<p>Authenticating Deichman library users</p>
-</li>
-<li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_documentation">Documentation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
-</li>
-<li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
-</li>
-<li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
-</li>
-<li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
-</li>
-<li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
-</li>
-</ul>
+<p>This manifest tells Oslonøkkelen what the adapter can do. An administrator in Oslonøkkelen can map these actions to operations in the
+app. We support chaining multiple actions to allow one action to work as authorization for another and to support scenarios
+like unlocking a door and turning on the lights with a single operation in Oslonøkkelen.</p>
 </div>
 </div>
 </div>
@@ -525,7 +499,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-21 10:31:20 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

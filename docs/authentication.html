@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Oslonøkkelen adapter</title>
+<title>Authentication</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,18 +435,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Oslonøkkelen adapter</h1>
+<h1>Authentication</h1>
 <div class="details">
 <span id="revnumber">version 1.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_target_audience">Target audience</a></li>
-<li><a href="#_documentation">Documentation</a></li>
+<li><a href="#_token_header">Token header</a>
+<ul class="sectlevel2">
+<li><a href="#_example">Example</a></li>
+</ul>
+</li>
+<li><a href="#_token_body">Token body</a>
+<ul class="sectlevel3">
+<li><a href="#_example_scrape_manifest">Example: Scrape manifest</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -454,70 +463,110 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>One of the main design goals behind Oslonøkkelen is that it should support all kinds of third party systems. To that end
-we provide something we call our adapter api. The goal of these adapters are to work as bridges and translate between
-Oslonøkkelen and existing systems without modifications to either system.</p>
+<p>The mechanism we use for authentication is similar to the one used in openid connect.</p>
 </div>
-<div class="imageblock">
+<div class="paragraph">
+<p>All requests from Oslonøkkelen to your adapter will be signed <a href="https://auth0.com/docs/tokens/json-web-tokens">JWTs</a> and
+your adapter is responsible for downloading (and cache) the public keys from Oslonøkkelen and verify the signature of
+these tokens. Each request contains the id of the key used for signing (KID) and this id can be used to cache public keys
+to avoid looking up the same key multiple times.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_token_header">Token header</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each request will have a header like this indicating the algorithm used plus an id identifying the key used for signing.
+Your adapter is responsible for:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Verifying that the algorithm is acceptable</p>
+</li>
+<li>
+<p>Fetching the key from Oslonøkkelen backend (over https)</p>
+</li>
+<li>
+<p>Verifying the signature</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_example">Example</h3>
+<div class="listingblock">
 <div class="content">
-<img src="adapter-new-design.svg" alt="adapter new design" width="848" height="240">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+"kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok", <i class="conum" data-value="1"></i><b>(1)</b>
+"alg": "ES256" <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>Key id:</strong> Identifies the key used to sign the token. Use this to cache keys.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><strong>Algorithm:</strong> The algorithm used for signing. Keep a list of approved algorithms.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_target_audience">Target audience</h2>
+<h2 id="_token_body">Token body</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The target audience for this documentation is developers who want to add support for new such systems using our adapter api.
-Our adapter api works as a bridge between Oslonøkkelen backend and what ever third party api / system you want. Some
-examples of what this api has been used for so far:</p>
+<p>Each token has a body containing <strong>all</strong> important information related to the request. This information is signed and is
+why it is important that your adapter verifies the signature.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Opening doors controlled by system x, y or z</p>
-</li>
-<li>
-<p>Authenticating Deichman library users</p>
-</li>
-<li>
-<p>Dropping beer from cotton clouds</p>
-</li>
-<li>
-<p>Lowering gingerbread castle drawbridge</p>
-</li>
-<li>
-<p>Fetching QR / bar codes</p>
-</li>
-</ul>
+<div class="sect3">
+<h4 id="_example_scrape_manifest">Example: Scrape manifest</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "aud": "https://third-party-system.com", <i class="conum" data-value="1"></i><b>(1)</b>
+  "scope": [ "manifest:scrape" ], <i class="conum" data-value="2"></i><b>(2)</b>
+  "iss": "https://oslonokkelen.oslo.kommune.no", <i class="conum" data-value="3"></i><b>(3)</b>
+  "jti": "922aab41-af21-4d92-93e9-0f26764d1576", <i class="conum" data-value="4"></i><b>(4)</b>
+  "exp": 1613739166, <i class="conum" data-value="5"></i><b>(5)</b>
+  "iat": 1613739136 <i class="conum" data-value="6"></i><b>(6)</b>
+}</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>Audience:</strong> Verify that the token is intended for your adapter.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><strong>Scope:</strong> The intention</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><strong>Issuer:</strong> Who issued the token.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><strong>Token id:</strong> Unique token id. Should be used to prevent replay attacks.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><strong>Expire:</strong> Verify that the expiration date has not passed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><strong>Issued at:</strong> When the token was issued</td>
+</tr>
+</table>
 </div>
-<div class="sect1">
-<h2 id="_documentation">Documentation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The list below is order by recommended reading order.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="overview.adoc">Overview</a> - High level view of how an adapter works</p>
-</li>
-<li>
-<p><a href="protocol.adoc">Protocol</a> - How Oslonøkkelen and your adapter will communicate</p>
-</li>
-<li>
-<p><a href="authentication.adoc">Authentication</a> - How your adapter verifies request</p>
-</li>
-<li>
-<p><a href="protobuf.adoc">Protobuf</a> - Message definitions</p>
-</li>
-<li>
-<p><a href="implementation-checklist.adoc">Implementation checklist</a> - Things to keep in mind when implementing an adapter</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -525,7 +574,7 @@ examples of what this api has been used for so far:</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 09:09:14 +0100
+Last updated 2021-02-22 07:37:26 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
