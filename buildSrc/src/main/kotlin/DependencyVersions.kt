@@ -1,6 +1,6 @@
 object DependencyVersions {
 
-    const val joseJwt = "9.6"
+    const val joseJwt = "9.7"
     const val kotlinVersion = "1.4.30"
     const val kotlinImmutableCollections = "0.3.3"
     const val protobuf = "3.15.1"

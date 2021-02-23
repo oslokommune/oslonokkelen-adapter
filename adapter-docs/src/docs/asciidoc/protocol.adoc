@@ -25,7 +25,7 @@ seqdiag {
 ....
 
 
-=== Sample token
+=== Sample manifest request token
 
 Each http request to the `manifest` endpoint will contain an `Authorization` header on the format below. Your adapter is
 responsible for parsing and validating the token.
@@ -47,6 +47,10 @@ responsible for parsing and validating the token.
 }
 ....
 <1> All requests to the manifest endpoint will have this scope
+
+=== Sample manifest response
+
+*TODO*
 
 
 == Executing a request
@@ -117,3 +121,8 @@ If you copy the serialized token above into https://jwt.io you should see someth
 <1> Most requests won't have any attachments.
 <2> Randomly generated.
 <3> All execute requests will have this scope.
+
+
+=== Sample execute response
+
+*TODO*

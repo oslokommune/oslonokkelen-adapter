@@ -68,7 +68,8 @@ sealed class AdapterAttachment {
 
     data class PunchCard(
         val used: Int,
-        val total: Int
+        val total: Int,
+        val expiresAt: ZonedDateTime? = null
     ) : AdapterAttachment() {
         init {
             if (used < 0) {
