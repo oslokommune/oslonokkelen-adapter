@@ -1,5 +1,8 @@
 package com.github.oslokommune.oslonokkelen.adapter
 
+import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
+import com.github.oslokommune.oslonokkelen.adapter.protobuf.ProtobufSerializer
+import com.google.protobuf.util.JsonFormat
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.ECDSASigner
@@ -8,6 +11,7 @@ import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.KeyOperation
 import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator
+import com.nimbusds.jose.shaded.json.parser.JSONParser
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import java.net.URI
@@ -36,6 +40,35 @@ class BackendTokenGenerator(
             jwtID(jwtIdGenerator())
             claim("scope", listOf("manifest:scrape"))
         }
+    }
+
+    fun createActionRequestToken(remoteUri: URI, request: AdapterActionRequest): SignedJWT {
+        val parsedRequest = serializeRequestAsJson(request)
+
+        return buildToken {
+            audience("${remoteUri.scheme}://${remoteUri.host}")
+            issuer("${oslonokkelenBackendUri.scheme}://${oslonokkelenBackendUri.host}")
+            jwtID(jwtIdGenerator())
+            claim("scope", listOf("action:execute"))
+            claim("request", parsedRequest)
+        }
+    }
+
+    /**
+     * This is a bit of a hack..
+     *
+     * We use protobuf to describe messages and it is possible to serialize the
+     * Java classes generated from the .proto files to json, BUT the jwt library
+     * can't work with these classes so we have to serialize the request to json
+     * and then back to classes Nimbus JWT can work with in order to embed the
+     * request in the token.
+     */
+    private fun serializeRequestAsJson(request: AdapterActionRequest): Any? {
+        val protobufRequest = ProtobufSerializer.serialize(request)
+        val jsonRequest = JsonFormat.printer().print(protobufRequest)
+        val jsonParser = JSONParser(JSONParser.ACCEPT_SIMPLE_QUOTE)
+
+        return jsonParser.parse(jsonRequest)
     }
 
     fun buildToken(builderBlock: JWTClaimsSet.Builder.() -> Unit): SignedJWT {

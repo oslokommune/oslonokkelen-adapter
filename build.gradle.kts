@@ -14,5 +14,6 @@ allprojects {
 
     repositories {
         mavenCentral()
+        jcenter() // Try to get rid of this
     }
 }

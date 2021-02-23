@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
+    idea
+
     id("org.jetbrains.kotlin.jvm")
     id("com.adarshr.test-logger")
     id("java")
@@ -16,6 +18,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:${DependencyVersions.slf4j}")
     implementation(project(":adapter-protobuf-java"))
     api("com.nimbusds:nimbus-jose-jwt:${DependencyVersions.joseJwt}")
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:${DependencyVersions.kotlinImmutableCollections}")
 
     testImplementation("org.slf4j:slf4j-simple:${DependencyVersions.slf4j}")
     testImplementation("org.assertj:assertj-core:${DependencyVersions.assertj}")

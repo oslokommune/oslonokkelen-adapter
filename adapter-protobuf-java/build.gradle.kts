@@ -6,6 +6,7 @@ import com.google.protobuf.gradle.protoc
 plugins {
     id("com.google.protobuf")
     `java-library`
+    idea
 }
 
 project.description = "Defines protobuf messages used in api"
