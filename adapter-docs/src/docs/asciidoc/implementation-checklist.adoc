@@ -6,9 +6,10 @@ from this list.
 == HTTP endpoints
 
 Your adapter must implement the following http endpoints. You can choose your own `<path>`, but it must be the same
-for all endpoints. Details can be found on the page describing the xref:protocol.adoc[protocol] and link:protobuf.adoc[message format].
+for all endpoints. Details can be found on the page describing the xref:protocol.adoc[protocol] and xref:protobuf.adoc[message format].
 
 * [ ] Expose endpoints on port 443 with a valid tls certificate
+* [ ] Parsing won't fail on unknown fields in token (forward compatiblity)
 * [ ] Manifest: `GET <path>/manifest`
 * [ ] Execute: `GET <path>/execute`
 
@@ -35,4 +36,4 @@ After implementing everything described above, you can get in touch with us with
 
 * [ ] Your adapters public uri like `https://dev.example.com/api/oslonokkelen`
 * [ ] At least one email address for alerts if something fails
-* [ ] ..
+* [ ] "Behandlingsgrunnlag" for any actions requiring personal data (GDPR)

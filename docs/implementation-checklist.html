@@ -465,12 +465,15 @@ from this list.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Your adapter must implement the following http endpoints. You can choose your own <code>&lt;path&gt;</code>, but it must be the same
-for all endpoints. Details can be found on the page describing the <a href="protocol.html">protocol</a> and <a href="protobuf.adoc">message format</a>.</p>
+for all endpoints. Details can be found on the page describing the <a href="protocol.html">protocol</a> and <a href="protobuf.html">message format</a>.</p>
 </div>
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
 <p>&#10063; Expose endpoints on port 443 with a valid tls certificate</p>
+</li>
+<li>
+<p>&#10063; Parsing won&#8217;t fail on unknown fields in token (forward compatiblity)</p>
 </li>
 <li>
 <p>&#10063; Manifest: <code>GET &lt;path&gt;/manifest</code></p>
@@ -537,7 +540,7 @@ for all endpoints. Details can be found on the page describing the <a href="prot
 <p>&#10063; At least one email address for alerts if something fails</p>
 </li>
 <li>
-<p>&#10063; ..</p>
+<p>&#10063; "Behandlingsgrunnlag" for any actions requiring personal data (GDPR)</p>
 </li>
 </ul>
 </div>
@@ -547,7 +550,7 @@ for all endpoints. Details can be found on the page describing the <a href="prot
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 10:57:34 +0100
+Last updated 2021-02-23 08:50:40 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

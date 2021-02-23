@@ -435,6 +435,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -452,7 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_executing_a_request">Executing a request</a>
 <ul class="sectlevel2">
-<li><a href="#_sample_token_2">Sample token</a></li>
+<li><a href="#_sample_request_token">Sample request token</a></li>
 </ul>
 </li>
 </ul>
@@ -489,7 +490,35 @@ It is important that the third party system has a proper TLS certificate and tha
 <div class="sect2">
 <h3 id="_sample_token">Sample token</h3>
 <div class="paragraph">
-<p>TODO</p>
+<p>Each http request to the <code>manifest</code> endpoint will contain an <code>Authorization</code> header on the format below. Your adapter is
+responsible for parsing and validating the token.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Authorization: bearer eyJraWQiOiJGY3hwY3pLM0l2V3F2Q2x2ZFRYV3ZFMVBpN3phVV9oaV9NSGdUalgtME9rIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGhpcmQtcGFydHktc3lzdGVtLmNvbSIsInNjb3BlIjpbIm1hbmlmZXN0OnNjcmFwZSJdLCJpc3MiOiJodHRwczpcL1wvb3Nsb25va2tlbGVuLm9zbG8ua29tbXVuZS5ubyIsImV4cCI6MTYxNDA2NTQ2NiwiaWF0IjoxNjE0MDY1NDM2LCJqdGkiOiI2ZDNjNjY0NS1kMDI2LTRkZjItYjJjMS1kNTQ3YThkZDkwZDAifQ.yWZQJ4Xlv0ZWPthU674tX2JPlRbmsvHvjvJP7hSfwPZ9sHoE-TBEFHH5RhKzYR7j4I3iHhMXEd5lWPzowlaNNg</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "aud": "https://third-party-system.com",
+  "scope": [
+    "manifest:scrape" <i class="conum" data-value="1"></i><b>(1)</b>
+  ],
+  "iss": "https://oslonokkelen.oslo.kommune.no",
+  "exp": 1614065466,
+  "iat": 1614065436,
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>All requests to the manifest endpoint will have this scope</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -521,9 +550,60 @@ from Oslonøkkelen backend and verify that the token actually is signed by a pri
 Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.</p>
 </div>
 <div class="sect2">
-<h3 id="_sample_token_2">Sample token</h3>
+<h3 id="_sample_request_token">Sample request token</h3>
 <div class="paragraph">
-<p>TODO</p>
+<p>Each http request to the <code>execute</code> endpoint will contain an <code>Authorization</code> header on the format below. Your adapter is
+responsible for parsing and validating the token.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Authorization: bearer eyJraWQiOiJGY3hwY3pLM0l2V3F2Q2x2ZFRYV3ZFMVBpN3phVV9oaV9NSGdUalgtME9rIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGhpcmQtcGFydHktc3lzdGVtLmNvbSIsInJlcXVlc3QiOnsiYXR0YWNobWVudHMiOlt7Im5vcndlZ2lhbkZvZHNlbHNudW1tZXIiOnsibnVtYmVyIjoiMzAwOTg2MDIyNDcifX1dLCJyZXF1ZXN0SWQiOiJyMSIsImFjdGlvbklkIjoib3BlbiIsInRoaW5nSWQiOiJkb29yIn0sInNjb3BlIjpbImFjdGlvbjpleGVjdXRlIl0sImlzcyI6Imh0dHBzOlwvXC9vc2xvbm9ra2VsZW4ub3Nsby5rb21tdW5lLm5vIiwiZXhwIjoxNjE0MDY1NDY2LCJpYXQiOjE2MTQwNjU0MzYsImp0aSI6IjZkM2M2NjQ1LWQwMjYtNGRmMi1iMmMxLWQ1NDdhOGRkOTBkMCJ9.g0t3pC6kmlW_YIkDsdRvG7MX3yogeoDqDridjjG2wnas25Z9M3j_3cipdmLOAZjiS5P5BfIPEa75FE_k0f8VRg</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you copy the serialized token above into <a href="https://jwt.io" class="bare">https://jwt.io</a> you should see something like the json structure below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "aud": "https://third-party-system.com",
+  "request": {
+    "attachments": [  <i class="conum" data-value="1"></i><b>(1)</b>
+      {
+        "norwegianFodselsnummer": {
+          "number": "30098602247" <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+      }
+    ],
+    "requestId": "r1",
+    "actionId": "open",
+    "thingId": "door"
+  },
+  "scope": [
+    "action:execute" <i class="conum" data-value="3"></i><b>(3)</b>
+  ],
+  "iss": "https://oslonokkelen.oslo.kommune.no",
+  "exp": 1614065466,
+  "iat": 1614065436,
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Most requests won&#8217;t have any attachments.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Randomly generated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>All execute requests will have this scope.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -532,7 +612,7 @@ Another assumption here is that the adapter verifies Oslonøkkelens TLS certific
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-02-22 12:55:49 +0100
+Last updated 2021-02-23 08:56:25 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

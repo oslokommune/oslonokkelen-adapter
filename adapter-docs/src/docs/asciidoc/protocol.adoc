@@ -1,4 +1,5 @@
 = Protocol
+:icons: font
 
 You will have to implement support for these http endpoints. All endpoints must implement authorization as described
 on the xref:authentication.adoc[authentication] page. Each request will contain a `Authorization: bearer <jwt>` header
@@ -26,7 +27,27 @@ seqdiag {
 
 === Sample token
 
-TODO
+Each http request to the `manifest` endpoint will contain an `Authorization` header on the format below. Your adapter is
+responsible for parsing and validating the token.
+
+    Authorization: bearer eyJraWQiOiJGY3hwY3pLM0l2V3F2Q2x2ZFRYV3ZFMVBpN3phVV9oaV9NSGdUalgtME9rIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGhpcmQtcGFydHktc3lzdGVtLmNvbSIsInNjb3BlIjpbIm1hbmlmZXN0OnNjcmFwZSJdLCJpc3MiOiJodHRwczpcL1wvb3Nsb25va2tlbGVuLm9zbG8ua29tbXVuZS5ubyIsImV4cCI6MTYxNDA2NTQ2NiwiaWF0IjoxNjE0MDY1NDM2LCJqdGkiOiI2ZDNjNjY0NS1kMDI2LTRkZjItYjJjMS1kNTQ3YThkZDkwZDAifQ.yWZQJ4Xlv0ZWPthU674tX2JPlRbmsvHvjvJP7hSfwPZ9sHoE-TBEFHH5RhKzYR7j4I3iHhMXEd5lWPzowlaNNg
+
+
+[source,json]
+....
+{
+  "aud": "https://third-party-system.com",
+  "scope": [
+    "manifest:scrape" <1>
+  ],
+  "iss": "https://oslonokkelen.oslo.kommune.no",
+  "exp": 1614065466,
+  "iat": 1614065436,
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+}
+....
+<1> All requests to the manifest endpoint will have this scope
+
 
 == Executing a request
 
@@ -59,6 +80,40 @@ The important part here is that the adapter is responsible for downloading the c
 from Oslonøkkelen backend and verify that the token actually is signed by a private key belonging to the public key it downloaded.
 Another assumption here is that the adapter verifies Oslonøkkelens TLS certificate.
 
-=== Sample token
+=== Sample request token
 
-TODO
+Each http request to the `execute` endpoint will contain an `Authorization` header on the format below. Your adapter is
+responsible for parsing and validating the token.
+
+    Authorization: bearer eyJraWQiOiJGY3hwY3pLM0l2V3F2Q2x2ZFRYV3ZFMVBpN3phVV9oaV9NSGdUalgtME9rIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGhpcmQtcGFydHktc3lzdGVtLmNvbSIsInJlcXVlc3QiOnsiYXR0YWNobWVudHMiOlt7Im5vcndlZ2lhbkZvZHNlbHNudW1tZXIiOnsibnVtYmVyIjoiMzAwOTg2MDIyNDcifX1dLCJyZXF1ZXN0SWQiOiJyMSIsImFjdGlvbklkIjoib3BlbiIsInRoaW5nSWQiOiJkb29yIn0sInNjb3BlIjpbImFjdGlvbjpleGVjdXRlIl0sImlzcyI6Imh0dHBzOlwvXC9vc2xvbm9ra2VsZW4ub3Nsby5rb21tdW5lLm5vIiwiZXhwIjoxNjE0MDY1NDY2LCJpYXQiOjE2MTQwNjU0MzYsImp0aSI6IjZkM2M2NjQ1LWQwMjYtNGRmMi1iMmMxLWQ1NDdhOGRkOTBkMCJ9.g0t3pC6kmlW_YIkDsdRvG7MX3yogeoDqDridjjG2wnas25Z9M3j_3cipdmLOAZjiS5P5BfIPEa75FE_k0f8VRg
+
+If you copy the serialized token above into https://jwt.io you should see something like the json structure below.
+
+[source,json]
+....
+{
+  "aud": "https://third-party-system.com",
+  "request": {
+    "attachments": [  <1>
+      {
+        "norwegianFodselsnummer": {
+          "number": "30098602247" <2>
+        }
+      }
+    ],
+    "requestId": "r1",
+    "actionId": "open",
+    "thingId": "door"
+  },
+  "scope": [
+    "action:execute" <3>
+  ],
+  "iss": "https://oslonokkelen.oslo.kommune.no",
+  "exp": 1614065466,
+  "iat": 1614065436,
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+}
+....
+<1> Most requests won't have any attachments.
+<2> Randomly generated.
+<3> All execute requests will have this scope.
