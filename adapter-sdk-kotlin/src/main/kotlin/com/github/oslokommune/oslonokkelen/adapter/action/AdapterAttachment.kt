@@ -1,6 +1,5 @@
 package com.github.oslokommune.oslonokkelen.adapter.action
 
-import kotlinx.collections.immutable.persistentListOf
 import java.net.URI
 import java.time.ZonedDateTime
 
@@ -12,7 +11,7 @@ sealed class AdapterAttachment {
         }
 
         return ActionResponseMessage(
-            attachments = persistentListOf(this, other)
+            attachments = listOf(this, other)
         )
     }
 

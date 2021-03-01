@@ -9,8 +9,8 @@ object ProtobufSerializer {
 
     fun serialize(response: ActionResponseMessage): Adapter.ActionResponse {
         return Adapter.ActionResponse.newBuilder()
-            .addAllAttachments(response.attachments.map { serializeAttachment(it) })
             .setStatus(response.status)
+            .addAllAttachments(response.attachments.map { serializeAttachment(it) })
             .build()
     }
 
@@ -40,6 +40,7 @@ object ProtobufSerializer {
                 Adapter.Attachment.newBuilder()
                     .setCode(Adapter.Attachment.Code.newBuilder().run {
                         code = attachment.code
+                        id = attachment.id
 
                         if (attachment.expiresAt != null) {
                             expiresAt = attachment.expiresAt.toString()
@@ -51,8 +52,8 @@ object ProtobufSerializer {
 
             is AdapterAttachment.DeniedReason -> {
                 Adapter.Attachment.newBuilder()
-                    .setErrorDescription(
-                        Adapter.Attachment.ErrorDescription.newBuilder()
+                    .setDeniedReason(
+                        Adapter.Attachment.DeniedReason.newBuilder()
                             .setDebugMessage(attachment.debugMessage)
                             .setCode(attachment.code)
                             .build()
@@ -81,6 +82,7 @@ object ProtobufSerializer {
                     .setErrorDescription(
                         Adapter.Attachment.ErrorDescription.newBuilder()
                             .setDebugMessage(attachment.debugMessage)
+                            .setPermanent(attachment.permanent)
                             .setCode(attachment.code)
                             .build()
                     )

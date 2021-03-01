@@ -1,10 +1,11 @@
 package com.github.oslokommune.oslonokkelen.adapter.action
 
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
-data class ActionResponseMessage(val attachments: PersistentList<AdapterAttachment> = persistentListOf()) {
+data class ActionResponseMessage(val attachments: List<AdapterAttachment> = emptyList()) {
+
+    constructor(vararg attachments: AdapterAttachment) : this(attachments.toList())
+
 
     val status: Adapter.ActionResponse.Status
         get() {
@@ -32,13 +33,13 @@ data class ActionResponseMessage(val attachments: PersistentList<AdapterAttachme
         }
 
         return copy(
-            attachments = attachments.add(attachment)
+            attachments = attachments + attachment
         )
     }
 
     operator fun plus(trouble: Throwable): ActionResponseMessage {
         return copy(
-            attachments = attachments.add(AdapterAttachment.ErrorDescription.from(trouble))
+            attachments = attachments + AdapterAttachment.ErrorDescription.from(trouble)
         )
     }
 
@@ -55,9 +56,8 @@ data class ActionResponseMessage(val attachments: PersistentList<AdapterAttachme
     }
 
     companion object {
-
         fun permanentError(code: String, debugMessage: String): ActionResponseMessage {
-            return ActionResponseMessage(persistentListOf(AdapterAttachment.ErrorDescription(code, debugMessage)))
+            return ActionResponseMessage(AdapterAttachment.ErrorDescription(code, debugMessage))
         }
     }
 }
