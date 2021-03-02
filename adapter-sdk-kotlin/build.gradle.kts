@@ -15,15 +15,15 @@ plugins {
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:${DependencyVersions.slf4j}")
+    implementation("org.slf4j:slf4j-api:1.7.30")
     implementation(project(":adapter-protobuf-java"))
-    api("com.nimbusds:nimbus-jose-jwt:${DependencyVersions.joseJwt}")
-    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:${DependencyVersions.kotlinImmutableCollections}")
+    api("com.nimbusds:nimbus-jose-jwt:9.7")
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.3")
 
-    testImplementation("org.slf4j:slf4j-simple:${DependencyVersions.slf4j}")
-    testImplementation("org.assertj:assertj-core:${DependencyVersions.assertj}")
-    testImplementation("org.assertj:assertj-core:${DependencyVersions.assertj}")
-    testImplementation("org.junit.jupiter:junit-jupiter:${DependencyVersions.junit5}")
+    testImplementation("org.slf4j:slf4j-simple:1.7.30")
+    testImplementation("org.assertj:assertj-core:3.19.0")
+    testImplementation("org.assertj:assertj-core:3.19.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
 }
 
 plugins.withType<TestLoggerPlugin> {
