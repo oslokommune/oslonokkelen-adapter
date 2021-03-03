@@ -18,7 +18,9 @@ sealed class AdapterAttachment {
     data class Code(
         val id: String,
         val code: String,
-        val expiresAt: ZonedDateTime? = null
+        val expiresAt: ZonedDateTime? = null,
+        val headerText: String? = null,
+        val footerText: String? = null
     ) : AdapterAttachment() {
         init {
             if (id.isBlank()) {

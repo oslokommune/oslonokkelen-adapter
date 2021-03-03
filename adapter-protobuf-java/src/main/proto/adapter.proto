@@ -183,6 +183,12 @@ message Attachment {
     // that it never expires before the expire date?
     bool must_verify = 4;
 
+    // Optional text to be displayed above the code
+    string header_text = 5;
+
+    // Optional text to be displayed under the code
+    string footer_text = 6;
+
   }
 
   // Some actions represents consumable resources.

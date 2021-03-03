@@ -42,6 +42,16 @@ object ProtobufParser {
                         ZonedDateTime.parse(attachment.code.expiresAt)
                     } else {
                         null
+                    },
+                    headerText = if (attachment.code.headerText != "") {
+                        attachment.code.headerText
+                    } else {
+                        null
+                    },
+                    footerText = if (attachment.code.footerText != "") {
+                        attachment.code.footerText
+                    } else {
+                        null
                     }
                 )
             }
