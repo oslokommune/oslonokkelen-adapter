@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
-    `maven-publish`
+    maven
     idea
 
     id("org.jetbrains.kotlin.jvm")

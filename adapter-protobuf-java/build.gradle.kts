@@ -6,7 +6,7 @@ import com.google.protobuf.gradle.protoc
 plugins {
     id("com.google.protobuf")
     `java-library`
-    `maven-publish`
+    maven
     idea
 }
 
