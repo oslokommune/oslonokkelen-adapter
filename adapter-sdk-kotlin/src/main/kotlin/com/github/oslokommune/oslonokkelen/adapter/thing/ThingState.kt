@@ -20,7 +20,7 @@ sealed class ThingState {
     ) : ThingState(), RelatedToAction {
 
         override val thingId = actionId.thingId
-        override val key = Key("action.health.${actionId.thingId.value}.${actionId.value}")
+        override val key = Key(thingId, "action.health.${actionId.thingId.value}.${actionId.value}")
     }
 
     data class Lock(
@@ -29,7 +29,7 @@ sealed class ThingState {
         val locked: Boolean
     ) : ThingState() {
 
-        override val key = Key("thing.${thingId.value}.locked")
+        override val key = Key(thingId, "thing.${thingId.value}.locked")
     }
 
     /**
@@ -44,7 +44,7 @@ sealed class ThingState {
         val state: ConnectionState
     ) : ThingState() {
 
-        override val key = Key("thing.${thingId.value}.remote")
+        override val key = Key(thingId, "thing.${thingId.value}.remote")
 
         val connected: Boolean
             get() = when (state) {
@@ -83,7 +83,7 @@ sealed class ThingState {
             return copy(lines = updatedLines)
         }
 
-        override val key: Key = Key("thing.${thingId.value}.debug-log")
+        override val key: Key = Key(thingId, "thing.${thingId.value}.debug-log")
 
         override val timestamp: Instant
             get() = lines.last().timestamp
@@ -106,9 +106,13 @@ sealed class ThingState {
 
     }
 
-    data class Key(val value: String)
+    data class Key(
+        val thingId: ThingId,
+        val value: String
+    )
 
     interface RelatedToAction {
         val actionId: ActionId
+        val key: Key
     }
 }

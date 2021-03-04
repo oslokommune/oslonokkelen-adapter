@@ -95,11 +95,48 @@ data class ManifestSnapshot(
         }
     }
 
-    fun withThingState(newState: ThingState): ManifestSnapshot {
+    operator fun minus(actionId: ActionId): ManifestSnapshot {
+        val thingId = actionId.thingId
+        val thingActions = actions[thingId]
+
+        return if (thingActions?.containsKey(actionId) == true) {
+            val updatedThingActions = thingActions.remove(actionId)
+            val stateToRemove = thingStates[thingId]
+                ?.values
+                ?.filterIsInstance<ThingState.RelatedToAction>()
+                ?.filter { it.actionId == actionId }
+                ?: emptyList()
+
+            var tmp = this
+
+            for (s: ThingState.RelatedToAction in stateToRemove) {
+                tmp -= s.key
+            }
+
+            if (updatedThingActions.isEmpty()) {
+                tmp.copy(
+                    version = version + 1,
+                    actions = actions.remove(thingId)
+                )
+            } else {
+                tmp.copy(
+                    version = version + 1,
+                    actions = actions.put(thingId, updatedThingActions)
+                )
+            }
+        } else {
+            this
+        }
+    }
+
+    operator fun plus(newState: ThingState): ManifestSnapshot {
         if (newState is ThingState.RelatedToAction) {
             if (!actions.containsKey(newState.actionId.thingId)) {
                 throw InvalidManifestException("Tried to add state related to unknown ${newState.actionId}")
             }
+        }
+        if (!things.containsKey(newState.thingId)) {
+            throw InvalidManifestException("Can't add state for unknown thing '${newState.thingId}' to manifest")
         }
 
         return if (thingStates[newState.thingId]?.get(newState.key) == newState) {
@@ -116,6 +153,34 @@ data class ManifestSnapshot(
         }
     }
 
+    operator fun minus(stateKey: ThingState.Key): ManifestSnapshot {
+        val thingId = stateKey.thingId
+        val currentStateForThing = thingStates[thingId]
+
+        return if (currentStateForThing == null) {
+            this
+        } else {
+            val currentState = currentStateForThing[stateKey]
+
+            if (currentState == null) {
+                this
+            } else {
+                val updatedStateForThing = currentStateForThing.remove(stateKey)
+
+                if (updatedStateForThing.isEmpty()) {
+                    copy(
+                        version = version + 1,
+                        thingStates = thingStates.remove(thingId)
+                    )
+                } else {
+                    copy(
+                        version = version + 1,
+                        thingStates = thingStates.put(thingId, updatedStateForThing)
+                    )
+                }
+            }
+        }
+    }
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ManifestSnapshot::class.java)

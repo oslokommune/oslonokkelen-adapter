@@ -7,12 +7,15 @@ import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodeDescription
 import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodes
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.Instant
 
 internal class ManifestSnapshotTest {
 
@@ -192,7 +195,7 @@ internal class ManifestSnapshotTest {
             @Test
             fun `Adding existing action with new description bumps manifest`() {
                 val original = ManifestSnapshot()
-                val modifiedUnlockAction =unlockFrontDoor.copy(description = "Sesam sesam")
+                val modifiedUnlockAction = unlockFrontDoor.copy(description = "Sesam sesam")
                 val withAction = original + frontDoor + unlockFrontDoor + modifiedUnlockAction
 
                 assertThat(withAction).isEqualTo(
@@ -225,8 +228,172 @@ internal class ManifestSnapshotTest {
 
         }
 
-    }
+        @Nested
+        inner class ThingStates {
 
+            private val unlockFrontDoor = ActionDescription(
+                id = ActionId("front-door", "unlock"),
+                description = "Unlock the front door"
+            )
+
+            private val lockedFrontDoor = ThingState.Lock(
+                timestamp = Instant.now(),
+                thingId = frontDoor.id,
+                locked = true
+            )
+
+            private val frontDoorLog = ThingState.DebugLog(
+                thingId = frontDoor.id,
+                lines = persistentListOf()
+            )
+
+            private val unlockHealthy = ThingState.ActionHealth(
+                debugMessage = "Not doing so well..",
+                actionId = unlockFrontDoor.id,
+                timestamp = Instant.now(),
+                healthy = false
+            )
+
+            @Test
+            fun `Can't add thing state for unknown thing`() {
+                val ex = assertThrows<InvalidManifestException> {
+                    val original = ManifestSnapshot()
+                    original + lockedFrontDoor
+                }
+
+                assertThat(ex).hasMessage("Can't add state for unknown thing 'thing: front-door' to manifest")
+            }
+
+            @Test
+            fun `Can't add action health for unknown action`() {
+                val ex = assertThrows<InvalidManifestException> {
+                    val original = ManifestSnapshot()
+                    original + unlockHealthy
+                }
+
+                assertThat(ex).hasMessage("Tried to add state related to unknown action: front-door/unlock")
+            }
+
+            @Test
+            fun `Adding the same state twice does not bump the manifest`() {
+                val original = ManifestSnapshot()
+                val withState = original + frontDoor + lockedFrontDoor + lockedFrontDoor
+
+                assertThat(withState).isEqualTo(
+                    ManifestSnapshot(
+                        version = 3,
+                        things = persistentMapOf(frontDoor.id to frontDoor),
+                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(lockedFrontDoor.key to lockedFrontDoor))
+                    )
+                )
+            }
+
+            @Test
+            fun `Confirming exactly the same state later will bump manifest`() {
+                val original = ManifestSnapshot()
+                val updatedLockedFrontDoor = lockedFrontDoor.copy(timestamp = lockedFrontDoor.timestamp.plusSeconds(20))
+                val withState = original + frontDoor + lockedFrontDoor + updatedLockedFrontDoor
+
+                assertThat(withState).isEqualTo(
+                    ManifestSnapshot(
+                        version = 4,
+                        things = persistentMapOf(frontDoor.id to frontDoor),
+                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(updatedLockedFrontDoor.key to updatedLockedFrontDoor))
+                    )
+                )
+            }
+
+            @Test
+            fun `Removing the thing will also remove the associated state`() {
+                val original = ManifestSnapshot()
+                val withState = original + frontDoor + lockedFrontDoor - frontDoor.id
+
+                assertThat(withState).isEqualTo(
+                    ManifestSnapshot(
+                        version = 4
+                    )
+                )
+            }
+
+            @Test
+            fun `Can remove the last state by key for a thing`() {
+                val original = ManifestSnapshot()
+                val withState = original + frontDoor + lockedFrontDoor
+                val withoutState = withState - lockedFrontDoor.key
+
+                assertThat(withoutState).isEqualTo(
+                    ManifestSnapshot(
+                        version = 4,
+                        things = persistentMapOf(frontDoor.id to frontDoor)
+                    )
+                )
+            }
+
+            @Test
+            fun `Removing state for an unknown thing returns the same manifest instance`() {
+                val original = ManifestSnapshot()
+                val same = original - lockedFrontDoor.key
+
+                assertSame(original, same)
+            }
+
+            @Test
+            fun `Can remove one off two states for thing`() {
+                val original = ManifestSnapshot()
+                val withState = original + frontDoor + lockedFrontDoor + frontDoorLog
+                val withoutState = withState - lockedFrontDoor.key
+
+                assertThat(withoutState).isEqualTo(
+                    ManifestSnapshot(
+                        version = 5,
+                        things = persistentMapOf(frontDoor.id to frontDoor),
+                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(frontDoorLog.key to frontDoorLog))
+                    )
+                )
+            }
+
+            @Test
+            fun `Removing the same state twice does not bump the manifest`() {
+                val original = ManifestSnapshot()
+                val withLockedState = original + frontDoor + lockedFrontDoor
+                val withoutLockedState = withLockedState - lockedFrontDoor.key
+
+                assertThat(withoutLockedState - lockedFrontDoor.key).isSameAs(withoutLockedState)
+            }
+
+            @Test
+            fun `Removing action will also remove state associated with that action`() {
+                val original = ManifestSnapshot()
+                val withState = original + frontDoor + unlockFrontDoor + unlockHealthy
+
+                assertThat(withState - unlockFrontDoor.id).isEqualTo(
+                    ManifestSnapshot(
+                        version = 5,
+                        things = persistentMapOf(frontDoor.id to frontDoor)
+                    )
+                )
+            }
+
+            @Test
+            fun `Removing unknown action does not bump manifest`() {
+                val original = ManifestSnapshot()
+                val withThing = original + frontDoor
+                val same = withThing - unlockFrontDoor.id
+
+                assertSame(withThing, same)
+            }
+
+            @Test
+            fun `Removing completely unknown action does not bump manifest`() {
+                val original = ManifestSnapshot()
+                val same = original - unlockFrontDoor.id
+
+                assertSame(original, same)
+            }
+
+        }
+
+    }
 
 
 }
