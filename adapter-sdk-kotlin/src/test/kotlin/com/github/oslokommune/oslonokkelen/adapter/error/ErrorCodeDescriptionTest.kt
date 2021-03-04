@@ -23,11 +23,11 @@ internal class ErrorCodeDescriptionTest {
         val ex = assertThrows<IllegalArgumentException> {
             ErrorCodeDescription(
                 description = "Too long code",
-                code = "x".repeat(ErrorCodeDescription.CODE_MAX_LENGTH + 1)
+                code = "x".repeat(ErrorCode.CODE_MAX_LENGTH + 1)
             )
         }
 
-        assertThat(ex).hasMessage("Error code is too long: ${"x".repeat(ErrorCodeDescription.CODE_MAX_LENGTH + 1)}")
+        assertThat(ex).hasMessage("Error code is too long: ${"x".repeat(ErrorCode.CODE_MAX_LENGTH + 1)}")
     }
 
     @Test

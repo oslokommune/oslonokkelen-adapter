@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentHashMap
 
-data class ErrorCodes(val codes: PersistentMap<String, ErrorCodeDescription> = persistentMapOf()) {
+data class ErrorCodes(val codes: PersistentMap<ErrorCode, ErrorCodeDescription> = persistentMapOf()) {
 
     constructor(vararg codes: ErrorCodeDescription) : this(codes.associateBy { it.code }.toPersistentHashMap())
 
@@ -15,6 +15,16 @@ data class ErrorCodes(val codes: PersistentMap<String, ErrorCodeDescription> = p
             copy(
                 codes = codes.put(description.code, description)
             )
+        }
+    }
+
+    operator fun minus(code: ErrorCode): ErrorCodes {
+        return if (codes.containsKey(code)) {
+            copy(
+                codes = codes.remove(code)
+            )
+        } else {
+            this
         }
     }
 
