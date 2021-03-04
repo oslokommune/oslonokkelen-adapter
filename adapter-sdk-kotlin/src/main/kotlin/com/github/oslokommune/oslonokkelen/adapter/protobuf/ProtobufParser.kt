@@ -7,15 +7,17 @@ import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import java.net.URI
 import java.time.Duration
+import java.time.Instant
 import java.time.ZonedDateTime
 
 object ProtobufParser {
 
-    fun parse(serializedRequest: Adapter.ActionRequest): AdapterActionRequest {
+    fun parse(serializedRequest: Adapter.ActionRequest, timestamp: Instant): AdapterActionRequest {
         return AdapterActionRequest(
             requestId = serializedRequest.requestId,
             actionId = ActionId(serializedRequest.thingId, serializedRequest.actionId),
             timeBudget = Duration.ofMillis(serializedRequest.timeBudgetMillis.toLong()),
+            receivedAt = timestamp,
             attachments = serializedRequest.attachmentsList.map { attachment ->
                 parseAttachment(attachment)
             }

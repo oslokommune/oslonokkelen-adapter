@@ -10,23 +10,27 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.net.URI
 import java.time.Duration
+import java.time.Instant
 import java.time.ZonedDateTime
 
 internal class ProtobufSerializerTest {
 
     @Test
     fun `Serialize and parse a request`() {
+        val receivedAt = Instant.now()
+
         val request = AdapterActionRequest(
             requestId = "request-1",
             actionId = ActionId("door", "open"),
             timeBudget = Duration.ofSeconds(3),
+            receivedAt = receivedAt,
             attachments = listOf(
                 AdapterAttachment.NorwegianFodselsnummer("30098602247")
             )
         )
 
         val serializedRequest = ProtobufSerializer.serialize(request)
-        val parsedRequest = ProtobufParser.parse(serializedRequest)
+        val parsedRequest = ProtobufParser.parse(serializedRequest, receivedAt)
 
         assertEquals(request, parsedRequest)
     }
