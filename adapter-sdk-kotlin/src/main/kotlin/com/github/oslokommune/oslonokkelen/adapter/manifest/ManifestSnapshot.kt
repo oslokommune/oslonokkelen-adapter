@@ -18,10 +18,10 @@ data class ManifestSnapshot(
     val things: PersistentMap<ThingId, ThingDescription> = persistentMapOf(),
     val actions: PersistentMap<ThingId, PersistentMap<ActionId, ActionDescription>> = persistentMapOf(),
     val thingStates: PersistentMap<ThingId, PersistentMap<ThingState.Key, ThingState>> = persistentMapOf(),
-    val errorCodes : ErrorCodes = ErrorCodes()
+    val errorCodes: ErrorCodes = ErrorCodes()
 ) {
 
-    operator fun plus(description: ErrorCodeDescription) : ManifestSnapshot {
+    operator fun plus(description: ErrorCodeDescription): ManifestSnapshot {
         val updatedErrorCodes = errorCodes + description
 
         return if (updatedErrorCodes == errorCodes) {
@@ -34,7 +34,7 @@ data class ManifestSnapshot(
         }
     }
 
-    operator fun minus(code: ErrorCode) : ManifestSnapshot {
+    operator fun minus(code: ErrorCode): ManifestSnapshot {
         val updatedCodes = errorCodes - code
 
         return if (errorCodes == updatedCodes) {
@@ -73,14 +73,13 @@ data class ManifestSnapshot(
         }
     }
 
-
     inline fun <reified S : ThingState> stateOfTypeOrNull(thingId: ThingId): S? {
         return thingStates[thingId]?.values?.filterIsInstance<S>()?.firstOrNull()
     }
 
-    fun withAction(description: ActionDescription): ManifestSnapshot {
+    operator fun plus(description: ActionDescription): ManifestSnapshot {
         if (!things.containsKey(description.id.thingId)) {
-            throw InvalidManifestException("Can't add action ${description.id} to a manifest without ${description.id.thingId}")
+            throw InvalidManifestException("Can't add action '${description.id}' to a manifest that doesn't have a description of thing '${description.id.thingId}'")
         }
 
         return if (actions[description.id.thingId]?.get(description.id) == description) {
