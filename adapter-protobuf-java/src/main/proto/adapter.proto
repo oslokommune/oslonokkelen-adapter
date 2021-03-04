@@ -14,6 +14,8 @@ message AdapterManifest {
 
   repeated Thing things = 2;
 
+  // Declaration of errors might returned from the adapter.
+  repeated ErrorCodeDescription error_code_descriptions = 3;
 
 
   // Examples:
@@ -59,25 +61,22 @@ message AdapterManifest {
     // Possible output
     repeated AttachmentType possible_output_attachment_types = 4;
 
-    // By declaring possible error codes we can help / force
-    // administrators to map helpful error messages.
-    repeated PossibleErrorCode possible_error_codes = 5;
-
-
-    message PossibleErrorCode {
-
-      // Url safe code.
-      // Example: im-a-teapot
-      string code = 1;
-
-      // Really short human readable description explaining
-      // when this code will be returned.
-      string description = 2;
-
-    }
+    reserved 5;
 
   }
 
+
+  message ErrorCodeDescription {
+
+    // Url safe code.
+    // Example: im-a-teapot
+    string code = 1;
+
+    // Really short human readable description explaining
+    // when this code will be returned.
+    string description = 2;
+
+  }
 
 }
 
