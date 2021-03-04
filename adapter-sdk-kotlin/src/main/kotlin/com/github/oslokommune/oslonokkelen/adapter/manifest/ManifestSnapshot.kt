@@ -47,7 +47,7 @@ data class ManifestSnapshot(
         }
     }
 
-    fun withThing(description: ThingDescription): ManifestSnapshot {
+    operator fun plus(description: ThingDescription): ManifestSnapshot {
         return if (things[description.id] == description) {
             this
         } else {
@@ -57,6 +57,22 @@ data class ManifestSnapshot(
             )
         }
     }
+
+    operator fun minus(id: ThingId): ManifestSnapshot {
+        return if (!things.containsKey(id)) {
+            this
+        } else {
+            log.info("Removed {} from manifest", id)
+
+            copy(
+                version = version + 1,
+                things = things.remove(id),
+                thingStates = thingStates.remove(id),
+                actions = actions.remove(id)
+            )
+        }
+    }
+
 
     inline fun <reified S : ThingState> stateOfTypeOrNull(thingId: ThingId): S? {
         return thingStates[thingId]?.values?.filterIsInstance<S>()?.firstOrNull()
@@ -101,20 +117,6 @@ data class ManifestSnapshot(
         }
     }
 
-    fun withoutThing(id: ThingId): ManifestSnapshot {
-        return if (!things.containsKey(id)) {
-            this
-        } else {
-            log.info("Removed {} from manifest", id)
-
-            copy(
-                version = version + 1,
-                things = things.remove(id),
-                thingStates = thingStates.remove(id),
-                actions = actions.remove(id)
-            )
-        }
-    }
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ManifestSnapshot::class.java)
