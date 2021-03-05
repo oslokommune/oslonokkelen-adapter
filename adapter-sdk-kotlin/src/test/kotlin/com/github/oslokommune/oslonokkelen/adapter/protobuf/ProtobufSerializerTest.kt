@@ -160,6 +160,24 @@ internal class ProtobufSerializerTest {
             assertEquals(Adapter.ActionResponse.Status.DENIED, parsedResponse.status)
         }
 
+        @Test
+        fun `Serialize and parse response with code`() {
+            val response = ActionResponseMessage(
+                AdapterAttachment.Code(
+                    id = "some-code",
+                    code = "x-123",
+                    headerText = "Header",
+                    footerText = "Footer"
+                )
+            )
+
+            val serializedResponse = ProtobufSerializer.serialize(response)
+            val parsedResponse = ProtobufParser.parse(serializedResponse)
+
+            assertEquals(response, parsedResponse)
+            assertEquals(Adapter.ActionResponse.Status.SUCCESS, parsedResponse.status)
+        }
+
     }
 
     @Nested

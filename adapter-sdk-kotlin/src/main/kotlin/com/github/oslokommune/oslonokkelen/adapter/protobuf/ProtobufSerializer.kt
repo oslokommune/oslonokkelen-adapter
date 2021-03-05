@@ -48,6 +48,12 @@ object ProtobufSerializer {
                         if (attachment.expiresAt != null) {
                             expiresAt = attachment.expiresAt.toString()
                         }
+                        if (attachment.headerText != null) {
+                            headerText = attachment.headerText
+                        }
+                        if (attachment.footerText != null) {
+                            footerText = attachment.footerText
+                        }
                         build()
                     })
                     .build()
