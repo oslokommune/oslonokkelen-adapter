@@ -32,6 +32,14 @@ sealed class ThingState {
         override val key = Key(thingId, "thing.${thingId.value}.locked")
     }
 
+    data class OpenPosition(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val open: Boolean
+    ) : ThingState() {
+        override val key = Key(thingId, "thing.${thingId.value}.open")
+    }
+
     /**
      * Some "things" works as proxies in front of other systems.
      * This can be used to indicate the health of the connection between
@@ -59,9 +67,9 @@ sealed class ThingState {
                 }
             }
 
-            data class Disconnected(val disconnectedAt: Instant, val reason: String) : ConnectionState() {
+            data class Disconnected(val disconnectedAt: Instant) : ConnectionState() {
                 override fun toString(): String {
-                    return "Disconnected with reason: $reason"
+                    return "Disconnected $disconnectedAt"
                 }
             }
         }
