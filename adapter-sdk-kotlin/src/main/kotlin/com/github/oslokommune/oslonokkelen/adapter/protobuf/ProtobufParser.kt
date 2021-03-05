@@ -12,6 +12,9 @@ import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
+import com.google.protobuf.util.JsonFormat
+import com.nimbusds.jose.util.JSONObjectUtils
+import com.nimbusds.jwt.JWTClaimsSet
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentHashMap
@@ -27,6 +30,16 @@ object ProtobufParser {
 
     private val log: Logger = LoggerFactory.getLogger(ProtobufParser::class.java)
 
+    @Suppress("UNCHECKED_CAST")
+    fun parseActionRequestFromClaims(verifiedClaims: JWTClaimsSet) : Adapter.ActionRequest {
+        val request = verifiedClaims.getClaim("request") ?: throw IllegalStateException("No 'request' in token")
+        val json = JSONObjectUtils.toJSONString(request as MutableMap<String, *>?)
+
+        val jsonParser = JsonFormat.parser()
+        val requestBuilder = Adapter.ActionRequest.newBuilder()
+        jsonParser.merge(json, requestBuilder)
+        return requestBuilder.build()
+    }
 
     fun parse(serializedRequest: Adapter.ActionRequest, timestamp: Instant): AdapterActionRequest {
         return AdapterActionRequest(
