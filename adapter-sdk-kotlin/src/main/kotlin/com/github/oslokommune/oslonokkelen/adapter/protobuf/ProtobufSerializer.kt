@@ -3,7 +3,10 @@ package com.github.oslokommune.oslonokkelen.adapter.protobuf
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionResponseMessage
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
+import com.github.oslokommune.oslonokkelen.adapter.manifest.ManifestSnapshot
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 
 object ProtobufSerializer {
 
@@ -104,6 +107,128 @@ object ProtobufSerializer {
                     .build()
             }
         }
+    }
+
+    fun serialize(manifest: ManifestSnapshot): Adapter.AdapterManifest {
+        val thingList = manifest.things.values.map { thing ->
+            Adapter.AdapterManifest.Thing.newBuilder()
+                .setId(thing.id.value)
+                .setDescription(thing.description)
+                .addAllActions(serializeActions(manifest, thing))
+                .addAllSupportedStateTypes(thing.supportedStateTypes.toList())
+                .addAllState(serializeThingState(manifest, thing))
+                .setAdminRole(thing.adminRole)
+                .build()
+        }
+
+        val errorList = manifest.errorCodes.codes.map { (code, description) ->
+            Adapter.AdapterManifest.ErrorCodeDescription.newBuilder()
+                .setCode(code.code)
+                .setDescription(description.description)
+                .build()
+        }
+
+        return Adapter.AdapterManifest.newBuilder()
+            .setVersion(manifest.version)
+            .addAllThings(thingList)
+            .addAllErrorCodeDescriptions(errorList)
+            .build()
+    }
+
+    private fun serializeThingState(manifest: ManifestSnapshot, thing: ThingDescription): List<Adapter.ThingState> {
+        return manifest.thingStates[thing.id]?.map { (_, state) ->
+            when (state) {
+                is ThingState.ActionHealth -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setActionHealth(
+                            Adapter.ThingState.ActionHealth.newBuilder()
+                                .setDebugMessage(state.debugMessage)
+                                .setActionId(state.actionId.value)
+                                .setHealthy(state.healthy)
+                                .build()
+                        )
+                        .build()
+                }
+                is ThingState.Lock -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setLocked(
+                            if (state.locked) {
+                                Adapter.ThingState.Locked.LOCKED
+                            } else {
+                                Adapter.ThingState.Locked.UNLOCKED
+                            }
+                        )
+                        .build()
+                }
+                is ThingState.RemoteSystemConnection -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setRemoteConnection(
+                            Adapter.ThingState.RemoteConnection.newBuilder()
+                                .setConnected(state.connected)
+                                .setTimestampEpochSeconds(state.timestamp.epochSecond)
+                                .setDebugMessage(state.debugMessage)
+                                .build()
+                        )
+                        .build()
+                }
+                is ThingState.DebugLog -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setDebugLog(
+                            Adapter.ThingState.DebugLog.newBuilder()
+                                .addAllLines(
+                                    state.lines.map { line ->
+                                        Adapter.ThingState.DebugLog.Line.newBuilder()
+                                            .setTimestampEpochMillis(line.timestamp.toEpochMilli())
+                                            .setMessage(line.message)
+                                            .setLevel(
+                                                when (line.level) {
+                                                    Adapter.ThingState.DebugLog.Level.DEBUG -> Adapter.ThingState.DebugLog.Level.DEBUG
+                                                    Adapter.ThingState.DebugLog.Level.INFO -> Adapter.ThingState.DebugLog.Level.INFO
+                                                    Adapter.ThingState.DebugLog.Level.WARNING -> Adapter.ThingState.DebugLog.Level.WARNING
+                                                    Adapter.ThingState.DebugLog.Level.ERROR -> Adapter.ThingState.DebugLog.Level.ERROR
+                                                    Adapter.ThingState.DebugLog.Level.UNRECOGNIZED -> Adapter.ThingState.DebugLog.Level.ERROR
+                                                }
+                                            )
+                                            .build()
+                                    }
+                                )
+                                .build()
+                        )
+                        .build()
+                }
+                is ThingState.OpenPosition -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setOpen(
+                            when (state.open) {
+                                true -> Adapter.ThingState.Open.OPEN
+                                false -> Adapter.ThingState.Open.CLOSED
+                            }
+                        )
+                        .build()
+                }
+            }
+        } ?: emptyList()
+    }
+
+    private fun serializeActions(
+        manifest: ManifestSnapshot,
+        thing: ThingDescription
+    ): List<Adapter.AdapterManifest.Action> {
+        val actionList = manifest.actions[thing.id]?.map { (_, action) ->
+            Adapter.AdapterManifest.Action.newBuilder()
+                .setId(action.id.value)
+                .setDescription(action.description)
+                .addAllRequiredInputAttachmentTypes(action.requiredAttachmentTypes.toList())
+                .addAllPossibleOutputAttachmentTypes(action.possibleOutputAttachmentTypes.toList())
+                .build()
+        } ?: emptyList()
+
+        return actionList.sortedBy { it.id }
     }
 
 }

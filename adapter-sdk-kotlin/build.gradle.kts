@@ -46,6 +46,6 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "9"
-    kotlinOptions.freeCompilerArgs += "-java-parameters"
     kotlinOptions.allWarningsAsErrors = false
+   // kotlinOptions.useIR = true
 }
