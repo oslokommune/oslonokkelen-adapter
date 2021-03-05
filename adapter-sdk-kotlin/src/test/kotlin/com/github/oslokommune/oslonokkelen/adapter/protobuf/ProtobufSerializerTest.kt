@@ -5,13 +5,13 @@ import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionResponseMessage
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodeDescription
 import com.github.oslokommune.oslonokkelen.adapter.manifest.ManifestSnapshot
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -277,6 +277,11 @@ internal class ProtobufSerializerTest {
             )
 
             test(ManifestSnapshot() + frontDoor + debugLog)
+        }
+
+        @Test
+        fun `Serialize manifest with error codes`() {
+            test(ManifestSnapshot() + ErrorCodeDescription("some.error", "Some error"))
         }
 
 

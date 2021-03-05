@@ -121,9 +121,17 @@ object ProtobufSerializer {
                 .build()
         }
 
+        val errorList = manifest.errorCodes.codes.map { (code, description) ->
+            Adapter.AdapterManifest.ErrorCodeDescription.newBuilder()
+                .setCode(code.code)
+                .setDescription(description.description)
+                .build()
+        }
+
         return Adapter.AdapterManifest.newBuilder()
             .setVersion(manifest.version)
             .addAllThings(thingList)
+            .addAllErrorCodeDescriptions(errorList)
             .build()
     }
 

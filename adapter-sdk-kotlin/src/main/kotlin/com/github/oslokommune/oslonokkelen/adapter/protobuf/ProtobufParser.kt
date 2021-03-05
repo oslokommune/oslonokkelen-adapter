@@ -5,6 +5,8 @@ import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionResponseMessage
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodeDescription
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodes
 import com.github.oslokommune.oslonokkelen.adapter.manifest.ManifestSnapshot
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
@@ -12,6 +14,7 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentHashMap
 import kotlinx.collections.immutable.toPersistentList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -234,11 +237,19 @@ object ProtobufParser {
             }
         }
 
+        val errorCodes = serializedManifest.errorCodeDescriptionsList.map { serializedErrorCode ->
+            ErrorCodeDescription(
+                code = serializedErrorCode.code,
+                description = serializedErrorCode.description
+            )
+        }
+
         return ManifestSnapshot(
             version = serializedManifest.version,
-            things = things,
+            errorCodes = ErrorCodes(errorCodes.associateBy { it.code }.toPersistentHashMap()),
             thingStates = allThingState,
-            actions = actions
+            actions = actions,
+            things = things
         )
     }
 
