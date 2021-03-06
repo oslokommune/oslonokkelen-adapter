@@ -1,6 +1,6 @@
 package com.github.oslokommune.oslonokkelen.adapter.protobuf
 
-import com.github.oslokommune.oslonokkelen.adapter.BackendTokenGeneratorTest
+import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.BackendTokenGeneratorTest
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment

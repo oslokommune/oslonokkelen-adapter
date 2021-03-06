@@ -1,4 +1,4 @@
-package com.github.oslokommune.oslonokkelen.adapter
+package com.github.oslokommune.oslonokkelen.adapter.tokens.generator
 
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
@@ -14,8 +14,6 @@ import java.time.Instant
  * what different tokens look like.
  */
 class BackendTokenGeneratorTest {
-
-
 
     @Test
     fun `Manifest token`() {
@@ -49,22 +47,23 @@ class BackendTokenGeneratorTest {
         private val rightNow = Instant.now()
 
         val testGenerator = BackendTokenGenerator(
-            key = JWK.parse(
-                """{
-                  "kty": "EC",
-                  "d": "_QxboB_I6TlKxJJl35-vEwPJyBvbnTKs4Bmk_lGgg2o",
-                  "use": "sig",
-                  "crv": "P-256",
-                  "kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok",
-                  "key_ops": [
-                    "sign",
-                    "verify"
-                  ],
-                  "x": "ok7D8MXbeNd8SNra23LFL4jHK6IOMn2-3aqOHVLt-YA",
-                  "y": "7_E19ml4XpO8l1VkSfRyv46nibsJ5jygSYwl-14CSVQ"
-                }"""
-            )
-                .toECKey(),
+            tokenSigningKeySupplier = {
+                JWK.parse(
+                    """{
+                              "kty": "EC",
+                              "d": "_QxboB_I6TlKxJJl35-vEwPJyBvbnTKs4Bmk_lGgg2o",
+                              "use": "sig",
+                              "crv": "P-256",
+                              "kid": "FcxpczK3IvWqvClvdTXWvE1Pi7zaU_hi_MHgTjX-0Ok",
+                              "key_ops": [
+                                "sign",
+                                "verify"
+                              ],
+                              "x": "ok7D8MXbeNd8SNra23LFL4jHK6IOMn2-3aqOHVLt-YA",
+                              "y": "7_E19ml4XpO8l1VkSfRyv46nibsJ5jygSYwl-14CSVQ"
+                            }"""
+                ).toECKey()
+            },
             oslonokkelenBackendUri = URI.create("https://oslonokkelen.oslo.kommune.no"),
             tokenExpireTime = Duration.ofSeconds(30),
             timestamper = { rightNow }

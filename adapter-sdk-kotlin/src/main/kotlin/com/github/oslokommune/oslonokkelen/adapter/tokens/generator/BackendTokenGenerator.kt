@@ -1,4 +1,4 @@
-package com.github.oslokommune.oslonokkelen.adapter
+package com.github.oslokommune.oslonokkelen.adapter.tokens.generator
 
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.protobuf.ProtobufSerializer
@@ -25,7 +25,7 @@ import java.util.UUID
  * Useful for testing your adapter implementation.
  */
 class BackendTokenGenerator(
-    private val key: ECKey,
+    private val tokenSigningKeySupplier: TokenSigningKeySupplier,
     private val oslonokkelenBackendUri: URI,
     private val tokenExpireTime: Duration = Duration.ofSeconds(60),
     private val timestamper: () -> Instant = { Instant.now() },
@@ -73,8 +73,11 @@ class BackendTokenGenerator(
 
     fun buildToken(builderBlock: JWTClaimsSet.Builder.() -> Unit): SignedJWT {
         val claims = createTokenClaims(builderBlock)
-        val header = createTokenHeader()
-        return signToken(header, claims)
+        val adapterUri = URI.create(claims.audience.firstOrNull() ?: throw IllegalStateException("No aud"))
+        val signingKey = tokenSigningKeySupplier.signingKeyFor(adapterUri)
+        val header = createTokenHeader(signingKey)
+
+        return signToken(header, claims, signingKey)
     }
 
     private fun createTokenClaims(claimsBuilderBlock: JWTClaimsSet.Builder.() -> Unit): JWTClaimsSet {
@@ -87,16 +90,16 @@ class BackendTokenGenerator(
         return claimsBuilder.build()
     }
 
-    private fun createTokenHeader(): JWSHeader {
+    private fun createTokenHeader(signingKey: ECKey): JWSHeader {
         val headerBuilder = JWSHeader.Builder(JWSAlgorithm.ES256)
-        val publicKey = key.toPublicJWK()
+        val publicKey = signingKey.toPublicJWK()
         headerBuilder.keyID(publicKey.keyID)
         return headerBuilder.build()
     }
 
-    private fun signToken(header: JWSHeader?, claims: JWTClaimsSet): SignedJWT {
+    private fun signToken(header: JWSHeader?, claims: JWTClaimsSet, signingKey: ECKey): SignedJWT {
         val signedJWT = SignedJWT(header, claims)
-        signedJWT.sign(ECDSASigner(key))
+        signedJWT.sign(ECDSASigner(signingKey))
         return signedJWT
     }
 

@@ -1,6 +1,8 @@
 package com.github.oslokommune.oslonokkelen.adapter.tokens
 
-import com.github.oslokommune.oslonokkelen.adapter.BackendTokenGenerator
+import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.BackendTokenGenerator
+import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.TokenSigningKeySupplier
+import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.jwk.source.JWKSource
@@ -32,7 +34,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(key)))
@@ -50,7 +52,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = URI.create("https://not-expected-backend.com"),
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(key)))
@@ -70,7 +72,7 @@ internal class TokenVerifierFactoryTest {
             oslonokkelenBackendUri = backendUri,
             timestamper = { Instant.now().minusSeconds(61) },
             tokenExpireTime = Duration.ofSeconds(60),
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(key)))
@@ -88,7 +90,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(key)))
@@ -113,7 +115,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            key = fakeKey
+            tokenSigningKeySupplier = { fakeKey }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(realKey)))
@@ -131,7 +133,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet())) // Empty key set
@@ -149,7 +151,7 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            key = key
+            tokenSigningKeySupplier = { key }
         )
 
         val factor = createVerificationFactory(keySource = ImmutableJWKSet(JWKSet(key)))
