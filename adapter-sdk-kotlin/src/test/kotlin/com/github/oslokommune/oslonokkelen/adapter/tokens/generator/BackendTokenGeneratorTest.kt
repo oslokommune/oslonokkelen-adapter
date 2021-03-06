@@ -32,7 +32,6 @@ class BackendTokenGeneratorTest {
                 requestId = "r1",
                 actionId = ActionId("door", "open"),
                 timeBudget = Duration.ofSeconds(2),
-                receivedAt = Instant.now(),
                 attachments = listOf(
                     AdapterAttachment.NorwegianFodselsnummer("30098602247")
                 )

@@ -14,12 +14,9 @@ internal class ProtobufParserTest {
 
     @Test
     fun `Parse execute token from jwt`() {
-        val timestamp = Instant.now()
-
         val request = AdapterActionRequest(
             actionId = ActionId("door", "open"),
             requestId = "r-1",
-            receivedAt = timestamp,
             timeBudget = Duration.ofMillis(2400),
             attachments = listOf(
                 AdapterAttachment.NorwegianFodselsnummer("12345678912")
@@ -32,7 +29,7 @@ internal class ProtobufParserTest {
         )
 
         val protobufRequest = ProtobufParser.parseActionRequestFromClaims(token.jwtClaimsSet)
-        val restoredRequest = ProtobufParser.parse(protobufRequest, timestamp)
+        val restoredRequest = ProtobufParser.parse(protobufRequest)
 
         assertEquals(request, restoredRequest)
     }

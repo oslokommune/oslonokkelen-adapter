@@ -41,12 +41,11 @@ object ProtobufParser {
         return requestBuilder.build()
     }
 
-    fun parse(serializedRequest: Adapter.ActionRequest, timestamp: Instant): AdapterActionRequest {
+    fun parse(serializedRequest: Adapter.ActionRequest): AdapterActionRequest {
         return AdapterActionRequest(
             requestId = serializedRequest.requestId,
             actionId = ActionId(serializedRequest.thingId, serializedRequest.actionId),
             timeBudget = Duration.ofMillis(serializedRequest.timeBudgetMillis.toLong()),
-            receivedAt = timestamp,
             attachments = serializedRequest.attachmentsList.map { attachment ->
                 parseAttachment(attachment)
             }

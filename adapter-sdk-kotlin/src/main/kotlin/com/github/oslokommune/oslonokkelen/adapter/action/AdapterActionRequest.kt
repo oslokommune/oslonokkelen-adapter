@@ -8,7 +8,6 @@ data class AdapterActionRequest(
     val requestId: String = UUID.randomUUID().toString(),
     val actionId: ActionId,
     val timeBudget: Duration,
-    val receivedAt: Instant,
     val attachments: List<AdapterAttachment>
 ) {
 
