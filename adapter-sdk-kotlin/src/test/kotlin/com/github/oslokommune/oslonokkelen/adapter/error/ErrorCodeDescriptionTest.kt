@@ -1,5 +1,10 @@
 package com.github.oslokommune.oslonokkelen.adapter.error
 
+import com.github.oslokommune.oslonokkelen.adapter.action.ActionResponseMessage
+import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorType.DENIED
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorType.PERMANENT_ERROR
+import com.github.oslokommune.oslonokkelen.adapter.error.ErrorType.TEMPORARY_ERROR
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -56,6 +61,81 @@ internal class ErrorCodeDescriptionTest {
             description = "Another valid code",
             code = "this.is.also-valid"
         )
+    }
+
+    @Test
+    fun `Use error description to create permanent action error with default debug message`() {
+        val errorDescription = ErrorCodeDescription(
+            description = "This is bad..",
+            code = "bad.really.bad",
+            type = PERMANENT_ERROR
+        )
+
+        val response = errorDescription.createActionResponse()
+
+        assertThat(response).isEqualTo(ActionResponseMessage(
+            AdapterAttachment.ErrorDescription(
+                code = "bad.really.bad",
+                debugMessage = "This is bad..",
+                permanent = true
+            )
+        ))
+    }
+
+    @Test
+    fun `Use error description to create temporary action error with default debug message`() {
+        val errorDescription = ErrorCodeDescription(
+            description = "This is semi bad..",
+            code = "semi.bad",
+            type = TEMPORARY_ERROR
+        )
+
+        val response = errorDescription.createActionResponse()
+
+        assertThat(response).isEqualTo(ActionResponseMessage(
+            AdapterAttachment.ErrorDescription(
+                code = "semi.bad",
+                debugMessage = "This is semi bad..",
+                permanent = false
+            )
+        ))
+    }
+
+    @Test
+    fun `Use error description to create temporary action error with overridden debug message`() {
+        val errorDescription = ErrorCodeDescription(
+            description = "This is semi bad..",
+            code = "semi.bad",
+            type = TEMPORARY_ERROR
+        )
+
+        val response = errorDescription.createActionResponse("Could be worse...")
+
+        assertThat(response).isEqualTo(ActionResponseMessage(
+            AdapterAttachment.ErrorDescription(
+                code = "semi.bad",
+                debugMessage = "Could be worse...",
+                permanent = false
+            )
+        ))
+    }
+
+    @Test
+    fun `Use error description to create denied action error with overridden debug message`() {
+        val errorDescription = ErrorCodeDescription(
+            description = "No access",
+            code = "no.access",
+            type = DENIED
+        )
+
+        val response = errorDescription.createActionResponse("Members only")
+
+        assertThat(response).isEqualTo(ActionResponseMessage(
+            AdapterAttachment.DeniedReason(
+                debugMessage = "Members only",
+                code = "no.access"
+            )
+        ))
     }
 
 }
