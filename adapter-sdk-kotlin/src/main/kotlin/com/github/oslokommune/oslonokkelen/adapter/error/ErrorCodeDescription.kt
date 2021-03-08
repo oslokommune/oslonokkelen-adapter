@@ -15,6 +15,10 @@ data class ErrorCodeDescription(
     val type: ErrorType = PERMANENT_ERROR
 ) {
 
+    fun createActionResponse(trouble: Throwable) : ActionResponseMessage {
+        return createActionResponse("${trouble.javaClass.canonicalName}: ${trouble.message}")
+    }
+
     fun createActionResponse(debugMessage: String = description): ActionResponseMessage {
         return ActionResponseMessage(
             when (type) {

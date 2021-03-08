@@ -138,4 +138,22 @@ internal class ErrorCodeDescriptionTest {
         ))
     }
 
+    @Test
+    fun `Create action error response from exception`() {
+        val errorDescription = ErrorCodeDescription(
+            description = "Unexpected exception",
+            code = "unexpected"
+        )
+
+        val response = errorDescription.createActionResponse(IllegalStateException("You didn't see this coming!"))
+
+        assertThat(response).isEqualTo(ActionResponseMessage(
+            AdapterAttachment.ErrorDescription(
+                code = "unexpected",
+                debugMessage = "java.lang.IllegalStateException: You didn't see this coming!",
+                permanent = true
+            )
+        ))
+    }
+
 }
