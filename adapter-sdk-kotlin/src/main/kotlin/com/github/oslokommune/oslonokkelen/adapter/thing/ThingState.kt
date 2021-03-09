@@ -17,27 +17,52 @@ sealed class ThingState {
         override val actionId: ActionId,
         val healthy: Boolean,
         val debugMessage: String
-    ) : ThingState(), RelatedToAction {
+    ) : ThingState(), RelatedToAction, ComparableThingState {
 
         override val thingId = actionId.thingId
         override val key = Key(thingId, "action.health.${actionId.thingId.value}.${actionId.value}")
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is ActionHealth && healthy == other.healthy
+        }
+
+        override fun toString(): String {
+            return "${actionId.short}, healthy: $healthy, message: $debugMessage"
+        }
     }
 
     data class Lock(
         override val timestamp: Instant,
         override val thingId: ThingId,
         val locked: Boolean
-    ) : ThingState() {
+    ) : ThingState(), ComparableThingState {
 
         override val key = Key(thingId, "thing.${thingId.value}.locked")
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is Lock && locked == other.locked
+        }
+
+        override fun toString(): String {
+            return "${thingId.value} locked: $locked"
+        }
+
     }
 
     data class OpenPosition(
         override val timestamp: Instant,
         override val thingId: ThingId,
         val open: Boolean
-    ) : ThingState() {
+    ) : ThingState(), ComparableThingState {
         override val key = Key(thingId, "thing.${thingId.value}.open")
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is OpenPosition && open == other.open
+        }
+
+        override fun toString(): String {
+            return "${thingId.value} open: $open"
+        }
     }
 
     /**
@@ -50,7 +75,7 @@ sealed class ThingState {
         override val timestamp: Instant,
         val debugMessage: String,
         val state: ConnectionState
-    ) : ThingState() {
+    ) : ThingState(), ComparableThingState {
 
         override val key = Key(thingId, "thing.${thingId.value}.remote")
 
@@ -59,6 +84,10 @@ sealed class ThingState {
                 is ConnectionState.Connected -> true
                 is ConnectionState.Disconnected -> false
             }
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is RemoteSystemConnection && connected == other.connected
+        }
 
         sealed class ConnectionState {
             data class Connected(val connectedAt: Instant) : ConnectionState() {

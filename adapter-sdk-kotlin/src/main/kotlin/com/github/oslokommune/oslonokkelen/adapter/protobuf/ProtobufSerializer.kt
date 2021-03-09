@@ -142,7 +142,7 @@ object ProtobufSerializer {
     }
 
     private fun serializeThingState(manifest: ManifestSnapshot, thing: ThingDescription): List<Adapter.ThingState> {
-        return manifest.thingStates[thing.id]?.map { (_, state) ->
+        return manifest.thingStates[thing.id]?.data?.map { (_, state) ->
             when (state) {
                 is ThingState.ActionHealth -> {
                     Adapter.ThingState.newBuilder()

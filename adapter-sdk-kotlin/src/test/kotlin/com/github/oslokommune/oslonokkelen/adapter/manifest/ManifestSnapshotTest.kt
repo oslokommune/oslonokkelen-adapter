@@ -8,6 +8,7 @@ import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodes
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.assertj.core.api.Assertions.assertThat
@@ -283,7 +284,7 @@ internal class ManifestSnapshotTest {
                     ManifestSnapshot(
                         version = 3,
                         things = persistentMapOf(frontDoor.id to frontDoor),
-                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(lockedFrontDoor.key to lockedFrontDoor))
+                        thingStates = persistentMapOf(frontDoor.id to ThingStateSnapshot(lockedFrontDoor))
                     )
                 )
             }
@@ -298,7 +299,7 @@ internal class ManifestSnapshotTest {
                     ManifestSnapshot(
                         version = 4,
                         things = persistentMapOf(frontDoor.id to frontDoor),
-                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(updatedLockedFrontDoor.key to updatedLockedFrontDoor))
+                        thingStates = persistentMapOf(frontDoor.id to ThingStateSnapshot(updatedLockedFrontDoor))
                     )
                 )
             }
@@ -347,7 +348,7 @@ internal class ManifestSnapshotTest {
                     ManifestSnapshot(
                         version = 5,
                         things = persistentMapOf(frontDoor.id to frontDoor),
-                        thingStates = persistentMapOf(frontDoor.id to persistentMapOf(frontDoorLog.key to frontDoorLog))
+                        thingStates = persistentMapOf(frontDoor.id to ThingStateSnapshot(frontDoorLog))
                     )
                 )
             }

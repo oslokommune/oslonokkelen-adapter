@@ -12,6 +12,7 @@ import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
 import com.google.protobuf.util.JsonFormat
 import com.nimbusds.jose.util.JSONObjectUtils
 import com.nimbusds.jwt.JWTClaimsSet
@@ -132,7 +133,7 @@ object ProtobufParser {
 
     fun parse(serializedManifest: Adapter.AdapterManifest): ManifestSnapshot {
         var things = persistentMapOf<ThingId, ThingDescription>()
-        var allThingState = persistentMapOf<ThingId, PersistentMap<ThingState.Key, ThingState>>()
+        var allThingState = persistentMapOf<ThingId, ThingStateSnapshot>()
         var actions = persistentMapOf<ThingId, PersistentMap<ActionId, ActionDescription>>()
 
         for (serializedThing in serializedManifest.thingsList) {
@@ -245,7 +246,7 @@ object ProtobufParser {
                 actions = actions.put(thing.id, thingActions)
             }
             if (thingStates.isNotEmpty()) {
-                allThingState = allThingState.put(thing.id, thingStates)
+                allThingState = allThingState.put(thing.id, ThingStateSnapshot(thing.id, thingStates))
             }
         }
 

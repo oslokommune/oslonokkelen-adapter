@@ -8,6 +8,7 @@ import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodes
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
+import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import org.slf4j.Logger
@@ -17,7 +18,7 @@ data class ManifestSnapshot(
     val version: Long = 1,
     val things: PersistentMap<ThingId, ThingDescription> = persistentMapOf(),
     val actions: PersistentMap<ThingId, PersistentMap<ActionId, ActionDescription>> = persistentMapOf(),
-    val thingStates: PersistentMap<ThingId, PersistentMap<ThingState.Key, ThingState>> = persistentMapOf(),
+    val thingStates: PersistentMap<ThingId, ThingStateSnapshot> = persistentMapOf(),
     val errorCodes: ErrorCodes = ErrorCodes()
 ) {
 
@@ -74,7 +75,7 @@ data class ManifestSnapshot(
     }
 
     inline fun <reified S : ThingState> stateOfTypeOrNull(thingId: ThingId): S? {
-        return thingStates[thingId]?.values?.filterIsInstance<S>()?.firstOrNull()
+        return thingStates[thingId]?.data?.values?.filterIsInstance<S>()?.firstOrNull()
     }
 
     operator fun plus(description: ActionDescription): ManifestSnapshot {
@@ -102,6 +103,7 @@ data class ManifestSnapshot(
         return if (thingActions?.containsKey(actionId) == true) {
             val updatedThingActions = thingActions.remove(actionId)
             val stateToRemove = thingStates[thingId]
+                ?.data
                 ?.values
                 ?.filterIsInstance<ThingState.RelatedToAction>()
                 ?.filter { it.actionId == actionId }
@@ -139,12 +141,12 @@ data class ManifestSnapshot(
             throw InvalidManifestException("Can't add state for unknown thing '${newState.thingId}' to manifest")
         }
 
-        return if (thingStates[newState.thingId]?.get(newState.key) == newState) {
+        return if (thingStates[newState.thingId]?.data?.get(newState.key) == newState) {
             log.debug("State already up to date: {}", newState)
             this
         } else {
-            val state = thingStates[newState.thingId] ?: persistentMapOf()
-            val updatedThingState = state.put(newState.key, newState)
+            val thingState = thingStates[newState.thingId] ?: ThingStateSnapshot(newState.thingId)
+            val updatedThingState = thingState + newState
 
             copy(
                 version = version + 1,
@@ -165,17 +167,17 @@ data class ManifestSnapshot(
             if (currentState == null) {
                 this
             } else {
-                val updatedStateForThing = currentStateForThing.remove(stateKey)
+                val updatedStateForThing = currentStateForThing - (stateKey)
 
-                if (updatedStateForThing.isEmpty()) {
+                if (updatedStateForThing != null) {
                     copy(
                         version = version + 1,
-                        thingStates = thingStates.remove(thingId)
+                        thingStates = thingStates.put(thingId, updatedStateForThing)
                     )
                 } else {
                     copy(
                         version = version + 1,
-                        thingStates = thingStates.put(thingId, updatedStateForThing)
+                        thingStates = thingStates.remove(thingId)
                     )
                 }
             }
