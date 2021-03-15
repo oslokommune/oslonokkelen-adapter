@@ -14,7 +14,7 @@ project.description = "Defines protobuf messages used in api"
 
 dependencies {
     api("com.google.protobuf:protobuf-java:3.15.5")
-    api("com.google.protobuf:protobuf-java-util:3.15.5")
+    api("com.google.protobuf:protobuf-java-util:3.15.6")
 }
 
 protobuf {
