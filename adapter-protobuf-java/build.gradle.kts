@@ -19,7 +19,7 @@ dependencies {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.15.5"
+        artifact = "com.google.protobuf:protoc:3.15.6"
     }
     generateProtoTasks {
         ofSourceSet("protobuf").forEach { task ->
