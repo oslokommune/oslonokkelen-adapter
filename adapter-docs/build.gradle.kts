@@ -43,6 +43,7 @@ tasks {
 
 
 asciidoctorj {
+    setVersion("2.4.3")
     modules.diagram.setVersion("2.1.0")
     logLevel = LogLevel.INFO
 }
