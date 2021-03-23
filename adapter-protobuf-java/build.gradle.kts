@@ -12,14 +12,16 @@ plugins {
 
 project.description = "Defines protobuf messages used in api"
 
+val protobufVersion = "3.15.5"
+
 dependencies {
-    api("com.google.protobuf:protobuf-java:3.15.5")
-    api("com.google.protobuf:protobuf-java-util:3.15.5")
+    api("com.google.protobuf:protobuf-java:$protobufVersion")
+    api("com.google.protobuf:protobuf-java-util:$protobufVersion")
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.15.5"
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
     generateProtoTasks {
         ofSourceSet("protobuf").forEach { task ->
