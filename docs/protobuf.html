@@ -464,6 +464,8 @@ message AdapterManifest {
 
   repeated Thing things = 2;
 
+  // Declaration of errors might returned from the adapter.
+  repeated ErrorCodeDescription error_code_descriptions = 3;
 
 
   // Examples:
@@ -509,25 +511,22 @@ message AdapterManifest {
     // Possible output
     repeated AttachmentType possible_output_attachment_types = 4;
 
-    // By declaring possible error codes we can help / force
-    // administrators to map helpful error messages.
-    repeated PossibleErrorCode possible_error_codes = 5;
-
-
-    message PossibleErrorCode {
-
-      // Url safe code.
-      // Example: im-a-teapot
-      string code = 1;
-
-      // Really short human readable description explaining
-      // when this code will be returned.
-      string description = 2;
-
-    }
+    reserved 5;
 
   }
 
+
+  message ErrorCodeDescription {
+
+    // Url safe code.
+    // Example: im-a-teapot
+    string code = 1;
+
+    // Really short human readable description explaining
+    // when this code will be returned.
+    string description = 2;
+
+  }
 
 }
 
@@ -598,6 +597,8 @@ enum AttachmentType {
 
   ERROR_DESCRIPTION = 4;
 
+  DENIED_REASON = 5;
+
 }
 
 // Action requests and responses can contain attachments.
@@ -609,6 +610,7 @@ message Attachment {
     ErrorDescription error_description = 3;
     EndUserMessage end_user_message = 4;
     NorwegianFodselsnummer norwegian_fodselsnummer = 5;
+    DeniedReason denied_reason = 6;
   }
 
   message Code {
@@ -629,6 +631,12 @@ message Attachment {
     // Is the app required to verify a cached code? Or can it assume
     // that it never expires before the expire date?
     bool must_verify = 4;
+
+    // Optional text to be displayed above the code
+    string header_text = 5;
+
+    // Optional text to be displayed under the code
+    string footer_text = 6;
 
   }
 
@@ -652,6 +660,20 @@ message Attachment {
   message ErrorDescription {
 
     // Something like: unknown-user or db-connection-error
+    // Should be declared in the action manifest to allow
+    // admins to map error codes to human readable messages.
+    string code = 1;
+
+    string debugMessage = 2;
+
+    bool permanent = 3;
+
+
+  }
+
+  message DeniedReason {
+
+    // Something like: unknown-user
     // Should be declared in the action manifest to allow
     // admins to map error codes to human readable messages.
     string code = 1;
@@ -724,6 +746,7 @@ message ThingState {
     QueueEstimate queue_estimate = 4;
     ActionHealth action_health = 5;
     RemoteConnection remote_connection = 6;
+    DebugLog debug_log = 7;
   }
 
 
@@ -774,6 +797,25 @@ message ThingState {
 
     // Short one liner describing the connection status.
     string debug_message = 3;
+  }
+
+  message DebugLog {
+
+    repeated Line lines = 1;
+
+    message Line {
+      int64 timestamp_epoch_millis = 1;
+      Level level = 2;
+      string message = 3;
+    }
+
+    enum Level {
+      DEBUG = 0;
+      INFO = 1;
+      WARNING = 2;
+      ERROR = 3;
+    }
+
   }
 
 }</code></pre>
