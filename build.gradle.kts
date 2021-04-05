@@ -2,7 +2,7 @@ plugins {
     id("idea")
     id("jacoco")
     id("org.jetbrains.kotlin.jvm") version "1.4.32"
-    id("com.adarshr.test-logger") version "2.1.1"
+    id("com.adarshr.test-logger") version "3.0.0"
     id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
