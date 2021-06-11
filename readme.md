@@ -15,3 +15,5 @@ We use [asciidoc](https://asciidoctor.org/docs/asciidoc-writers-guide/) for our 
 as html by running:
 
     ./gradlew :adapter-docs:asciidoctor
+
+This will generate new html files you have to commit and push. 
