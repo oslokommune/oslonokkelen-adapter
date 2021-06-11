@@ -1,6 +1,7 @@
 Oslonøkkelen adapter
 ====================
-
+[![](https://jitpack.io/v/oslokommune/oslonokkelen-adapter.svg)](https://jitpack.io/#oslokommune/oslonokkelen-adapter)
+[![Testing](https://github.com/oslokommune/oslonokkelen-adapter/actions/workflows/testing.yml/badge.svg)](https://github.com/oslokommune/oslonokkelen-adapter/actions/workflows/testing.yml)
 
 Development
 -----------
