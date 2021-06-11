@@ -47,5 +47,12 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "9"
     kotlinOptions.allWarningsAsErrors = false
-   // kotlinOptions.useIR = true
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
 }
