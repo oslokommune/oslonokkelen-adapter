@@ -18,7 +18,7 @@ description = "Oslonøkkelen Adapter Kotlin SDK"
 dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
     api(project(":adapter-protobuf-java"))
-    api("com.nimbusds:nimbus-jose-jwt:9.10")
+    api("com.nimbusds:nimbus-jose-jwt:9.11.1")
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.4")
 
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
