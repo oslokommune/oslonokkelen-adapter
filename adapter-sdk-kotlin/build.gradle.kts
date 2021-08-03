@@ -16,7 +16,7 @@ plugins {
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("org.slf4j:slf4j-api:1.7.32")
     api(project(":adapter-protobuf-java"))
     api("com.nimbusds:nimbus-jose-jwt:9.11.3")
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.4")
