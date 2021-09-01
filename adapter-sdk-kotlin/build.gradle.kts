@@ -23,7 +23,6 @@ dependencies {
 
     testImplementation("org.slf4j:slf4j-simple:1.7.32")
     testImplementation("org.assertj:assertj-core:3.20.2")
-    testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
 }
 
@@ -39,8 +38,8 @@ plugins.withType<TestLoggerPlugin> {
 tasks.test {
     useJUnitPlatform()
     reports {
-        html.isEnabled = true
-        junitXml.isEnabled = true
+        html.required.set(false)
+        junitXml.required.set(true)
     }
 }
 
