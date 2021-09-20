@@ -242,6 +242,10 @@ message Attachment {
     // Optional link (to website)
     string link = 2;
 
+    // Optional link name. Will be ignored without a link.
+    // Single line and max 20 characters.
+    string linkName = 3;
+
   }
 
   message NorwegianFodselsnummer {

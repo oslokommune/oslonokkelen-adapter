@@ -15,3 +15,15 @@ allprojects {
         mavenCentral()
     }
 }
+
+subprojects {
+    plugins.withType<JavaPlugin> {
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(16))
+                vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+                implementation.set(JvmImplementation.J9)
+            }
+        }
+    }
+}

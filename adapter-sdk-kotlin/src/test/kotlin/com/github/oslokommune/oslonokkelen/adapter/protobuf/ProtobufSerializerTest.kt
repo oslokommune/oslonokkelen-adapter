@@ -146,7 +146,10 @@ internal class ProtobufSerializerTest {
                 ),
                 AdapterAttachment.EndUserMessage(
                     message = "Not open today",
-                    link = URI.create("https://example.com/opening-hours")
+                    link = AdapterAttachment.Link(
+                        link = URI.create("https://example.com/opening-hours"),
+                        name = "Opening hours"
+                    )
                 )
             )
 

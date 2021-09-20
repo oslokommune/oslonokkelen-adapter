@@ -79,7 +79,11 @@ object ProtobufSerializer {
                             .build()
 
                         if (attachment.link != null) {
-                            link = attachment.link.toString()
+                            link = attachment.link.link.toString()
+
+                            if (attachment.link.name != null) {
+                                linkName = attachment.link.name
+                            }
                         }
                         build()
                     })

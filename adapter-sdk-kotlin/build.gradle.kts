@@ -1,7 +1,6 @@
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
@@ -41,10 +40,6 @@ tasks.test {
         html.required.set(false)
         junitXml.required.set(true)
     }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.allWarningsAsErrors = false
 }
 
 publishing {

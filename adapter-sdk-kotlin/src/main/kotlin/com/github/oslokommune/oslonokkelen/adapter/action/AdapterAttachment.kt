@@ -34,11 +34,24 @@ sealed class AdapterAttachment {
 
     data class EndUserMessage(
         val message: String,
-        val link: URI? = null
+        val link: Link? = null
     ) : AdapterAttachment() {
         init {
             if (message.isBlank()) {
                 throw IllegalArgumentException("Message can't be blank")
+            }
+        }
+    }
+
+    data class Link(val link: URI, val name: String? = null) {
+        init {
+            if (name != null) {
+                if (name.length > 20) {
+                    throw IllegalArgumentException("Name is too long")
+                }
+                if (name.contains('\n')) {
+                    throw IllegalArgumentException("Name must be single line")
+                }
             }
         }
     }

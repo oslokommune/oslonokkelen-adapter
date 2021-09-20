@@ -118,7 +118,12 @@ object ProtobufParser {
                 AdapterAttachment.EndUserMessage(
                     message = attachment.endUserMessage.message.message,
                     link = if (attachment.endUserMessage.link.isNotBlank()) {
-                        URI.create(attachment.endUserMessage.link)
+                        AdapterAttachment.Link(
+                            link = URI.create(attachment.endUserMessage.link),
+                            name = attachment.endUserMessage.linkName.ifBlank {
+                                null
+                            }
+                        )
                     } else {
                         null
                     }
