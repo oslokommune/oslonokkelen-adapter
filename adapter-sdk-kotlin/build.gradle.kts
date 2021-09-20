@@ -44,7 +44,6 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "9"
     kotlinOptions.allWarningsAsErrors = false
 }
 
