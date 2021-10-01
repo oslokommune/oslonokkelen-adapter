@@ -7,5 +7,6 @@ data class ThingDescription(
     val id: ThingId,
     val description: String,
     val adminRole: String,
-    val supportedStateTypes: Set<Adapter.ThingStateType> = emptySet()
+    val supportedStateTypes: Set<Adapter.ThingStateType> = emptySet(),
+    val tags: Set<String> = emptySet()
 )
