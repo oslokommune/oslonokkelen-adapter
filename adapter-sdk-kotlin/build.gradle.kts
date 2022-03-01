@@ -18,7 +18,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.36")
     api(project(":adapter-protobuf-java"))
     api("com.nimbusds:nimbus-jose-jwt:9.20")
-    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.4")
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     testImplementation("org.slf4j:slf4j-simple:1.7.36")
     testImplementation("org.assertj:assertj-core:3.22.0")
