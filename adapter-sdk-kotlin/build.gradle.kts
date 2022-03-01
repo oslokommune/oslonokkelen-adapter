@@ -15,12 +15,12 @@ plugins {
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.slf4j:slf4j-api:1.7.36")
     api(project(":adapter-protobuf-java"))
     api("com.nimbusds:nimbus-jose-jwt:9.15.2")
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.4")
 
-    testImplementation("org.slf4j:slf4j-simple:1.7.32")
+    testImplementation("org.slf4j:slf4j-simple:1.7.36")
     testImplementation("org.assertj:assertj-core:3.22.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
