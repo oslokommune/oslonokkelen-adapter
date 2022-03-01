@@ -92,12 +92,14 @@
     <text x='306' y='92'>Action</text>
     <text x='114' y='12'>Context:</text>
     <line class='broken' x1='212' x2='212' y1='0' y2='224'/>
-    <text x='250' y='76'>0..*</text>
+    <text x='250' y='76'>0..</text>
+    <circle class='filled' cx='276' cy='72' r='4'/>
     <text x='58' y='92'>Operation</text>
     <line class='solid end_marked_arrow' x1='216' x2='288' y1='88' y2='88'/>
     <text x='154' y='108'>1..1</text>
-    <line class='solid end_marked_arrow' x1='332' x2='332' y1='144' y2='112'/>
-    <text x='346' y='124'>0..*</text>
+    <polygon class='filled' points='328,124 332,112 336,124'/>
+    <text x='346' y='124'>0..</text>
+    <circle class='filled' cx='372' cy='120' r='4'/>
     <text x='290' y='172'>1..1</text>
     <text x='322' y='204'>Thing</text>
     <text x='226' y='12'>Context:</text>
@@ -131,7 +133,7 @@
         <path class='nofill' d='M 140,100 A 4,4 0,0,1 136,104'/>
     </g>
     <g>
-        <line class='solid' x1='332' x2='332' y1='144' y2='184'/>
+        <line class='solid' x1='332' x2='332' y1='128' y2='184'/>
         <path class='nofill' d='M 312,184 A 4,4 0,0,0 308,188'/>
         <line class='solid' x1='308' x2='308' y1='188' y2='212'/>
         <line class='solid' x1='312' x2='368' y1='184' y2='184'/>
