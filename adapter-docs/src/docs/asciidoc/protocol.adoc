@@ -50,8 +50,29 @@ responsible for parsing and validating the token.
 
 === Sample manifest response
 
-*TODO*
 
+[source,yaml]
+....
+version: 42
+things:
+- id: front-door
+  description: The front door
+  actions:
+  - id: open
+    description: Unlocks and opens the front door for 10 seconds
+  - id: unlock
+    description: Unlocks the front door
+  - id: lock
+    description: Locks the front door
+- id: back-door
+  description: The back door
+  actions:
+  - id: open
+    description: Unlocks and opens the back door for 10 seconds
+....
+
+NOTE: This sample uses yaml formatting just to give you an idea of what a manifest looks like. The actual manifest
+response produced by your adapter should be protobuf encoded.
 
 == Executing a request
 
@@ -125,4 +146,19 @@ If you copy the serialized token above into https://jwt.io you should see someth
 
 === Sample execute response
 
-*TODO*
+[source,yaml]
+....
+status: ERROR_TEMPORARY <1>
+attachments:
+- error_description:
+    code: door-offline <2>
+- end_user_message:
+    message:
+      message: Sorry, but the door appears to be offline <3>
+....
+<1> Success, denied, temporary error or permanent error
+<2> Error code mostly for debugging / statistics
+<3> Human-readable message that will show up in the users app
+
+NOTE: This sample uses yaml formatting just to give you an idea of what a manifest looks like. The actual manifest
+response produced by your adapter should be protobuf encoded.

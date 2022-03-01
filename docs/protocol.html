@@ -527,8 +527,38 @@ responsible for parsing and validating the token.</p>
 </div>
 <div class="sect2">
 <h3 id="_sample_manifest_response">Sample manifest response</h3>
-<div class="paragraph">
-<p><strong>TODO</strong></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 42
+things:
+- id: front-door
+  description: The front door
+  actions:
+  - id: open
+    description: Unlocks and opens the front door for 10 seconds
+  - id: unlock
+    description: Unlocks the front door
+  - id: lock
+    description: Locks the front door
+- id: back-door
+  description: The back door
+  actions:
+  - id: open
+    description: Unlocks and opens the back door for 10 seconds</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This sample uses yaml formatting just to give you an idea of what a manifest looks like. The actual manifest
+response produced by your adapter should be protobuf encoded.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -618,8 +648,45 @@ responsible for parsing and validating the token.</p>
 </div>
 <div class="sect2">
 <h3 id="_sample_execute_response">Sample execute response</h3>
-<div class="paragraph">
-<p><strong>TODO</strong></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">status: ERROR_TEMPORARY <i class="conum" data-value="1"></i><b>(1)</b>
+attachments:
+- error_description:
+    code: door-offline <i class="conum" data-value="2"></i><b>(2)</b>
+- end_user_message:
+    message:
+      message: Sorry, but the door appears to be offline <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Success, denied, temporary error or permanent error</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Error code mostly for debugging / statistics</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Human-readable message that will show up in the users app</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This sample uses yaml formatting just to give you an idea of what a manifest looks like. The actual manifest
+response produced by your adapter should be protobuf encoded.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -628,7 +695,7 @@ responsible for parsing and validating the token.</p>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2021-09-01 08:48:45 +0200
+Last updated 2022-03-01 09:43:29 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
