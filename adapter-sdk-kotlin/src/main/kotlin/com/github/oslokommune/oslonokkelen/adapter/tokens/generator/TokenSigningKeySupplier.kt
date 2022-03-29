@@ -5,6 +5,6 @@ import java.net.URI
 
 fun interface TokenSigningKeySupplier {
 
-    fun signingKeyFor(adapterRemoteUri: URI) : ECKey
+    fun signingKeyFor() : ECKey
 
 }
