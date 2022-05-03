@@ -73,8 +73,7 @@ class BackendTokenGenerator(
 
     fun buildToken(builderBlock: JWTClaimsSet.Builder.() -> Unit): SignedJWT {
         val claims = createTokenClaims(builderBlock)
-        val adapterUri = URI.create(claims.audience.firstOrNull() ?: throw IllegalStateException("No aud"))
-        val signingKey = tokenSigningKeySupplier.signingKeyFor(adapterUri)
+        val signingKey = tokenSigningKeySupplier.signingKeyFor()
         val header = createTokenHeader(signingKey)
 
         return signToken(header, claims, signingKey)
