@@ -15,7 +15,8 @@ plugins {
 val ktorVersion = "2.0.1"
 
 dependencies {
-    api(project(":adapter-sdk-ktor2-module"))
+    implementation(project(":adapter-sdk-ktor2-module"))
+    implementation(project(":adapter-sdk-kotlin"))
 
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.github.ajalt.clikt:clikt-jvm:3.4.2")
