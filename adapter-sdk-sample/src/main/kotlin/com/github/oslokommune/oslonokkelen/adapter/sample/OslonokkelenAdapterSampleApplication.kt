@@ -11,7 +11,6 @@ import com.github.oslokommune.oslonokkelen.adapter.tokens.client.OslonokkelenJWK
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType.Application.Json
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import java.net.URI
@@ -21,7 +20,7 @@ fun main(args: Array<String>) {
     command.main(args)
 }
 
-class RootCommand :CliktCommand(name = "oslonokkelen-sample-adapter") {
+class RootCommand : CliktCommand(name = "oslonokkelen-sample-adapter") {
     override fun run() {
 
     }
@@ -36,7 +35,10 @@ class SampleAdapterCommand : CliktCommand(name = "server") {
     private val backendUri by option("--oslonokkelen-backend-uri", help = "Oslonøkkelen backend uri")
         .default("https://oslonokkelen-backend-api.k8s.oslo.kommune.no")
 
-    private val adapterUri by option("--adapter-uri", help = "Where your adapter is deployed, example: https://example.com/oslonokkelen-adapter")
+    private val adapterUri by option(
+        "--adapter-uri",
+        help = "Where your adapter is deployed, example: https://example.com/oslonokkelen-adapter"
+    )
         .default("https://oslonokkelen-backend-api.k8s.oslo.kommune.no")
 
     override fun run() {
@@ -55,11 +57,18 @@ class SampleAdapterCommand : CliktCommand(name = "server") {
             expectSuccess = false
         }
 
-        val tokenVerifierFactory =  TokenVerifierFactory(
+        val jwkSourceFactory = OslonokkelenJWKSourceFactory(
+            client = httpClient,
+            backendRootUri = backendRootUri
+        )
+        val replayDetector = InMemoryTokenReplayDetector(
+            capacity = 1000
+        )
+        val tokenVerifierFactory = TokenVerifierFactory(
             expectedAudience = URI.create(adapterUri),
+            keySource = jwkSourceFactory.createSource(),
             expectedIssuer = backendRootUri,
-            replayDetector = InMemoryTokenReplayDetector(capacity = 1000),
-            keySource = OslonokkelenJWKSourceFactory(httpClient, backendRootUri).createSource()
+            replayDetector = replayDetector
         )
 
     }
