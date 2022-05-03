@@ -6,6 +6,7 @@ plugins {
     application
     idea
 
+    kotlin("plugin.serialization") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.jetbrains.kotlin.jvm")
     id("com.adarshr.test-logger")
@@ -15,11 +16,17 @@ plugins {
 val ktorVersion = "2.0.1"
 
 dependencies {
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
     implementation(project(":adapter-sdk-ktor2-module"))
     implementation(project(":adapter-sdk-kotlin"))
+    implementation(project(":adapter-sdk-kotlin-ktor2-client"))
 
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.github.ajalt.clikt:clikt-jvm:3.4.2")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
 
     testImplementation("org.slf4j:slf4j-simple:1.7.36")
@@ -33,7 +40,7 @@ application {
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("keystudioctl")
+        archiveBaseName.set("oslonokkelen-sample-adapter")
         archiveClassifier.set("")
         archiveVersion.set("")
 

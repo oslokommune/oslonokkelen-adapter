@@ -7,6 +7,13 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.oslokommune.oslonokkelen.adapter.tokens.InMemoryTokenReplayDetector
 import com.github.oslokommune.oslonokkelen.adapter.tokens.TokenVerifierFactory
+import com.github.oslokommune.oslonokkelen.adapter.tokens.client.OslonokkelenJWKSourceFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import java.net.URI
 
 fun main(args: Array<String>) {
@@ -34,12 +41,25 @@ class SampleAdapterCommand : CliktCommand(name = "server") {
 
     override fun run() {
         echo("Starting adapter on port $port")
+        val backendRootUri = URI.create(backendUri)
+
+        val httpClient = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    }
+                )
+            }
+            expectSuccess = false
+        }
 
         val tokenVerifierFactory =  TokenVerifierFactory(
             expectedAudience = URI.create(adapterUri),
-            expectedIssuer = URI.create(backendUri),
+            expectedIssuer = backendRootUri,
             replayDetector = InMemoryTokenReplayDetector(capacity = 1000),
-            keySource = OslonokkelenJWKSourceFactory(httpClient, backendUri).createSource()
+            keySource = OslonokkelenJWKSourceFactory(httpClient, backendRootUri).createSource()
         )
 
     }
