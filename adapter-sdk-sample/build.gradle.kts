@@ -24,10 +24,19 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.github.ajalt.clikt:clikt-jvm:3.4.2")
+
+    // Ktor client
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
+    // Ktor server
+    implementation("io.ktor:ktor-server-cio:$ktorVersion")
+    implementation("io.ktor:ktor-server-compression:$ktorVersion")
+    implementation("io.ktor:ktor-server-default-headers:$ktorVersion")
+    implementation("io.ktor:ktor-server-html-builder:$ktorVersion")
+    implementation("io.ktor:ktor-server-cors:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
 
     testImplementation("org.slf4j:slf4j-simple:1.7.36")
     testImplementation("org.assertj:assertj-core:3.22.0")
