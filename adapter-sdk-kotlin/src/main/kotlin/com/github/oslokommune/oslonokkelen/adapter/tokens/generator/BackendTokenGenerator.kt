@@ -2,6 +2,7 @@ package com.github.oslokommune.oslonokkelen.adapter.tokens.generator
 
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.protobuf.ProtobufSerializer
+import com.google.gson.JsonParser
 import com.google.protobuf.util.JsonFormat
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
@@ -11,7 +12,6 @@ import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.KeyOperation
 import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator
-import com.nimbusds.jose.shaded.json.parser.JSONParser
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import java.net.URI
@@ -66,9 +66,7 @@ class BackendTokenGenerator(
     private fun serializeRequestAsJson(request: AdapterActionRequest): Any? {
         val protobufRequest = ProtobufSerializer.serialize(request)
         val jsonRequest = JsonFormat.printer().print(protobufRequest)
-        val jsonParser = JSONParser(JSONParser.ACCEPT_SIMPLE_QUOTE)
-
-        return jsonParser.parse(jsonRequest)
+        return JsonParser.parseString(jsonRequest)
     }
 
     fun buildToken(builderBlock: JWTClaimsSet.Builder.() -> Unit): SignedJWT {
