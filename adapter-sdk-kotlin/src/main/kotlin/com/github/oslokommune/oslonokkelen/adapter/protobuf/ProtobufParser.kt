@@ -13,8 +13,6 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
-import com.google.gson.JsonObject
-import com.google.protobuf.util.JsonFormat
 import com.nimbusds.jwt.JWTClaimsSet
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -33,13 +31,59 @@ object ProtobufParser {
 
 
     fun parseActionRequestFromClaims(verifiedClaims: JWTClaimsSet) : Adapter.ActionRequest {
-        val requestClaim = verifiedClaims.getClaim("request")
-        val request = requestClaim as? JsonObject ?: throw IllegalStateException("Missing request claim")
-        val jsonParser = JsonFormat.parser()
+        val requestClaim = verifiedClaims.getJSONObjectClaim("request")
         val requestBuilder = Adapter.ActionRequest.newBuilder()
-        jsonParser.merge(request.toString(), requestBuilder)
+            .setRequestId(requireString(requestClaim, "requestId"))
+            .setThingId(requireString(requestClaim, "thingId"))
+            .setActionId(requireString(requestClaim, "actionId"))
+            .setTimeBudgetMillis(requireLong(requestClaim, "timeBudgetMillis").toInt())
+            .addAllAttachments(requireList(requestClaim, "attachments").mapNotNull { attachment ->
+                if (attachment is Map<*, *>) {
+                    val key = attachment.keys.firstOrNull() as? String
+
+                    when (key) {
+                        "norwegianFodselsnummer" -> {
+                            val value = attachment.values.firstOrNull() as Map<*, *>
+
+                            Adapter.Attachment.newBuilder()
+                                .setNorwegianFodselsnummer(Adapter.Attachment.NorwegianFodselsnummer.newBuilder()
+                                    .setNumber(requireString(value, "number"))
+                                    .build())
+                                .build()
+                        }
+                        else -> {
+                            null
+                        }
+                    }
+                } else {
+                    null
+                }
+            })
 
         return requestBuilder.build()
+    }
+
+    private fun requireString(requestClaim: Map<*, *>, key: String): String {
+        val value = requestClaim[key] as? String
+
+        return if (!value.isNullOrBlank()) {
+            value
+        } else {
+            throw missingKey(key, requestClaim)
+        }
+    }
+
+    private fun requireLong(requestClaim: Map<String, Any>, key: String): Long {
+        return requestClaim[key] as? Long ?: throw missingKey(key, requestClaim)
+    }
+
+    private fun requireList(requestClaim: Map<String, Any>, key: String): List<*> {
+        val value = requestClaim[key] as? List<*>
+        return value ?: throw missingKey(key, requestClaim)
+    }
+
+    private fun missingKey(key: String,requestClaim: Map<*, *>): IllegalStateException {
+        return IllegalStateException("Missing key $key (found: ${requestClaim.keys.joinToString(", ")})")
     }
 
     fun parse(serializedRequest: Adapter.ActionRequest): AdapterActionRequest {

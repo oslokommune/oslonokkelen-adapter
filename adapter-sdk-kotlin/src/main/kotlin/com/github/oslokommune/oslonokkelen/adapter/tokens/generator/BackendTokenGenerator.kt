@@ -1,9 +1,7 @@
 package com.github.oslokommune.oslonokkelen.adapter.tokens.generator
 
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
-import com.github.oslokommune.oslonokkelen.adapter.protobuf.ProtobufSerializer
-import com.google.gson.JsonParser
-import com.google.protobuf.util.JsonFormat
+import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.ECDSASigner
@@ -43,30 +41,38 @@ class BackendTokenGenerator(
     }
 
     fun createActionRequestToken(remoteUri: URI, request: AdapterActionRequest): SignedJWT {
-        val parsedRequest = serializeRequestAsJson(request)
+        val requestClaim = mapOf(
+            "thingId" to request.actionId.thingId.value,
+            "actionId" to request.actionId.value,
+            "timeBudgetMillis" to request.timeBudget.toMillis(),
+            "requestId" to request.requestId,
+            "attachments" to request.attachments.mapNotNull { attachment ->
+                when (attachment) {
+                    is AdapterAttachment.NorwegianFodselsnummer -> {
+                        mapOf(
+                            "norwegianFodselsnummer" to mapOf(
+                                "number" to attachment.number
+                            )
+                        )
+                    }
+
+                    // These are response attachments
+                    is AdapterAttachment.Code,
+                    is AdapterAttachment.DeniedReason,
+                    is AdapterAttachment.EndUserMessage,
+                    is AdapterAttachment.ErrorDescription,
+                    is AdapterAttachment.PunchCard -> null
+                }
+            }
+        )
 
         return buildToken {
             audience("${remoteUri.scheme}://${remoteUri.host}")
             issuer("${oslonokkelenBackendUri.scheme}://${oslonokkelenBackendUri.host}")
             jwtID(jwtIdGenerator())
             claim("scope", listOf("action:execute"))
-            claim("request", parsedRequest)
+            claim("request", requestClaim)
         }
-    }
-
-    /**
-     * This is a bit of a hack..
-     *
-     * We use protobuf to describe messages and it is possible to serialize the
-     * Java classes generated from the .proto files to json, BUT the jwt library
-     * can't work with these classes so we have to serialize the request to json
-     * and then back to classes Nimbus JWT can work with in order to embed the
-     * request in the token.
-     */
-    private fun serializeRequestAsJson(request: AdapterActionRequest): Any? {
-        val protobufRequest = ProtobufSerializer.serialize(request)
-        val jsonRequest = JsonFormat.printer().print(protobufRequest)
-        return JsonParser.parseString(jsonRequest)
     }
 
     fun buildToken(builderBlock: JWTClaimsSet.Builder.() -> Unit): SignedJWT {
