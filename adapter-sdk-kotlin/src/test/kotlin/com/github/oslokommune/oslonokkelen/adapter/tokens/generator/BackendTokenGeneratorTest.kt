@@ -41,6 +41,7 @@ class BackendTokenGeneratorTest {
         println(token.serialize())
     }
 
+
     companion object {
 
         private val rightNow = Instant.now()
