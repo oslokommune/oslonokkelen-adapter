@@ -16,7 +16,7 @@ val ktorVersion = "2.1.0"
 
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:1.7.36")
+    implementation("org.slf4j:slf4j-api:2.0.3")
     api("com.nimbusds:nimbus-jose-jwt:9.25.6")
 
     implementation("io.ktor:ktor-client-json:$ktorVersion")
