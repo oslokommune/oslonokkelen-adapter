@@ -3,7 +3,7 @@ plugins {
     id("jacoco")
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("com.adarshr.test-logger") version "3.2.0"
-    id("com.google.protobuf") version "0.8.19"
+    id("com.google.protobuf") version "0.9.1"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
