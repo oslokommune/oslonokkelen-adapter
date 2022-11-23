@@ -131,18 +131,6 @@ object ProtobufParser {
                 )
             }
 
-            Adapter.Attachment.ValueCase.PUNCH_CARD -> {
-                AdapterAttachment.PunchCard(
-                    used = attachment.punchCard.used,
-                    total = attachment.punchCard.used + attachment.punchCard.remaining,
-                    expiresAt = if (attachment.punchCard.expiresAt.isNotBlank()) {
-                        ZonedDateTime.parse(attachment.punchCard.expiresAt)
-                    } else {
-                        null
-                    }
-                )
-            }
-
             Adapter.Attachment.ValueCase.ERROR_DESCRIPTION -> {
                 AdapterAttachment.ErrorDescription(
                     code = attachment.errorDescription.code,
