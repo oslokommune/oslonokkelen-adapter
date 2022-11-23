@@ -80,24 +80,6 @@ sealed class AdapterAttachment {
         }
     }
 
-    data class PunchCard(
-        val used: Int,
-        val total: Int,
-        val expiresAt: ZonedDateTime? = null
-    ) : AdapterAttachment() {
-        init {
-            if (used < 0) {
-                throw IllegalArgumentException("Used must be positive")
-            }
-            if (total < 0) {
-                throw IllegalArgumentException("Total must be positive")
-            }
-            if (used > total) {
-                throw IllegalArgumentException("Used can't be greater then total")
-            }
-        }
-    }
-
     /**
      * http://www.fnrinfo.no/verktoy/finnlovlige_tilfeldig.aspx
      */

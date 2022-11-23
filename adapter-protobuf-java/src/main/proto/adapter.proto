@@ -141,7 +141,7 @@ enum AttachmentType {
 
   CODE = 1;
 
-  PUNCH_CARD = 2;
+  reserved 2;
 
   END_USER_MESSAGE = 3;
 
@@ -156,7 +156,6 @@ message Attachment {
 
   oneof value {
     Code code = 1;
-    PunchCard punch_card = 2;
     ErrorDescription error_description = 3;
     EndUserMessage end_user_message = 4;
     NorwegianFodselsnummer norwegian_fodselsnummer = 5;
@@ -187,23 +186,6 @@ message Attachment {
 
     // Optional text to be displayed under the code
     string footer_text = 6;
-
-  }
-
-  // Some actions represents consumable resources.
-  // This attachment indicates how many "clips" are left.
-  message PunchCard {
-
-    // How many of the "resource" has
-    // been used so far this period.
-    int32 used = 1;
-
-    // Hoe many of the "resource" is
-    // still remaining this period.
-    int32 remaining = 2;
-
-    // ISO-8601
-    string expires_at = 3;
 
   }
 

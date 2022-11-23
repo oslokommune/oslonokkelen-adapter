@@ -52,17 +52,11 @@ internal class ProtobufSerializerTest {
                 code = "y"
             )
 
-            val punchCard = AdapterAttachment.PunchCard(
-                expiresAt = ZonedDateTime.now(),
-                used = 10,
-                total = 20
-            )
-
             val message = AdapterAttachment.EndUserMessage(
                 message = "Here is your code"
             )
 
-            val response = code + message + punchCard
+            val response = code + message
             val serializedResponse = ProtobufSerializer.serialize(response)
             val parsedResponse = ProtobufParser.parse(serializedResponse)
 
@@ -77,12 +71,7 @@ internal class ProtobufSerializerTest {
                 id = "x"
             )
 
-            val message = AdapterAttachment.PunchCard(
-                used = 10,
-                total = 20
-            )
-
-            val response = code + message
+            val response = ActionResponseMessage(code)
             val serializedResponse = ProtobufSerializer.serialize(response)
             val parsedResponse = ProtobufParser.parse(serializedResponse)
 

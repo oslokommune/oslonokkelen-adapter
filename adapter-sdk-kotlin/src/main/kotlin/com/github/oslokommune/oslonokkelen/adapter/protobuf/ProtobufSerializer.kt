@@ -101,21 +101,6 @@ object ProtobufSerializer {
                     )
                     .build()
             }
-
-            is AdapterAttachment.PunchCard -> {
-                Adapter.Attachment.newBuilder()
-                    .setPunchCard(Adapter.Attachment.PunchCard.newBuilder().run {
-                        remaining = attachment.total - attachment.used
-                        used = attachment.used
-
-                        if (attachment.expiresAt != null) {
-                            expiresAt = attachment.expiresAt.toString()
-                        }
-
-                        build()
-                    })
-                    .build()
-            }
         }
     }
 

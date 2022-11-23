@@ -60,8 +60,7 @@ class BackendTokenGenerator(
                     is AdapterAttachment.Code,
                     is AdapterAttachment.DeniedReason,
                     is AdapterAttachment.EndUserMessage,
-                    is AdapterAttachment.ErrorDescription,
-                    is AdapterAttachment.PunchCard -> null
+                    is AdapterAttachment.ErrorDescription -> null
                 }
             }
         )
