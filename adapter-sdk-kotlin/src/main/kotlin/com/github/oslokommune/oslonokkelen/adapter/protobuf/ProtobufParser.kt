@@ -91,19 +91,19 @@ object ProtobufParser {
             requestId = serializedRequest.requestId,
             actionId = ActionId(serializedRequest.thingId, serializedRequest.actionId),
             timeBudget = Duration.ofMillis(serializedRequest.timeBudgetMillis.toLong()),
-            attachments = serializedRequest.attachmentsList.map { attachment ->
+            attachments = serializedRequest.attachmentsList.mapNotNull { attachment ->
                 parseAttachment(attachment)
             }
         )
     }
 
     fun parse(serializedResponse: Adapter.ActionResponse): ActionResponseMessage {
-        return ActionResponseMessage(serializedResponse.attachmentsList.map { attachment ->
+        return ActionResponseMessage(serializedResponse.attachmentsList.mapNotNull { attachment ->
             parseAttachment(attachment)
         })
     }
 
-    private fun parseAttachment(attachment: Adapter.Attachment): AdapterAttachment {
+    private fun parseAttachment(attachment: Adapter.Attachment): AdapterAttachment? {
         return when (attachment.valueCase) {
             Adapter.Attachment.ValueCase.NORWEGIAN_FODSELSNUMMER -> {
                 AdapterAttachment.NorwegianFodselsnummer(attachment.norwegianFodselsnummer.number)
@@ -163,7 +163,8 @@ object ProtobufParser {
             }
 
             Adapter.Attachment.ValueCase.VALUE_NOT_SET, null -> {
-                throw UnsupportedOperationException("Unsupported attachment: ${attachment.valueCase}")
+                log.warn("Unsupported or missing attachment: {}", attachment.valueCase)
+                null
             }
         }
     }
