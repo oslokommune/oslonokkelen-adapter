@@ -9,6 +9,15 @@ Please install the Ktlint git pre-commit hook to auto format changed files.
 
     ./gradlew addKtlintFormatGitPreCommitHook
 
+How to upgrade gradle wrapper
+-----------
+Find the newest version of gradle here: https://gradle.org/releases/ 
+Then run this command(remember to replace version with the newest version):
+
+``` bash
+./gradlew wrapper --gradle-version 7.6
+```
+
 Build docs
 ----------
 We use [asciidoc](https://asciidoctor.org/docs/asciidoc-writers-guide/) for our documentation. This can be rendered
