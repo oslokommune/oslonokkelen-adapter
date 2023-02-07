@@ -1,29 +1,29 @@
-name: Testing
-on: [push]
+name: Integration testing
+
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
   build:
-    timeout-minutes: 10
-    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout sources"
+        uses: actions/checkout@v3
 
-      - name: Cache gradle
-        uses: actions/cache@v3
+      - name: "Configure Java"
+        uses: actions/setup-java@v3
         with:
-          path: ~/.gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/build.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: "temurin"
+          java-version: 18
 
-      - name: Install Java
-        uses: actions/setup-java@v3.9.0
+      - name: "Gradle - Tests"
+        uses: gradle/gradle-build-action@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
-
-      - name: Build with Gradle
-        run: ./gradlew test
-
+          arguments: test --no-watch-fs --parallel --stacktrace --max-workers=4
 
