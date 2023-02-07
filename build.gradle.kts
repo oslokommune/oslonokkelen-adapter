@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("idea")
     id("jacoco")
@@ -14,4 +16,11 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    pluginManager.withPlugin("kotlin") {
+        tasks.withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = JavaVersion.VERSION_18.toString()
+        }
+    }
 }
+
