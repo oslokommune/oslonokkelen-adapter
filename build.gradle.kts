@@ -22,5 +22,11 @@ allprojects {
             kotlinOptions.jvmTarget = JavaVersion.VERSION_18.toString()
         }
     }
+    pluginManager.withPlugin("java") {
+        tasks.withType<JavaCompile> {
+            targetCompatibility = JavaVersion.VERSION_18.toString()
+            sourceCompatibility = JavaVersion.VERSION_18.toString()
+        }
+    }
 }
 
