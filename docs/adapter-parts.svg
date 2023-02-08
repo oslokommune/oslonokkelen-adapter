@@ -107,7 +107,7 @@
     <text x='466' y='76'>Adapter</text>
     <text x='530' y='76'>api</text>
     <line class='solid end_marked_arrow' x1='500' x2='500' y1='88' y2='160'/>
-    <polygon class='filled' points='152,100 144,104 152,108'/>
+    <line class='broken end_marked_arrow' x1='160' x2='144' y1='104' y2='104'/>
     <text x='514' y='108'>trigger</text>
     <text x='578' y='108'>action</text>
     <text x='514' y='124'>over</text>
@@ -163,7 +163,7 @@
         <text x='434' y='44'>kkelen</text>
     </g>
     <g>
-        <line class='broken' x1='152' x2='232' y1='104' y2='104'/>
+        <line class='broken' x1='160' x2='232' y1='104' y2='104'/>
         <path class='nofill' d='M 232,104 A 4,4 0,0,1 236,108'/>
         <line class='broken' x1='236' x2='236' y1='108' y2='144'/>
     </g>

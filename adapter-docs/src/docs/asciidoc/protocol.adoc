@@ -134,14 +134,16 @@ If you copy the serialized token above into https://jwt.io you should see someth
     "action:execute" <3>
   ],
   "iss": "https://oslonokkelen.oslo.kommune.no",
-  "exp": 1614065466,
+  "exp": 1614065466, <4>
   "iat": 1614065436,
-  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0" <5>
 }
 ....
 <1> Most requests won't have any attachments.
-<2> Randomly generated.
-<3> All execute requests will have this scope.
+<2> Randomly generated for this example.
+<3> All execute requests will have this scope. The scope tells the adapter what the purpose of the tokken is. The adapter must not open any doors unless this scope is present in the token.
+<4> Token expire time. The adapter must reject any expired tokens.
+<5> The adapter can prevent replay attacks by keeping a list of non expired token ids and rejecting already used tokens.
 
 
 === Sample execute response

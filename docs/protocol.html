@@ -623,9 +623,9 @@ responsible for parsing and validating the token.</p>
     "action:execute" <i class="conum" data-value="3"></i><b>(3)</b>
   ],
   "iss": "https://oslonokkelen.oslo.kommune.no",
-  "exp": 1614065466,
+  "exp": 1614065466, <i class="conum" data-value="4"></i><b>(4)</b>
   "iat": 1614065436,
-  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0"
+  "jti": "6d3c6645-d026-4df2-b2c1-d547a8dd90d0" <i class="conum" data-value="5"></i><b>(5)</b>
 }</code></pre>
 </div>
 </div>
@@ -637,11 +637,19 @@ responsible for parsing and validating the token.</p>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Randomly generated.</td>
+<td>Randomly generated for this example.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>All execute requests will have this scope.</td>
+<td>All execute requests will have this scope. The scope tells the adapter what the purpose of the tokken is. The adapter must not open any doors unless this scope is present in the token.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Token expire time. The adapter must reject any expired tokens.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The adapter can prevent replay attacks by keeping a list of non expired token ids and rejecting already used tokens.</td>
 </tr>
 </table>
 </div>
@@ -695,7 +703,7 @@ response produced by your adapter should be protobuf encoded.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-03-01 09:43:29 +0100
+Last updated 2023-02-08 09:57:12 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

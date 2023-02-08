@@ -112,7 +112,7 @@
     <text x='674' y='108'>response</text>
     <line class='solid end_marked_arrow' x1='24' x2='152' y1='120' y2='120'/>
     <line class='solid end_marked_arrow' x1='656' x2='776' y1='120' y2='120'/>
-    <polygon class='filled' points='264,204 268,192 272,204'/>
+    <line class='solid end_marked_arrow' x1='268' x2='268' y1='224' y2='192'/>
     <text x='194' y='252'>Can</text>
     <text x='226' y='252'>break</text>
     <text x='274' y='252'>the</text>
@@ -124,8 +124,8 @@
     <text x='194' y='284'>success</text>
     <text x='258' y='284'>response.</text>
     <g>
-        <line class='solid' x1='268' x2='268' y1='208' y2='232'/>
         <line class='solid' x1='192' x2='352' y1='232' y2='232'/>
+        <line class='solid' x1='268' x2='268' y1='224' y2='232'/>
     </g>
     <g>
         <path class='nofill' d='M 208,72 A 4,4 0,0,0 204,76'/>
