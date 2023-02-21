@@ -137,11 +137,14 @@ data class ManifestSnapshot(
                 throw InvalidManifestException("Tried to add state related to unknown ${newState.actionId}")
             }
         }
-        if (!things.containsKey(newState.thingId)) {
-            throw InvalidManifestException("Can't add state for unknown thing '${newState.thingId}' to manifest")
-        }
-
-        return if (thingStates[newState.thingId]?.data?.get(newState.key) == newState) {
+        return if (!things.containsKey(newState.thingId)) {
+            if (newState is ThingState.DebugLog) {
+                log.warn("Got debug log from thing {} before manifest: {}", newState.thingId.value, newState.lines.lastOrNull())
+                this
+            } else {
+                throw InvalidManifestException("Can't add state for unknown thing '${newState.thingId}' to manifest")
+            }
+        } else if (thingStates[newState.thingId]?.data?.get(newState.key) == newState) {
             log.debug("State already up to date: {}", newState)
             this
         } else {
