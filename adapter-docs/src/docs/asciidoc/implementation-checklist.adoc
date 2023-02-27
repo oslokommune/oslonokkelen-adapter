@@ -37,3 +37,7 @@ After implementing everything described above, you can get in touch with us with
 * [ ] Your adapters public uri like `https://dev.example.com/api/oslonokkelen`
 * [ ] At least one email address for alerts if something fails
 * [ ] "Behandlingsgrunnlag" for any actions requiring personal data (GDPR)
+
+== Other requirements
+
+* [ ] Your adapter must have a way to filter which doors are made available to Oslonøkkelen.
