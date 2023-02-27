@@ -19,7 +19,7 @@ val slf4jVersion = "2.0.6"
 dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     api(project(":adapter-protobuf-java"))
-    api("com.nimbusds:nimbus-jose-jwt:9.30.2")
+    api("com.nimbusds:nimbus-jose-jwt:9.31")
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
