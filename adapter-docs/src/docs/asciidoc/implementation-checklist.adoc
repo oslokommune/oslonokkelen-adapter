@@ -19,7 +19,7 @@ for all endpoints. Details can be found on the page describing the xref:protocol
 Please note that this will never be an exhaustive list. The details can be found on the page describing
 link:authentication.adoc[authentication]. You will get a lot of these "for free" if you are able to use our Kotlin SDK.
 
-* [ ] Fetch public keys from Oslonøkkelen backend
+* [ ] Fetch https://api.prod.citykey.oslo.systems/adapter/v2/keys[public keys] from Oslonøkkelen backend
 * [ ] Cache public keys by `kid` for at least 24 hours
 * [ ] Make sure your http client verifies tls certificate when fetching public keys
 * [ ] Validate token signature against cached public keys
