@@ -65,45 +65,6 @@ sealed class ThingState {
         }
     }
 
-    /**
-     * Some "things" works as proxies in front of other systems.
-     * This can be used to indicate the health of the connection between
-     * your adapter and this other system.
-     */
-    data class RemoteSystemConnection(
-        override val thingId: ThingId,
-        override val timestamp: Instant,
-        val debugMessage: String,
-        val state: ConnectionState
-    ) : ThingState(), ComparableThingState {
-
-        override val key = Key(thingId, "thing.${thingId.value}.remote")
-
-        val connected: Boolean
-            get() = when (state) {
-                is ConnectionState.Connected -> true
-                is ConnectionState.Disconnected -> false
-            }
-
-        override fun hasSameStateAs(other: ThingState): Boolean {
-            return other is RemoteSystemConnection && connected == other.connected
-        }
-
-        sealed class ConnectionState {
-            data class Connected(val connectedAt: Instant) : ConnectionState() {
-                override fun toString(): String {
-                    return "Connected at $connectedAt"
-                }
-            }
-
-            data class Disconnected(val disconnectedAt: Instant) : ConnectionState() {
-                override fun toString(): String {
-                    return "Disconnected $disconnectedAt"
-                }
-            }
-        }
-    }
-
     data class DebugLog(
         override val thingId: ThingId,
         val maxLength: Int = DEFAULT_MAX_LENGTH,
