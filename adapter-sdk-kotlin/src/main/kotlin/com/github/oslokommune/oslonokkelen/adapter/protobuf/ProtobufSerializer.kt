@@ -110,7 +110,6 @@ object ProtobufSerializer {
                 .setId(thing.id.value)
                 .setDescription(thing.description)
                 .addAllActions(serializeActions(manifest, thing))
-                .addAllSupportedStateTypes(thing.supportedStateTypes.toList())
                 .addAllState(serializeThingState(manifest, thing))
                 .setAdminRole(thing.adminRole)
                 .build()
@@ -154,18 +153,6 @@ object ProtobufSerializer {
                             } else {
                                 Adapter.ThingState.Locked.UNLOCKED
                             }
-                        )
-                        .build()
-                }
-                is ThingState.RemoteSystemConnection -> {
-                    Adapter.ThingState.newBuilder()
-                        .setLastUpdate(state.timestamp.toString())
-                        .setRemoteConnection(
-                            Adapter.ThingState.RemoteConnection.newBuilder()
-                                .setConnected(state.connected)
-                                .setTimestampEpochSeconds(state.timestamp.epochSecond)
-                                .setDebugMessage(state.debugMessage)
-                                .build()
                         )
                         .build()
                 }

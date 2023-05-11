@@ -178,8 +178,7 @@ object ProtobufParser {
             val thing = ThingDescription(
                 id = ThingId(serializedThing.id),
                 description = serializedThing.description,
-                adminRole = serializedThing.adminRole,
-                supportedStateTypes = serializedThing.supportedStateTypesList.toSet()
+                adminRole = serializedThing.adminRole
             )
 
             // Actions
@@ -219,37 +218,12 @@ object ProtobufParser {
                         )
                     }
 
-                    Adapter.ThingState.ValueCase.QUEUE_ESTIMATE -> {
-                        log.warn("Support for queue estimate has not been implemented")
-                        null
-                    }
-
                     Adapter.ThingState.ValueCase.ACTION_HEALTH -> {
                         ThingState.ActionHealth(
                             timestamp = lastUpdate,
                             actionId = thing.id.createActionId(serializedState.actionHealth.actionId),
                             debugMessage = serializedState.actionHealth.debugMessage,
                             healthy = serializedState.actionHealth.healthy
-                        )
-                    }
-
-                    Adapter.ThingState.ValueCase.REMOTE_CONNECTION -> {
-                        ThingState.RemoteSystemConnection(
-                            timestamp = lastUpdate,
-                            thingId = thing.id,
-                            debugMessage = serializedState.remoteConnection.debugMessage,
-                            state = when (serializedState.remoteConnection.connected) {
-                                true -> {
-                                    ThingState.RemoteSystemConnection.ConnectionState.Connected(
-                                        connectedAt = Instant.ofEpochSecond(serializedState.remoteConnection.timestampEpochSeconds)
-                                    )
-                                }
-                                false -> {
-                                    ThingState.RemoteSystemConnection.ConnectionState.Disconnected(
-                                        disconnectedAt = Instant.ofEpochSecond(serializedState.remoteConnection.timestampEpochSeconds)
-                                    )
-                                }
-                            }
                         )
                     }
 

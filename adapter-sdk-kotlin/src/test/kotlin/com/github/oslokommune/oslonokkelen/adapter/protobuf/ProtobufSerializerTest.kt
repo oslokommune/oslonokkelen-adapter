@@ -176,7 +176,6 @@ internal class ProtobufSerializerTest {
             id = ThingId("front-door"),
             description = "This is the front door",
             adminRole = "master-of-doors",
-            supportedStateTypes = setOf(Adapter.ThingStateType.ACTION_HEALTH)
         )
 
         private val unlockFrontDoor = ActionDescription(
@@ -228,30 +227,6 @@ internal class ProtobufSerializerTest {
             )
 
             test(ManifestSnapshot() + frontDoor + unlockFrontDoor + healthyAction)
-        }
-
-        @Test
-        fun `Serialize and parse manifest with remote connection - Connected`() {
-            val remoteConnection = ThingState.RemoteSystemConnection(
-                timestamp = timestamp,
-                debugMessage = "All good",
-                state = ThingState.RemoteSystemConnection.ConnectionState.Connected(timestamp),
-                thingId = frontDoor.id
-            )
-
-            test(ManifestSnapshot() + frontDoor + remoteConnection)
-        }
-
-        @Test
-        fun `Serialize and parse manifest with remote connection - Disconnected`() {
-            val remoteConnection = ThingState.RemoteSystemConnection(
-                timestamp = timestamp,
-                debugMessage = "We are disconnected",
-                state = ThingState.RemoteSystemConnection.ConnectionState.Disconnected(timestamp),
-                thingId = frontDoor.id
-            )
-
-            test(ManifestSnapshot() + frontDoor + remoteConnection)
         }
 
         @Test
