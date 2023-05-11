@@ -16,7 +16,7 @@ message AdapterManifest {
   repeated Thing things = 2;
 
   // Declaration of errors might returned from the adapter.
-  // By declaring error possible error codes up front administrators of
+  // By declaring possible error codes up front administrators of
   // Oslonøkkelen can write and change human readable messages for different
   // errors without changing the implementation of the adapter.
   repeated ErrorCodeDescription error_code_descriptions = 3;
