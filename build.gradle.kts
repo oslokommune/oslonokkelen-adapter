@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
     id("com.adarshr.test-logger") version "3.2.0"
     id("com.google.protobuf") version "0.9.3"
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.4.0"
 }
 
 allprojects {
