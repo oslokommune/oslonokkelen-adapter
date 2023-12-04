@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("idea")
     id("jacoco")
-    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    id("org.jetbrains.kotlin.jvm") version "1.9.21"
     id("com.adarshr.test-logger") version "4.0.0"
     id("com.google.protobuf") version "0.9.4"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
