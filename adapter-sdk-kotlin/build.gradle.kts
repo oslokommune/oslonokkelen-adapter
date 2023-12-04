@@ -24,7 +24,7 @@ dependencies {
 
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
     testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
 }
 
 plugins.withType<TestLoggerPlugin> {
