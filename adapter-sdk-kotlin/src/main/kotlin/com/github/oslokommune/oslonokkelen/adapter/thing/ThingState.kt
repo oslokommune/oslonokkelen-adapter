@@ -86,6 +86,10 @@ sealed class ThingState {
         override val timestamp: Instant
             get() = lines.last().timestamp
 
+        override fun toString(): String {
+            return lines.joinToString("\n")
+        }
+
         data class Line(
             val timestamp: Instant,
             val message: String,
@@ -93,6 +97,10 @@ sealed class ThingState {
         ) : Comparable<Line> {
             override fun compareTo(other: Line): Int {
                 return timestamp.compareTo(other.timestamp)
+            }
+
+            override fun toString(): String {
+                return "$timestamp - $level: $message"
             }
         }
 
