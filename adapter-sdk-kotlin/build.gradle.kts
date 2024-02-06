@@ -14,7 +14,7 @@ plugins {
 
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
-val slf4jVersion = "2.0.11"
+val slf4jVersion = "2.0.12"
 
 dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
@@ -23,7 +23,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
-    testImplementation("org.assertj:assertj-core:3.25.2")
+    testImplementation("org.assertj:assertj-core:3.25.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 

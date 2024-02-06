@@ -16,7 +16,7 @@ val ktorVersion = "2.3.8"
 
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:2.0.11")
+    implementation("org.slf4j:slf4j-api:2.0.12")
     api("com.nimbusds:nimbus-jose-jwt:9.37.3")
 
     implementation("io.ktor:ktor-client-json:$ktorVersion")
@@ -24,8 +24,8 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    testImplementation("org.slf4j:slf4j-simple:2.0.11")
-    testImplementation("org.assertj:assertj-core:3.25.2")
+    testImplementation("org.slf4j:slf4j-simple:2.0.12")
+    testImplementation("org.assertj:assertj-core:3.25.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
