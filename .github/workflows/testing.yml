@@ -17,13 +17,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Configure Java"
-        uses: actions/setup-java@v4
+        uses: "actions/setup-java@v4"
         with:
           distribution: "temurin"
           java-version: 21
 
       - name: "Gradle - Tests"
-        uses: gradle/gradle-build-action@v3.0.0
+        uses: "gradle/actions/setup-gradle@v3"
         with:
-          arguments: test --no-watch-fs --parallel --stacktrace --max-workers=4
+          dependency-graph: "generate-and-submit"
+          build-root-directory: "oslonokkelen-backend"
+          arguments: "test --configuration-cache --build-cache --no-watch-fs --stacktrace --scan"
 
