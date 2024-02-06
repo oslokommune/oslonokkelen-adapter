@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 plugins {
     id("org.asciidoctor.jvm.convert") version "4.0.0"
     id("org.asciidoctor.jvm.pdf") version "4.0.2"
-    id("org.asciidoctor.jvm.gems") version "3.3.2"
+    id("org.asciidoctor.jvm.gems") version "4.0.2"
 }
 
 repositories {
