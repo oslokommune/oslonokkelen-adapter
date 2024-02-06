@@ -26,6 +26,5 @@ jobs:
         uses: "gradle/actions/setup-gradle@v3"
         with:
           dependency-graph: "generate-and-submit"
-          build-root-directory: "oslonokkelen-backend"
           arguments: "test --configuration-cache --build-cache --no-watch-fs --stacktrace --scan"
 
