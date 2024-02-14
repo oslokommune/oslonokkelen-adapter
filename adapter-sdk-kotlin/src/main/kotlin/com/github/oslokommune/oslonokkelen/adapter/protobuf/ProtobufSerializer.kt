@@ -193,6 +193,48 @@ object ProtobufSerializer {
                         )
                         .build()
                 }
+
+                is ThingState.BatteryStatus -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setBatteryStatus(when (state.state) {
+                            ThingState.BatteryStatus.State.EMPTY -> Adapter.ThingState.BatteryStatus.EMPTY
+                            ThingState.BatteryStatus.State.GOOD -> Adapter.ThingState.BatteryStatus.GOOD
+                            ThingState.BatteryStatus.State.POOR -> Adapter.ThingState.BatteryStatus.POOR
+                        })
+                        .build()
+                }
+                is ThingState.DeviceType -> {
+                    val deviceInfoBuilder = Adapter.ThingState.DeviceInfo.newBuilder()
+
+                    if (state.vendor != null) {
+                        deviceInfoBuilder.setVendor(state.vendor)
+                    }
+                    if (state.model != null) {
+                        deviceInfoBuilder.setModel(state.model)
+                    }
+                    if (state.firmwareVersion != null) {
+                        deviceInfoBuilder.setFirmwareVersion(state.firmwareVersion)
+                    }
+
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setDeviceType(deviceInfoBuilder.build())
+                        .build()
+                }
+                is ThingState.Online -> {
+                    val onlineBuilder = Adapter.ThingState.Online.newBuilder()
+                    onlineBuilder.setIsOnline(state.online)
+
+                    if (state.lastSeen != null) {
+                        onlineBuilder.setLastSeen(state.lastSeen.toString())
+                    }
+
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setOnline(onlineBuilder.build())
+                        .build()
+                }
             }
         } ?: emptyList()
     }

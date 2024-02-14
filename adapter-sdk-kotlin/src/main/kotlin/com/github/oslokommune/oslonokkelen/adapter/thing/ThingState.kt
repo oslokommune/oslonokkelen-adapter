@@ -112,6 +112,44 @@ sealed class ThingState {
 
     }
 
+    data class BatteryStatus(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val state: State
+    ) : ThingState() {
+
+        override val key = Key(thingId, "thing.${thingId.value}.battery")
+
+        enum class State {
+            EMPTY, GOOD, POOR
+        }
+
+    }
+
+    data class Online(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val lastSeen: Instant?,
+        val online: Boolean
+    ) : ThingState() {
+
+        override val key = Key(thingId, "thing.${thingId.value}.online")
+
+    }
+
+    data class DeviceType(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val vendor: String?,
+        val model: String?,
+        val firmwareVersion: String?
+    ) : ThingState() {
+
+        override val key = Key(thingId, "thing.${thingId.value}.online")
+
+    }
+
+
     data class Key(
         val thingId: ThingId,
         val value: String
