@@ -9,6 +9,10 @@ import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodeDescription
 import com.github.oslokommune.oslonokkelen.adapter.error.ErrorCodes
 import com.github.oslokommune.oslonokkelen.adapter.manifest.ManifestSnapshot
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
+import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.EMPTY
+import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.GOOD
+import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.POOR
+import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.UNRECOGNIZED
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
@@ -30,7 +34,7 @@ object ProtobufParser {
     private val log: Logger = LoggerFactory.getLogger(ProtobufParser::class.java)
 
 
-    fun parseActionRequestFromClaims(verifiedClaims: JWTClaimsSet) : Adapter.ActionRequest {
+    fun parseActionRequestFromClaims(verifiedClaims: JWTClaimsSet): Adapter.ActionRequest {
         val requestClaim = verifiedClaims.getJSONObjectClaim("request")
         val requestBuilder = Adapter.ActionRequest.newBuilder()
             .setRequestId(requireString(requestClaim, "requestId"))
@@ -46,11 +50,14 @@ object ProtobufParser {
                             val value = attachment.values.firstOrNull() as Map<*, *>
 
                             Adapter.Attachment.newBuilder()
-                                .setNorwegianFodselsnummer(Adapter.Attachment.NorwegianFodselsnummer.newBuilder()
-                                    .setNumber(requireString(value, "number"))
-                                    .build())
+                                .setNorwegianFodselsnummer(
+                                    Adapter.Attachment.NorwegianFodselsnummer.newBuilder()
+                                        .setNumber(requireString(value, "number"))
+                                        .build()
+                                )
                                 .build()
                         }
+
                         else -> {
                             null
                         }
@@ -82,7 +89,7 @@ object ProtobufParser {
         return value ?: throw missingKey(key, requestClaim)
     }
 
-    private fun missingKey(key: String,requestClaim: Map<*, *>): IllegalStateException {
+    private fun missingKey(key: String, requestClaim: Map<*, *>): IllegalStateException {
         return IllegalStateException("Missing key $key (found: ${requestClaim.keys.joinToString(", ")})")
     }
 
@@ -237,6 +244,41 @@ object ProtobufParser {
                                     level = line.level
                                 )
                             }.toPersistentList()
+                        )
+                    }
+
+                    Adapter.ThingState.ValueCase.DEVICE_TYPE -> {
+                        ThingState.DeviceType(
+                            thingId = thing.id,
+                            timestamp = lastUpdate,
+                            vendor = serializedState.deviceType.vendor.ifBlank { null },
+                            model = serializedState.deviceType.model.ifBlank { null },
+                            firmwareVersion = serializedState.deviceType.firmwareVersion.ifBlank { null }
+                        )
+                    }
+
+                    Adapter.ThingState.ValueCase.ONLINE -> {
+                        ThingState.Online(
+                            thingId = thing.id,
+                            timestamp = lastUpdate,
+                            online = serializedState.online.isOnline,
+                            lastSeen = if (serializedState.online.lastSeen.isNotBlank()) {
+                                Instant.parse(serializedState.online.lastSeen)
+                            } else {
+                                null
+                            }
+                        )
+                    }
+
+                    Adapter.ThingState.ValueCase.BATTERY_STATUS -> {
+                        ThingState.BatteryStatus(
+                            thingId = thing.id,
+                            timestamp = lastUpdate,
+                            state = when (serializedState.batteryStatus) {
+                                GOOD -> ThingState.BatteryStatus.State.GOOD
+                                POOR -> ThingState.BatteryStatus.State.POOR
+                                EMPTY, UNRECOGNIZED, null -> ThingState.BatteryStatus.State.EMPTY
+                            }
                         )
                     }
 

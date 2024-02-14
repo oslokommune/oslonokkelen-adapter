@@ -305,6 +305,10 @@ message TextContent {
 // locked, unlocked, open, close, offline, online etc. Implementing this can
 // help administrators of Oslonøkkelen to configure alerts when things go
 // offline, remain open too long etc.
+//
+// Not all devices will support reporting all this information. Just add those
+// your device supports. Example: Don't send "online = false" if your device
+// does not support online/offline reporting.
 message ThingState {
 
   // ISO-8601
@@ -329,6 +333,15 @@ message ThingState {
     // Allows a few lines of technical system logs related to a thing to
     // be communicated to Oslonøkkelen
     DebugLog debug_log = 7;
+
+    // Information about the device like vendor and model.
+    DeviceInfo device_type = 8;
+
+    // Is the device online right now? When was the last time it was seen?
+    Online online = 9;
+
+    // Rough indicator of battery health
+    BatteryStatus battery_status = 10;
 
   }
 
@@ -364,6 +377,33 @@ message ThingState {
 
   }
 
+  // All fields are optional, but make sure you include at least
+  // one of the fields. If your device does not support either of these
+  // fields you should omit the DeviceInfo from your manifest.
+  message DeviceInfo {
+    string vendor = 1;
+    string model = 2;
+    string firmware_version = 3;
+  }
+
+  enum BatteryStatus {
+
+    // The battery should have been replaced already
+    EMPTY = 0;
+
+    // No need to change the battery
+    GOOD = 1;
+
+    // Battery should be replaced as soon as possible
+    POOR = 2;
+  }
+
+  message Online {
+    bool is_online = 1;
+
+    // ISO-8601
+    string last_seen = 2;
+  }
 
   // Used to communicate a few lines of technical logs to Oslonøkkelen.
   message DebugLog {

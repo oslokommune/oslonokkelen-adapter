@@ -19,13 +19,13 @@ allprojects {
 
     pluginManager.withPlugin("kotlin") {
         tasks.withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = JavaVersion.VERSION_18.toString()
+            kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
         }
     }
     pluginManager.withPlugin("java") {
         tasks.withType<JavaCompile> {
-            targetCompatibility = JavaVersion.VERSION_18.toString()
-            sourceCompatibility = JavaVersion.VERSION_18.toString()
+            targetCompatibility = JavaVersion.VERSION_21.toString()
+            sourceCompatibility = JavaVersion.VERSION_21.toString()
         }
     }
 }
