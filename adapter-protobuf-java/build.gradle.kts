@@ -7,7 +7,7 @@ plugins {
 
 project.description = "Defines protobuf messages used in api"
 
-val protobufVersion = "4.26.0"
+val protobufVersion = "4.26.1"
 
 dependencies {
     api("com.google.protobuf:protobuf-java:$protobufVersion")
