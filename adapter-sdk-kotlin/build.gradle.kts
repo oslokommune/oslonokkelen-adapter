@@ -23,7 +23,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
-    testImplementation("org.assertj:assertj-core:3.25.3")
+    testImplementation("org.assertj:assertj-core:3.26.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
