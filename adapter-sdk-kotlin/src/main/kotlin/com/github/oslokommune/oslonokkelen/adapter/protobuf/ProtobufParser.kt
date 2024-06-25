@@ -185,7 +185,12 @@ object ProtobufParser {
             val thing = ThingDescription(
                 id = ThingId(serializedThing.id),
                 description = serializedThing.description,
-                adminRole = serializedThing.adminRole
+                adminRole = serializedThing.adminRole,
+                link = if (serializedThing.uri?.isNotBlank() == true) {
+                    URI.create(serializedThing.uri)
+                } else {
+                    null
+                }
             )
 
             // Actions

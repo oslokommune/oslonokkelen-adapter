@@ -176,6 +176,7 @@ internal class ProtobufSerializerTest {
             id = ThingId("front-door"),
             description = "This is the front door",
             adminRole = "master-of-doors",
+            link = URI.create("https://grafana.example.com/d/xxx/iot-statusmeldinger?orgId=1&var-mac=70:70:70:70:70:70&from=now-1h&to=now&refresh=1m")
         )
 
         private val unlockFrontDoor = ActionDescription(

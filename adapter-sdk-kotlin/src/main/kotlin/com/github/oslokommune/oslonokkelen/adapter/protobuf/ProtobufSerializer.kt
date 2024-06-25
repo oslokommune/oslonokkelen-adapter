@@ -106,13 +106,18 @@ object ProtobufSerializer {
 
     fun serialize(manifest: ManifestSnapshot): Adapter.AdapterManifest {
         val thingList = manifest.things.values.map { thing ->
-            Adapter.AdapterManifest.Thing.newBuilder()
+            val thingBuilder = Adapter.AdapterManifest.Thing.newBuilder()
                 .setId(thing.id.value)
                 .setDescription(thing.description)
                 .addAllActions(serializeActions(manifest, thing))
                 .addAllState(serializeThingState(manifest, thing))
                 .setAdminRole(thing.adminRole)
-                .build()
+
+            if (thing.link != null) {
+                thingBuilder.setUri(thing.link.toString())
+            }
+
+            thingBuilder.build()
         }
 
         val errorList = manifest.errorCodes.codes.map { (code, description) ->

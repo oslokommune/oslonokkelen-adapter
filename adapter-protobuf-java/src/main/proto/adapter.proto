@@ -47,6 +47,10 @@ message AdapterManifest {
     // offline, remain open too long etc.
     repeated ThingState state = 6;
 
+    // Some systems have their own status pages etc.
+    // Optional.
+    string uri = 7;
+
   }
 
   // Examples:
