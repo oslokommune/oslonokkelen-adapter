@@ -403,10 +403,24 @@ message ThingState {
   }
 
   message Online {
-    bool is_online = 1;
+
+    reserved 1;
 
     // ISO-8601
     string last_seen = 2;
+
+    OnlineStatus online_status = 3;
+
+    enum OnlineStatus {
+      // Some systems don't support tracking online status, but they have
+      // a regular ping. By looking at last_seen we can guess the online status
+      // based on the absents of pings.
+      ONLINE_STATUS_UNSUPPORTED = 0;
+
+      REPORTED_ONLINE = 1;
+
+      REPORTED_OFFLINE = 2;
+    }
   }
 
   // Used to communicate a few lines of technical logs to Oslonøkkelen.

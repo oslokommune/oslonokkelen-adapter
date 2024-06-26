@@ -13,6 +13,7 @@ import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.Batt
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.GOOD
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.POOR
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.BatteryStatus.UNRECOGNIZED
+import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter.ThingState.Online.OnlineStatus
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
@@ -266,7 +267,11 @@ object ProtobufParser {
                         ThingState.Online(
                             thingId = thing.id,
                             timestamp = lastUpdate,
-                            online = serializedState.online.isOnline,
+                            status = when (serializedState.online.onlineStatus) {
+                                OnlineStatus.REPORTED_ONLINE -> ThingState.Online.Status.REPORTED_ONLINE
+                                OnlineStatus.REPORTED_OFFLINE -> ThingState.Online.Status.REPORTED_OFFLINE
+                                OnlineStatus.ONLINE_STATUS_UNSUPPORTED, OnlineStatus.UNRECOGNIZED, null -> ThingState.Online.Status.ONLINE_STATUS_UNSUPPORTED
+                            },
                             lastSeen = if (serializedState.online.lastSeen.isNotBlank()) {
                                 Instant.parse(serializedState.online.lastSeen)
                             } else {

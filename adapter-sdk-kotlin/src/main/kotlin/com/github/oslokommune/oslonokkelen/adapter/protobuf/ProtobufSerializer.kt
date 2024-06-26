@@ -229,7 +229,12 @@ object ProtobufSerializer {
                 }
                 is ThingState.Online -> {
                     val onlineBuilder = Adapter.ThingState.Online.newBuilder()
-                    onlineBuilder.setIsOnline(state.online)
+
+                    onlineBuilder.setOnlineStatus(when (state.status) {
+                        ThingState.Online.Status.REPORTED_ONLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_ONLINE
+                        ThingState.Online.Status.REPORTED_OFFLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_OFFLINE
+                        ThingState.Online.Status.ONLINE_STATUS_UNSUPPORTED -> Adapter.ThingState.Online.OnlineStatus.ONLINE_STATUS_UNSUPPORTED
+                    })
 
                     if (state.lastSeen != null) {
                         onlineBuilder.setLastSeen(state.lastSeen.toString())
