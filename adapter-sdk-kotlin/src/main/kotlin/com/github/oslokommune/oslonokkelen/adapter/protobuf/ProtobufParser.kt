@@ -276,7 +276,8 @@ object ProtobufParser {
                                 Instant.parse(serializedState.online.lastSeen)
                             } else {
                                 null
-                            }
+                            },
+                            explanation = serializedState.online.explanation.ifBlank { null }
                         )
                     }
 

@@ -130,7 +130,8 @@ sealed class ThingState {
         override val timestamp: Instant,
         override val thingId: ThingId,
         val status : Status,
-        val lastSeen: Instant?
+        val lastSeen: Instant?,
+        val explanation: String?
     ) : ThingState() {
 
         override val key = Key(thingId, "thing.${thingId.value}.online")

@@ -411,6 +411,10 @@ message ThingState {
 
     OnlineStatus online_status = 3;
 
+    // Short one-liner saying something about how
+    // it knows that the thing is online or not.
+    string explanation = 4;
+
     enum OnlineStatus {
       // Some systems don't support tracking online status, but they have
       // a regular ping. By looking at last_seen we can guess the online status

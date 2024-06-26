@@ -239,6 +239,9 @@ object ProtobufSerializer {
                     if (state.lastSeen != null) {
                         onlineBuilder.setLastSeen(state.lastSeen.toString())
                     }
+                    if (state.explanation != null) {
+                        onlineBuilder.setExplanation(state.explanation)
+                    }
 
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
