@@ -129,12 +129,16 @@ sealed class ThingState {
     data class Online(
         override val timestamp: Instant,
         override val thingId: ThingId,
-        val lastSeen: Instant?,
-        val online: Boolean
+        val status : Status,
+        val lastSeen: Instant?
     ) : ThingState() {
 
         override val key = Key(thingId, "thing.${thingId.value}.online")
 
+
+        enum class Status {
+            REPORTED_ONLINE, REPORTED_OFFLINE, ONLINE_STATUS_UNSUPPORTED
+        }
     }
 
     data class DeviceType(
