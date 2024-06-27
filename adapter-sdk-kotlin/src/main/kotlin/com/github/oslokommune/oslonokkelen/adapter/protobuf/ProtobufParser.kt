@@ -19,16 +19,16 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
 import com.nimbusds.jwt.JWTClaimsSet
+import java.net.URI
+import java.time.Duration
+import java.time.Instant
+import java.time.ZonedDateTime
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentHashMap
 import kotlinx.collections.immutable.toPersistentList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.net.URI
-import java.time.Duration
-import java.time.Instant
-import java.time.ZonedDateTime
 
 object ProtobufParser {
 
@@ -189,6 +189,11 @@ object ProtobufParser {
                 adminRole = serializedThing.adminRole,
                 link = if (serializedThing.uri?.isNotBlank() == true) {
                     URI.create(serializedThing.uri)
+                } else {
+                    null
+                },
+                secondsWithoutMessageBeforeAlert = if (serializedThing.secondsWithoutMessageBeforeAlert > 0) {
+                    Duration.ofSeconds(serializedThing.secondsWithoutMessageBeforeAlert.toLong())
                 } else {
                     null
                 }

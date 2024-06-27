@@ -51,6 +51,12 @@ message AdapterManifest {
     // Optional.
     string uri = 7;
 
+    // Some things will ping every n seconds allowing us to trigger
+    // an alert if we don't hear from the thing for n+m seconds.
+    //
+    // Optional, set to 0 if not relevant / supported
+    int32 seconds_without_message_before_alert = 8;
+
   }
 
   // Examples:
