@@ -116,8 +116,8 @@ object ProtobufSerializer {
             if (thing.link != null) {
                 thingBuilder.setUri(thing.link.toString())
             }
-            if (thing.secondsWithoutMessageBeforeAlert != null) {
-                thingBuilder.setSecondsWithoutMessageBeforeAlert(thing.secondsWithoutMessageBeforeAlert.toSeconds().toInt())
+            if (thing.timeWithoutMessageBeforeAlert != null) {
+                thingBuilder.setSecondsWithoutMessageBeforeAlert(thing.timeWithoutMessageBeforeAlert.toSeconds().toInt())
             }
 
             thingBuilder.build()

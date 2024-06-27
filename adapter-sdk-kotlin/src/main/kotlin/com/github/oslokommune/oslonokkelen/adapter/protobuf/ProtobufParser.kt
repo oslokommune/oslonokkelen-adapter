@@ -192,7 +192,7 @@ object ProtobufParser {
                 } else {
                     null
                 },
-                secondsWithoutMessageBeforeAlert = if (serializedThing.secondsWithoutMessageBeforeAlert > 0) {
+                timeWithoutMessageBeforeAlert = if (serializedThing.secondsWithoutMessageBeforeAlert > 0) {
                     Duration.ofSeconds(serializedThing.secondsWithoutMessageBeforeAlert.toLong())
                 } else {
                     null
