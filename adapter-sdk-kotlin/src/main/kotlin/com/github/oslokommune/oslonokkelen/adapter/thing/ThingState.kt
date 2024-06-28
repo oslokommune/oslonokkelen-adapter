@@ -148,13 +148,16 @@ sealed class ThingState {
     data class DeviceType(
         override val timestamp: Instant,
         override val thingId: ThingId,
-        val vendor: String?,
+        val manufacturer: String?,
         val model: String?,
         val firmwareVersion: String?
-    ) : ThingState() {
+    ) : ThingState(), ComparableThingState {
 
-        override val key = Key(thingId, "thing.${thingId.value}.online")
+        override val key = Key(thingId, "thing.${thingId.value}.type")
 
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is DeviceType && manufacturer == other.manufacturer && model == other.model && firmwareVersion == other.firmwareVersion
+        }
     }
 
 

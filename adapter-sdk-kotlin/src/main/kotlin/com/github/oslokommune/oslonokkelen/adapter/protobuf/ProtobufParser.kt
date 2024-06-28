@@ -262,7 +262,7 @@ object ProtobufParser {
                         ThingState.DeviceType(
                             thingId = thing.id,
                             timestamp = lastUpdate,
-                            vendor = serializedState.deviceType.vendor.ifBlank { null },
+                            manufacturer = serializedState.deviceType.manufacturer.ifBlank { null },
                             model = serializedState.deviceType.model.ifBlank { null },
                             firmwareVersion = serializedState.deviceType.firmwareVersion.ifBlank { null }
                         )

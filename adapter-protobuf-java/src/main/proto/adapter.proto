@@ -344,7 +344,7 @@ message ThingState {
     // be communicated to Oslonøkkelen
     DebugLog debug_log = 7;
 
-    // Information about the device like vendor and model.
+    // Information about the device like manufacturer and model.
     DeviceInfo device_type = 8;
 
     // Is the device online right now? When was the last time it was seen?
@@ -391,7 +391,7 @@ message ThingState {
   // one of the fields. If your device does not support either of these
   // fields you should omit the DeviceInfo from your manifest.
   message DeviceInfo {
-    string vendor = 1;
+    string manufacturer = 1;
     string model = 2;
     string firmware_version = 3;
   }

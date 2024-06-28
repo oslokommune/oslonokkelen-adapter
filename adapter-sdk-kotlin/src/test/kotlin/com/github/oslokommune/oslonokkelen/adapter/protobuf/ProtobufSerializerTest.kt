@@ -189,7 +189,7 @@ internal class ProtobufSerializerTest {
         private val deviceType = ThingState.DeviceType(
             timestamp = timestamp,
             thingId = frontDoor.id,
-            vendor = "Armin",
+            manufacturer = "Armin",
             model = "Oslonøkkelboksen",
             firmwareVersion = "v0.5.55"
         )

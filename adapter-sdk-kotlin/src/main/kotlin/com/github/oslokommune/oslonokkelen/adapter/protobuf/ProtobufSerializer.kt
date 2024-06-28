@@ -215,8 +215,8 @@ object ProtobufSerializer {
                 is ThingState.DeviceType -> {
                     val deviceInfoBuilder = Adapter.ThingState.DeviceInfo.newBuilder()
 
-                    if (state.vendor != null) {
-                        deviceInfoBuilder.setVendor(state.vendor)
+                    if (state.manufacturer != null) {
+                        deviceInfoBuilder.setManufacturer(state.manufacturer)
                     }
                     if (state.model != null) {
                         deviceInfoBuilder.setModel(state.model)
