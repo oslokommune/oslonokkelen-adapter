@@ -9,14 +9,15 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
+import java.time.Instant
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.time.Instant
 
 internal class ManifestSnapshotTest {
 
@@ -396,5 +397,70 @@ internal class ManifestSnapshotTest {
 
     }
 
+
+    @Nested
+    inner class Debug {
+
+        @Test
+        fun `Add thing to empty manifest`() {
+            val original = ManifestSnapshot()
+            val door = createThingDescription("door")
+            val withDoor = original + door
+
+            val expectedManifest = ManifestSnapshot(
+                version = 2,
+                things = persistentMapOf(door.id to door)
+            )
+
+            assertEquals(expectedManifest, withDoor)
+        }
+
+        @Test
+        fun `Update thing description`() {
+            val original = ManifestSnapshot()
+            val originalDoor = createThingDescription("door", "First door description")
+            val updatedDoor = createThingDescription("door", "Second door description")
+            val withOriginalDoor = original + originalDoor
+            val withUpdatedDoor = withOriginalDoor + updatedDoor
+
+            val expectedManifest = ManifestSnapshot(
+                version = 3,
+                things = persistentMapOf(originalDoor.id to updatedDoor)
+            )
+
+            assertEquals(expectedManifest, withUpdatedDoor)
+        }
+
+        @Test
+        fun `Should keep state when updating description`() {
+            val original = ManifestSnapshot()
+            val originalDoor = createThingDescription("door", "First door description")
+            val updatedDoor = createThingDescription("door", "Second door description")
+            val withOriginalDoor = original + originalDoor
+            val openState = ThingState.OpenPosition(timestamp = Instant.now(), originalDoor.id, open = true)
+            val withOriginalDoorAndState = withOriginalDoor + openState
+            val withUpdatedDoorAndState = withOriginalDoorAndState + updatedDoor
+
+            val expectedManifest = ManifestSnapshot(
+                version = 4,
+                things = persistentMapOf(originalDoor.id to updatedDoor),
+                thingStates = persistentMapOf(originalDoor.id to ThingStateSnapshot(openState))
+            )
+
+            assertEquals(expectedManifest, withUpdatedDoorAndState)
+        }
+
+    }
+
+    private fun createThingDescription(id: String, description: String = "Description of $id"): ThingDescription {
+        return ThingDescription(
+            id = ThingId(id),
+            description = description,
+            adminRole = "admin_role",
+            tags = emptySet(),
+            link = null,
+            timeWithoutMessageBeforeAlert = null
+        )
+    }
 
 }

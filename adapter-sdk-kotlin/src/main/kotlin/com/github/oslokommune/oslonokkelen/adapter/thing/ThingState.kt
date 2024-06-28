@@ -132,10 +132,13 @@ sealed class ThingState {
         val status : Status,
         val lastSeen: Instant?,
         val explanation: String?
-    ) : ThingState() {
+    ) : ThingState(), ComparableThingState {
 
         override val key = Key(thingId, "thing.${thingId.value}.online")
 
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is Online && lastSeen == other.lastSeen && status == other.status && explanation == other.explanation
+        }
 
         enum class Status {
             REPORTED_ONLINE, REPORTED_OFFLINE, ONLINE_STATUS_UNSUPPORTED

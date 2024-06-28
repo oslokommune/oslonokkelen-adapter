@@ -11,6 +11,12 @@ data class ThingStateSnapshot(
     val data: PersistentMap<ThingState.Key, ThingState> = persistentMapOf()
 ) {
 
+    init {
+        if (data.keys.any { id -> id.thingId != thingId }) {
+            throw IllegalArgumentException("Tried to create snapshot of $thingId with state belonging to a different thing: $data")
+        }
+    }
+
     constructor(first: ThingState, vararg state: ThingState) : this(
         thingId = first.thingId,
         data = (state.toList() + first).associateBy { it.key }.toPersistentHashMap()

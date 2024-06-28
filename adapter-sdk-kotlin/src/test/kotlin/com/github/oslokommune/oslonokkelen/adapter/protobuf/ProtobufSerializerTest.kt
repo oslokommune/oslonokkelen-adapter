@@ -186,6 +186,14 @@ internal class ProtobufSerializerTest {
 
         private val timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS)
 
+        private val deviceType = ThingState.DeviceType(
+            timestamp = timestamp,
+            thingId = frontDoor.id,
+            vendor = "Armin",
+            model = "Oslonøkkelboksen",
+            firmwareVersion = "v0.5.55"
+        )
+
         @Test
         fun `Serialize and parse manifest with thing`() {
             test(ManifestSnapshot() + frontDoor)
@@ -194,6 +202,11 @@ internal class ProtobufSerializerTest {
         @Test
         fun `Serialize and parse manifest with action`() {
             test(ManifestSnapshot() + frontDoor + unlockFrontDoor)
+        }
+
+        @Test
+        fun `Serialize and parse manifest with reported firmware`() {
+            test(ManifestSnapshot() + frontDoor + deviceType)
         }
 
         @Test
