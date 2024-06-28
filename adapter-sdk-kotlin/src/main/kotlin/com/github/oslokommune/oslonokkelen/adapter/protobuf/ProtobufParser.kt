@@ -298,10 +298,35 @@ object ProtobufParser {
                         )
                     }
 
+                    Adapter.ThingState.ValueCase.NETWORK -> {
+                        ThingState.Network(
+                            thingId = thing.id,
+                            timestamp = lastUpdate,
+                            ip = serializedState.network.ip.ifBlank { null },
+                            mac = serializedState.network.mac.ifBlank { null },
+                            rssi = if (serializedState.network.rssi > 0) {
+                                serializedState.network.rssi
+                            } else {
+                                null
+                            },
+                            lastConnectedAt = if (serializedState.network.lastConnectAtEpochSeconds > 0) {
+                                Instant.ofEpochSecond(serializedState.network.lastConnectAtEpochSeconds)
+                            } else {
+                                null
+                            },
+                            lastDisconnectedAt = if (serializedState.network.lastDisconnectAtEpochSeconds > 0) {
+                                Instant.ofEpochSecond(serializedState.network.lastDisconnectAtEpochSeconds)
+                            } else {
+                                null
+                            }
+                        )
+                    }
+
                     Adapter.ThingState.ValueCase.VALUE_NOT_SET, null -> {
                         log.warn("Unsupported thing state detected: {}", serializedState.valueCase)
                         null
                     }
+
                 }
 
                 if (state != null) {

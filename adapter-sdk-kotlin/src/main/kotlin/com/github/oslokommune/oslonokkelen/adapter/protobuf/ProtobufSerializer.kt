@@ -117,7 +117,9 @@ object ProtobufSerializer {
                 thingBuilder.setUri(thing.link.toString())
             }
             if (thing.timeWithoutMessageBeforeAlert != null) {
-                thingBuilder.setSecondsWithoutMessageBeforeAlert(thing.timeWithoutMessageBeforeAlert.toSeconds().toInt())
+                thingBuilder.setSecondsWithoutMessageBeforeAlert(
+                    thing.timeWithoutMessageBeforeAlert.toSeconds().toInt()
+                )
             }
 
             thingBuilder.build()
@@ -152,6 +154,7 @@ object ProtobufSerializer {
                         )
                         .build()
                 }
+
                 is ThingState.Lock -> {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
@@ -164,6 +167,7 @@ object ProtobufSerializer {
                         )
                         .build()
                 }
+
                 is ThingState.DebugLog -> {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
@@ -190,6 +194,7 @@ object ProtobufSerializer {
                         )
                         .build()
                 }
+
                 is ThingState.OpenPosition -> {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
@@ -205,13 +210,16 @@ object ProtobufSerializer {
                 is ThingState.BatteryStatus -> {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
-                        .setBatteryStatus(when (state.state) {
-                            ThingState.BatteryStatus.State.EMPTY -> Adapter.ThingState.BatteryStatus.EMPTY
-                            ThingState.BatteryStatus.State.GOOD -> Adapter.ThingState.BatteryStatus.GOOD
-                            ThingState.BatteryStatus.State.POOR -> Adapter.ThingState.BatteryStatus.POOR
-                        })
+                        .setBatteryStatus(
+                            when (state.state) {
+                                ThingState.BatteryStatus.State.EMPTY -> Adapter.ThingState.BatteryStatus.EMPTY
+                                ThingState.BatteryStatus.State.GOOD -> Adapter.ThingState.BatteryStatus.GOOD
+                                ThingState.BatteryStatus.State.POOR -> Adapter.ThingState.BatteryStatus.POOR
+                            }
+                        )
                         .build()
                 }
+
                 is ThingState.DeviceType -> {
                     val deviceInfoBuilder = Adapter.ThingState.DeviceInfo.newBuilder()
 
@@ -230,14 +238,17 @@ object ProtobufSerializer {
                         .setDeviceType(deviceInfoBuilder.build())
                         .build()
                 }
+
                 is ThingState.Online -> {
                     val onlineBuilder = Adapter.ThingState.Online.newBuilder()
 
-                    onlineBuilder.setOnlineStatus(when (state.status) {
-                        ThingState.Online.Status.REPORTED_ONLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_ONLINE
-                        ThingState.Online.Status.REPORTED_OFFLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_OFFLINE
-                        ThingState.Online.Status.ONLINE_STATUS_UNSUPPORTED -> Adapter.ThingState.Online.OnlineStatus.ONLINE_STATUS_UNSUPPORTED
-                    })
+                    onlineBuilder.setOnlineStatus(
+                        when (state.status) {
+                            ThingState.Online.Status.REPORTED_ONLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_ONLINE
+                            ThingState.Online.Status.REPORTED_OFFLINE -> Adapter.ThingState.Online.OnlineStatus.REPORTED_OFFLINE
+                            ThingState.Online.Status.ONLINE_STATUS_UNSUPPORTED -> Adapter.ThingState.Online.OnlineStatus.ONLINE_STATUS_UNSUPPORTED
+                        }
+                    )
 
                     if (state.lastSeen != null) {
                         onlineBuilder.setLastSeen(state.lastSeen.toString())
@@ -249,6 +260,31 @@ object ProtobufSerializer {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
                         .setOnline(onlineBuilder.build())
+                        .build()
+                }
+
+                is ThingState.Network -> {
+                    val networkBuilder = Adapter.ThingState.Network.newBuilder()
+
+                    state.ip?.let { ip ->
+                        networkBuilder.setIp(ip)
+                    }
+                    state.mac?.let { mac ->
+                        networkBuilder.setMac(mac)
+                    }
+                    state.rssi?.let { rssi ->
+                        networkBuilder.setRssi(rssi)
+                    }
+                    state.lastConnectedAt?.let { timestamp ->
+                        networkBuilder.setLastConnectAtEpochSeconds(timestamp.epochSecond)
+                    }
+                    state.lastDisconnectedAt?.let { timestamp ->
+                        networkBuilder.setLastDisconnectAtEpochSeconds(timestamp.epochSecond)
+                    }
+
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setNetwork(networkBuilder.build())
                         .build()
                 }
             }

@@ -353,6 +353,8 @@ message ThingState {
     // Rough indicator of battery health
     BatteryStatus battery_status = 10;
 
+    Network network = 11;
+
   }
 
   reserved 4;
@@ -385,6 +387,14 @@ message ThingState {
     // Will never be presented to end users.
     string debug_message = 3;
 
+  }
+
+  message Network {
+    string mac = 1;
+    string ip = 2;
+    int64 last_connect_at_epoch_seconds = 3;
+    int64 last_disconnect_at_epoch_seconds = 4;
+    int32 rssi = 5;
   }
 
   // All fields are optional, but make sure you include at least

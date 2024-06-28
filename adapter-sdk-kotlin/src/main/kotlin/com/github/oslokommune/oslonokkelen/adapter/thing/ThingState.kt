@@ -65,6 +65,26 @@ sealed class ThingState {
         }
     }
 
+    data class Network(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val ip: String?,
+        val mac: String?,
+        val lastConnectedAt: Instant?,
+        val lastDisconnectedAt: Instant?,
+        val rssi: Int?
+    ) : ThingState(), ComparableThingState {
+        override val key = Key(thingId, "thing.${thingId.value}.network")
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is Network && ip == other.ip && mac == other.mac && lastConnectedAt == other.lastConnectedAt && lastDisconnectedAt == other.lastDisconnectedAt && rssi == other.rssi
+        }
+
+        override fun toString(): String {
+            return "${thingId.value} network: ip=$ip, mac=$mac, last-connected=$lastConnectedAt, last-disconnected=$lastDisconnectedAt, rssi=$rssi"
+        }
+    }
+
     data class DebugLog(
         override val thingId: ThingId,
         val maxLength: Int = DEFAULT_MAX_LENGTH,
