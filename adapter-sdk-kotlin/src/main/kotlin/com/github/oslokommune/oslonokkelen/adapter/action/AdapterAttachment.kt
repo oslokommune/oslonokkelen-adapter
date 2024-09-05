@@ -7,7 +7,7 @@ sealed class AdapterAttachment {
 
     operator fun plus(other: AdapterAttachment): ActionResponseMessage {
         if (this.javaClass.isAssignableFrom(other.javaClass)) {
-            throw IllegalStateException("Can't add more then one ${other.javaClass.simpleName}")
+            throw IllegalStateException("Can't add more than one ${other.javaClass.simpleName}")
         }
 
         return ActionResponseMessage(
@@ -91,8 +91,15 @@ sealed class AdapterAttachment {
         }
     }
 
-    sealed class ErrorSource : AdapterAttachment() {
-        data object ExternalApi : ErrorSource()
-        data object Door : ErrorSource()
+    data class ErrorSource(val value: Value) : AdapterAttachment() {
+
+        enum class Value {
+            EXTERNAL_API, DOOR;
+        }
+
+        companion object {
+            val ExternalApi = ErrorSource(Value.EXTERNAL_API)
+            val Door = ErrorSource(Value.DOOR)
+        }
     }
 }
