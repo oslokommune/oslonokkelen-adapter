@@ -67,14 +67,21 @@ sealed class AdapterAttachment {
     data class ErrorDescription(
         val code: String,
         val debugMessage: String,
-        val permanent: Boolean = true
+        val permanent: Boolean = true,
+        val errorSource: ErrorSource?
     ) : AdapterAttachment() {
+
+        enum class ErrorSource {
+            EXTERNAL_API, DOOR
+        }
+
         companion object {
-            fun from(trouble: Throwable): ErrorDescription {
+            fun from(trouble: Throwable, errorSource: ErrorSource?): ErrorDescription {
                 return ErrorDescription(
                     code = "exception",
                     debugMessage = "${trouble.javaClass.name}: ${trouble.message ?: "No message"}",
-                    permanent = true
+                    permanent = true,
+                    errorSource = null
                 )
             }
         }

@@ -85,7 +85,8 @@ internal class ProtobufSerializerTest {
                 AdapterAttachment.ErrorDescription(
                     debugMessage = "Some error occurred",
                     code = "some.error",
-                    permanent = true
+                    permanent = true,
+                    errorSource = AdapterAttachment.ErrorDescription.ErrorSource.DOOR
                 )
             )
             val serializedResponse = ProtobufSerializer.serialize(response)
@@ -101,7 +102,8 @@ internal class ProtobufSerializerTest {
                 AdapterAttachment.ErrorDescription(
                     debugMessage = "Some error occurred",
                     code = "some.error",
-                    permanent = false
+                    permanent = false,
+                    errorSource = AdapterAttachment.ErrorDescription.ErrorSource.EXTERNAL_API
                 )
             )
             val serializedResponse = ProtobufSerializer.serialize(response)

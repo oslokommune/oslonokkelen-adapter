@@ -77,7 +77,8 @@ internal class ErrorCodeDescriptionTest {
             AdapterAttachment.ErrorDescription(
                 code = "bad.really.bad",
                 debugMessage = "This is bad..",
-                permanent = true
+                permanent = true,
+                errorSource = null
             )
         ))
     }
@@ -96,7 +97,8 @@ internal class ErrorCodeDescriptionTest {
             AdapterAttachment.ErrorDescription(
                 code = "semi.bad",
                 debugMessage = "This is semi bad..",
-                permanent = false
+                permanent = false,
+                errorSource = null
             )
         ))
     }
@@ -115,7 +117,8 @@ internal class ErrorCodeDescriptionTest {
             AdapterAttachment.ErrorDescription(
                 code = "semi.bad",
                 debugMessage = "Could be worse...",
-                permanent = false
+                permanent = false,
+                errorSource = null
             )
         ))
     }
@@ -151,7 +154,8 @@ internal class ErrorCodeDescriptionTest {
             AdapterAttachment.ErrorDescription(
                 code = "unexpected",
                 debugMessage = "java.lang.IllegalStateException: You didn't see this coming!",
-                permanent = true
+                permanent = true,
+                errorSource = null
             )
         ))
     }

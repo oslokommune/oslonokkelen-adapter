@@ -143,7 +143,12 @@ object ProtobufParser {
                 AdapterAttachment.ErrorDescription(
                     code = attachment.errorDescription.code,
                     debugMessage = attachment.errorDescription.debugMessage,
-                    permanent = attachment.errorDescription.permanent
+                    permanent = attachment.errorDescription.permanent,
+                    errorSource = when(attachment.errorDescription.errorSource) {
+                        Adapter.Attachment.ErrorDescription.ErrorSource.EXTERNAL_API -> AdapterAttachment.ErrorDescription.ErrorSource.EXTERNAL_API
+                        Adapter.Attachment.ErrorDescription.ErrorSource.DOOR -> AdapterAttachment.ErrorDescription.ErrorSource.DOOR
+                        Adapter.Attachment.ErrorDescription.ErrorSource.UNRECOGNIZED, null -> null
+                    }
                 )
             }
 

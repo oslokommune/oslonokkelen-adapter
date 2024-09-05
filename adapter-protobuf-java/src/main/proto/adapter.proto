@@ -262,6 +262,18 @@ message Attachment {
     // true if you think that a quick retry might work.
     bool permanent = 3;
 
+    // Source of the error
+    ErrorSource errorSource = 4;
+
+    enum ErrorSource {
+      // Adapters can call APIs to perform certain pre-requesite actions before opening a door.
+      // This can be authentication, verification, etc
+      EXTERNAL_API = 0;
+
+      //TODO: Find a better name for this.
+      // Physical device that controls the door/light/whatever
+      DOOR = 1;
+    }
 
   }
 

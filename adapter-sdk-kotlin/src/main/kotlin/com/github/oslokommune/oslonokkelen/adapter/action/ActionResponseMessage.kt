@@ -39,7 +39,7 @@ data class ActionResponseMessage(val attachments: List<AdapterAttachment> = empt
 
     operator fun plus(trouble: Throwable): ActionResponseMessage {
         return copy(
-            attachments = attachments + AdapterAttachment.ErrorDescription.from(trouble)
+            attachments = attachments + AdapterAttachment.ErrorDescription.from(trouble, null)
         )
     }
 
@@ -57,7 +57,11 @@ data class ActionResponseMessage(val attachments: List<AdapterAttachment> = empt
 
     companion object {
         fun permanentError(code: String, debugMessage: String): ActionResponseMessage {
-            return ActionResponseMessage(AdapterAttachment.ErrorDescription(code, debugMessage))
+            return ActionResponseMessage(AdapterAttachment.ErrorDescription(
+                code = code,
+                debugMessage = debugMessage,
+                errorSource = null
+            ))
         }
     }
 }

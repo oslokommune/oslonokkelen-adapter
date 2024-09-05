@@ -93,11 +93,18 @@ object ProtobufSerializer {
             is AdapterAttachment.ErrorDescription -> {
                 Adapter.Attachment.newBuilder()
                     .setErrorDescription(
-                        Adapter.Attachment.ErrorDescription.newBuilder()
-                            .setDebugMessage(attachment.debugMessage)
-                            .setPermanent(attachment.permanent)
-                            .setCode(attachment.code)
-                            .build()
+                        Adapter.Attachment.ErrorDescription.newBuilder().run {
+                            debugMessage = attachment.debugMessage
+                            permanent = attachment.permanent
+                            code = attachment.code
+                            if(attachment.errorSource != null) {
+                                errorSource = when(attachment.errorSource) {
+                                    AdapterAttachment.ErrorDescription.ErrorSource.EXTERNAL_API -> Adapter.Attachment.ErrorDescription.ErrorSource.EXTERNAL_API
+                                    AdapterAttachment.ErrorDescription.ErrorSource.DOOR -> Adapter.Attachment.ErrorDescription.ErrorSource.DOOR
+                                }
+                            }
+                            build()
+                        }
                     )
                     .build()
             }

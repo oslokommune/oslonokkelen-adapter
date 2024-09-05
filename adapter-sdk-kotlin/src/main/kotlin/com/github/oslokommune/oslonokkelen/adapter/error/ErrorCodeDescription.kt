@@ -32,14 +32,16 @@ data class ErrorCodeDescription(
                     AdapterAttachment.ErrorDescription(
                         debugMessage = debugMessage,
                         permanent = true,
-                        code = code.code
+                        code = code.code,
+                        errorSource = null
                     )
                 }
                 TEMPORARY_ERROR -> {
                     AdapterAttachment.ErrorDescription(
                         debugMessage = debugMessage,
                         permanent = false,
-                        code = code.code
+                        code = code.code,
+                        errorSource = null
                     )
                 }
             }
