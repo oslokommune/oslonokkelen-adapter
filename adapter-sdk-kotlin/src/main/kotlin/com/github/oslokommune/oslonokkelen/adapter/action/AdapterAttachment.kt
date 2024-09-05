@@ -90,4 +90,9 @@ sealed class AdapterAttachment {
             }
         }
     }
+
+    sealed class ErrorSource : AdapterAttachment() {
+        data object ExternalApi : ErrorSource()
+        data object Door : ErrorSource()
+    }
 }

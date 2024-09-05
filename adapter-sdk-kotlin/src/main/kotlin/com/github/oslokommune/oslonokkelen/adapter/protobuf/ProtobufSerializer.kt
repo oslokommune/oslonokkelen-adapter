@@ -101,6 +101,13 @@ object ProtobufSerializer {
                     )
                     .build()
             }
+
+            is AdapterAttachment.ErrorSource -> {
+                when(attachment) {
+                    AdapterAttachment.ErrorSource.Door -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.DOOR).build()
+                    AdapterAttachment.ErrorSource.ExternalApi -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.EXTERNAL_API).build()
+                }
+            }
         }
     }
 

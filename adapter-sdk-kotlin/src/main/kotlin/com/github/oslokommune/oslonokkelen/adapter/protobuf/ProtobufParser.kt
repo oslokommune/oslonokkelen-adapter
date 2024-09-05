@@ -170,6 +170,14 @@ object ProtobufParser {
                 )
             }
 
+            Adapter.Attachment.ValueCase.ERROR_SOURCE -> {
+                when(attachment.errorSource) {
+                    Adapter.Attachment.ErrorSource.EXTERNAL_API -> AdapterAttachment.ErrorSource.ExternalApi
+                    Adapter.Attachment.ErrorSource.DOOR -> AdapterAttachment.ErrorSource.Door
+                    Adapter.Attachment.ErrorSource.UNRECOGNIZED, null -> null
+                }
+            }
+
             Adapter.Attachment.ValueCase.VALUE_NOT_SET, null -> {
                 log.warn("Unsupported or missing attachment: {}", attachment.valueCase)
                 null

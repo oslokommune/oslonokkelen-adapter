@@ -217,6 +217,9 @@ message Attachment {
 
     // Says something about why an action request was denied.
     DeniedReason denied_reason = 6;
+
+    // Says something about the source of an error
+    ErrorSource error_source = 7;
   }
 
   message Code {
@@ -295,6 +298,16 @@ message Attachment {
 
   message NorwegianFodselsnummer {
     string number = 1;
+  }
+
+  enum ErrorSource {
+    // Adapters can call APIs to perform certain pre-requesite actions before opening a door.
+    // This can be authentication, verification, etc
+    EXTERNAL_API = 0;
+
+    //TODO: Find a better name for this.
+    // Physical device that controls the door/light/whatever
+    DOOR = 1;
   }
 
 }
