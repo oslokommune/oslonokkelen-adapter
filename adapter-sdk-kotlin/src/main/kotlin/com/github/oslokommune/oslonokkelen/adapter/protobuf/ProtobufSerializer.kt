@@ -104,7 +104,7 @@ object ProtobufSerializer {
 
             is AdapterAttachment.ErrorSource -> {
                 when(attachment.value) {
-                    AdapterAttachment.ErrorSource.Value.DOOR -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.DOOR).build()
+                    AdapterAttachment.ErrorSource.Value.THING -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.THING).build()
                     AdapterAttachment.ErrorSource.Value.EXTERNAL_API -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.EXTERNAL_API).build()
                 }
             }

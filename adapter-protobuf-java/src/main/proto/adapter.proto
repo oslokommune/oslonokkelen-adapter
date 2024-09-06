@@ -218,7 +218,7 @@ message Attachment {
     // Says something about why an action request was denied.
     DeniedReason denied_reason = 6;
 
-    // Says something about the source of an error
+    // Says something about where an error occurred
     ErrorSource error_source = 7;
   }
 
@@ -305,9 +305,8 @@ message Attachment {
     // This can be authentication, verification, etc
     EXTERNAL_API = 0;
 
-    //TODO: Find a better name for this.
     // Physical device that controls the door/light/whatever
-    DOOR = 1;
+    THING = 1;
   }
 
 }

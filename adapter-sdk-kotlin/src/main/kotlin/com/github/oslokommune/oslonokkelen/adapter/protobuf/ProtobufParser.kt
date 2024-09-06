@@ -173,7 +173,7 @@ object ProtobufParser {
             Adapter.Attachment.ValueCase.ERROR_SOURCE -> {
                 when(attachment.errorSource) {
                     Adapter.Attachment.ErrorSource.EXTERNAL_API -> AdapterAttachment.ErrorSource.ExternalApi
-                    Adapter.Attachment.ErrorSource.DOOR -> AdapterAttachment.ErrorSource.Door
+                    Adapter.Attachment.ErrorSource.THING -> AdapterAttachment.ErrorSource.Thing
                     Adapter.Attachment.ErrorSource.UNRECOGNIZED, null -> null
                 }
             }

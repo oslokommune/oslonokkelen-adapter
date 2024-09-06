@@ -94,12 +94,12 @@ sealed class AdapterAttachment {
     data class ErrorSource(val value: Value) : AdapterAttachment() {
 
         enum class Value {
-            EXTERNAL_API, DOOR;
+            EXTERNAL_API, THING;
         }
 
         companion object {
             val ExternalApi = ErrorSource(Value.EXTERNAL_API)
-            val Door = ErrorSource(Value.DOOR)
+            val Thing = ErrorSource(Value.THING)
         }
     }
 }
