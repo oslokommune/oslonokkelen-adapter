@@ -101,6 +101,14 @@ object ProtobufSerializer {
                     )
                     .build()
             }
+
+            is AdapterAttachment.ErrorCategory -> {
+                when(attachment.value) {
+                    AdapterAttachment.ErrorCategory.Value.THING_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.THING_ERROR).build()
+                    AdapterAttachment.ErrorCategory.Value.API_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.API_ERROR).build()
+                    AdapterAttachment.ErrorCategory.Value.NETWORK_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.NETWORK_ERROR).build()
+                }
+            }
         }
     }
 

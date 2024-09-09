@@ -41,4 +41,28 @@ internal class AdapterAttachmentTest {
         }
     }
 
+    @Test
+    fun `Can add error source to error description` () {
+        val errorDescription = AdapterAttachment.ErrorDescription("Test", "Test")
+        val response = errorDescription + AdapterAttachment.ErrorCategory.ThingError
+
+        val expected = ActionResponseMessage(
+            persistentListOf(
+                AdapterAttachment.ErrorDescription("Test", "Test"),
+                AdapterAttachment.ErrorCategory.ThingError
+            )
+        )
+
+        assertThat(response).isEqualTo(expected)
+    }
+
+    @Test
+    fun `Cant add multiple error sources`() {
+        val source = AdapterAttachment.ErrorCategory.ApiError
+
+        assertThrows<IllegalStateException> {
+            source + AdapterAttachment.ErrorCategory.ThingError
+        }
+    }
+
 }

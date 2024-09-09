@@ -170,6 +170,15 @@ object ProtobufParser {
                 )
             }
 
+            Adapter.Attachment.ValueCase.ERROR_CATEGORY -> {
+                when(attachment.errorCategory) {
+                    Adapter.Attachment.ErrorCategory.API_ERROR -> AdapterAttachment.ErrorCategory.ApiError
+                    Adapter.Attachment.ErrorCategory.THING_ERROR -> AdapterAttachment.ErrorCategory.ThingError
+                    Adapter.Attachment.ErrorCategory.NETWORK_ERROR -> AdapterAttachment.ErrorCategory.NetworkError
+                    Adapter.Attachment.ErrorCategory.UNRECOGNIZED, null -> null
+                }
+            }
+
             Adapter.Attachment.ValueCase.VALUE_NOT_SET, null -> {
                 log.warn("Unsupported or missing attachment: {}", attachment.valueCase)
                 null

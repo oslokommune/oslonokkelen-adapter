@@ -217,6 +217,9 @@ message Attachment {
 
     // Says something about why an action request was denied.
     DeniedReason denied_reason = 6;
+
+    // Says something about the type of an error
+    ErrorCategory error_category = 7;
   }
 
   message Code {
@@ -295,6 +298,19 @@ message Attachment {
 
   message NorwegianFodselsnummer {
     string number = 1;
+  }
+
+  enum ErrorCategory {
+    // Adapters might call APIs to perform certain pre-requisite actions before opening a door.
+    // This can be for authentication, verification, etc.
+    // This category should be used when an API is offline or returns an error
+    API_ERROR = 0;
+
+    // Physical device that controls the door/light/etc is offline or returns an error
+    THING_ERROR = 1;
+
+    // General network issue
+    NETWORK_ERROR = 2;
   }
 
 }

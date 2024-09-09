@@ -7,7 +7,7 @@ sealed class AdapterAttachment {
 
     operator fun plus(other: AdapterAttachment): ActionResponseMessage {
         if (this.javaClass.isAssignableFrom(other.javaClass)) {
-            throw IllegalStateException("Can't add more then one ${other.javaClass.simpleName}")
+            throw IllegalStateException("Can't add more than one ${other.javaClass.simpleName}")
         }
 
         return ActionResponseMessage(
@@ -88,6 +88,19 @@ sealed class AdapterAttachment {
             if (number.isBlank()) {
                 throw IllegalArgumentException("Fødselsnummer can't be blank")
             }
+        }
+    }
+
+    data class ErrorCategory(val value: Value) : AdapterAttachment() {
+
+        enum class Value {
+            API_ERROR, THING_ERROR, NETWORK_ERROR;
+        }
+
+        companion object {
+            val ApiError = ErrorCategory(Value.API_ERROR)
+            val ThingError = ErrorCategory(Value.THING_ERROR)
+            val NetworkError = ErrorCategory(Value.NETWORK_ERROR)
         }
     }
 }
