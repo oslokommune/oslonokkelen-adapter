@@ -91,15 +91,16 @@ sealed class AdapterAttachment {
         }
     }
 
-    data class ErrorSource(val value: Value) : AdapterAttachment() {
+    data class ErrorCategory(val value: Value) : AdapterAttachment() {
 
         enum class Value {
-            EXTERNAL_API, THING;
+            API_ERROR, THING_ERROR, NETWORK_ERROR;
         }
 
         companion object {
-            val ExternalApi = ErrorSource(Value.EXTERNAL_API)
-            val Thing = ErrorSource(Value.THING)
+            val ApiError = ErrorCategory(Value.API_ERROR)
+            val ThingError = ErrorCategory(Value.THING_ERROR)
+            val NetworkError = ErrorCategory(Value.NETWORK_ERROR)
         }
     }
 }

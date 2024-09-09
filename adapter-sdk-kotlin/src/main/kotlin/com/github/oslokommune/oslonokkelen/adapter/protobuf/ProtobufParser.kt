@@ -170,11 +170,12 @@ object ProtobufParser {
                 )
             }
 
-            Adapter.Attachment.ValueCase.ERROR_SOURCE -> {
-                when(attachment.errorSource) {
-                    Adapter.Attachment.ErrorSource.EXTERNAL_API -> AdapterAttachment.ErrorSource.ExternalApi
-                    Adapter.Attachment.ErrorSource.THING -> AdapterAttachment.ErrorSource.Thing
-                    Adapter.Attachment.ErrorSource.UNRECOGNIZED, null -> null
+            Adapter.Attachment.ValueCase.ERROR_CATEGORY -> {
+                when(attachment.errorCategory) {
+                    Adapter.Attachment.ErrorCategory.API_ERROR -> AdapterAttachment.ErrorCategory.ApiError
+                    Adapter.Attachment.ErrorCategory.THING_ERROR -> AdapterAttachment.ErrorCategory.ThingError
+                    Adapter.Attachment.ErrorCategory.NETWORK_ERROR -> AdapterAttachment.ErrorCategory.NetworkError
+                    Adapter.Attachment.ErrorCategory.UNRECOGNIZED, null -> null
                 }
             }
 

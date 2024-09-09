@@ -61,7 +61,7 @@ class BackendTokenGenerator(
                     is AdapterAttachment.DeniedReason,
                     is AdapterAttachment.EndUserMessage,
                     is AdapterAttachment.ErrorDescription,
-                    is AdapterAttachment.ErrorSource -> null
+                    is AdapterAttachment.ErrorCategory -> null
                 }
             }
         )

@@ -218,8 +218,8 @@ message Attachment {
     // Says something about why an action request was denied.
     DeniedReason denied_reason = 6;
 
-    // Says something about where an error occurred
-    ErrorSource error_source = 7;
+    // Says something about the type of an error
+    ErrorCategory error_category = 7;
   }
 
   message Code {
@@ -300,13 +300,17 @@ message Attachment {
     string number = 1;
   }
 
-  enum ErrorSource {
-    // Adapters can call APIs to perform certain pre-requesite actions before opening a door.
-    // This can be authentication, verification, etc
-    EXTERNAL_API = 0;
+  enum ErrorCategory {
+    // Adapters might call APIs to perform certain pre-requisite actions before opening a door.
+    // This can be for authentication, verification, etc.
+    // This category should be used when an API is offline or returns an error
+    API_ERROR = 0;
 
-    // Physical device that controls the door/light/whatever
-    THING = 1;
+    // Physical device that controls the door/light/etc is offline or returns an error
+    THING_ERROR = 1;
+
+    // General network issue
+    NETWORK_ERROR = 2;
   }
 
 }

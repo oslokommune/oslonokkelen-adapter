@@ -102,10 +102,11 @@ object ProtobufSerializer {
                     .build()
             }
 
-            is AdapterAttachment.ErrorSource -> {
+            is AdapterAttachment.ErrorCategory -> {
                 when(attachment.value) {
-                    AdapterAttachment.ErrorSource.Value.THING -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.THING).build()
-                    AdapterAttachment.ErrorSource.Value.EXTERNAL_API -> Adapter.Attachment.newBuilder().setErrorSource(Adapter.Attachment.ErrorSource.EXTERNAL_API).build()
+                    AdapterAttachment.ErrorCategory.Value.THING_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.THING_ERROR).build()
+                    AdapterAttachment.ErrorCategory.Value.API_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.API_ERROR).build()
+                    AdapterAttachment.ErrorCategory.Value.NETWORK_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.NETWORK_ERROR).build()
                 }
             }
         }
