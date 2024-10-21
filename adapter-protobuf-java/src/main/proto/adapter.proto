@@ -371,6 +371,9 @@ message ThingState {
 
     Network network = 11;
 
+    // Other key/value properties
+    Properties properties = 12;
+
   }
 
   reserved 4;
@@ -411,6 +414,10 @@ message ThingState {
     int64 last_connect_at_epoch_seconds = 3;
     int64 last_disconnect_at_epoch_seconds = 4;
     int32 rssi = 5;
+  }
+
+  message Properties {
+    map<string, string> props = 1;
   }
 
   // All fields are optional, but make sure you include at least

@@ -295,6 +295,15 @@ object ProtobufSerializer {
                         .setNetwork(networkBuilder.build())
                         .build()
                 }
+
+                is ThingState.Properties -> {
+                    Adapter.ThingState.newBuilder()
+                        .setLastUpdate(state.timestamp.toString())
+                        .setProperties(Adapter.ThingState.Properties.newBuilder()
+                            .putAllProps(state.props)
+                            .build())
+                        .build()
+                }
             }
         } ?: emptyList()
     }

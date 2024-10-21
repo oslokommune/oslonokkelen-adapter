@@ -190,4 +190,18 @@ sealed class ThingState {
         val actionId: ActionId
         val key: Key
     }
+
+    data class Properties(
+        override val timestamp: Instant,
+        override val thingId: ThingId,
+        val props: Map<String, String>
+    ) : ThingState(), ComparableThingState {
+
+        override val key = Key(thingId, "thing.${thingId.value}.props")
+
+        override fun hasSameStateAs(other: ThingState): Boolean {
+            return other is Properties && props == other.props
+        }
+
+    }
 }

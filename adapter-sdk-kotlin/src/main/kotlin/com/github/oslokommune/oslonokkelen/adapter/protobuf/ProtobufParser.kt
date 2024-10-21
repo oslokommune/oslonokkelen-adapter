@@ -331,6 +331,14 @@ object ProtobufParser {
                         )
                     }
 
+                    Adapter.ThingState.ValueCase.PROPERTIES -> {
+                        ThingState.Properties(
+                            thingId = thing.id,
+                            timestamp = lastUpdate,
+                            props = serializedState.properties.propsMap
+                        )
+                    }
+
                     Adapter.ThingState.ValueCase.VALUE_NOT_SET, null -> {
                         log.warn("Unsupported thing state detected: {}", serializedState.valueCase)
                         null
