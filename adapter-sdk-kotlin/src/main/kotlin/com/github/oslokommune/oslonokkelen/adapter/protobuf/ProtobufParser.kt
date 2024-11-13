@@ -111,7 +111,7 @@ object ProtobufParser {
         })
     }
 
-    private fun parseAttachment(attachment: Adapter.Attachment): AdapterAttachment? {
+    internal fun parseAttachment(attachment: Adapter.Attachment): AdapterAttachment? {
         return when (attachment.valueCase) {
             Adapter.Attachment.ValueCase.NORWEGIAN_FODSELSNUMMER -> {
                 AdapterAttachment.NorwegianFodselsnummer(attachment.norwegianFodselsnummer.number)
@@ -155,11 +155,13 @@ object ProtobufParser {
             }
 
             Adapter.Attachment.ValueCase.END_USER_MESSAGE -> {
+                val link = attachment.endUserMessage.link
+
                 AdapterAttachment.EndUserMessage(
                     message = attachment.endUserMessage.message.message,
-                    link = if (attachment.endUserMessage.link.isNotBlank()) {
+                    link = if (link.startsWith("http://") || link.startsWith("https://")) {
                         AdapterAttachment.Link(
-                            link = URI.create(attachment.endUserMessage.link),
+                            link = URI.create(link),
                             name = attachment.endUserMessage.linkName.ifBlank {
                                 null
                             }
