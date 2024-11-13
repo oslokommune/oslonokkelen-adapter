@@ -19,16 +19,16 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
 import com.nimbusds.jwt.JWTClaimsSet
-import java.net.URI
-import java.time.Duration
-import java.time.Instant
-import java.time.ZonedDateTime
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentHashMap
 import kotlinx.collections.immutable.toPersistentList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.URI
+import java.time.Duration
+import java.time.Instant
+import java.time.ZonedDateTime
 
 object ProtobufParser {
 
@@ -156,24 +156,30 @@ object ProtobufParser {
 
             Adapter.Attachment.ValueCase.END_USER_MESSAGE -> {
                 val link = attachment.endUserMessage.link
+                val containsInvalidLink =
+                    link.isNotBlank() && (!link.startsWith("http://") && !link.startsWith("https://"))
 
-                AdapterAttachment.EndUserMessage(
-                    message = attachment.endUserMessage.message.message,
-                    link = if (link.startsWith("http://") || link.startsWith("https://")) {
-                        AdapterAttachment.Link(
-                            link = URI.create(link),
-                            name = attachment.endUserMessage.linkName.ifBlank {
-                                null
-                            }
-                        )
-                    } else {
-                        null
-                    }
-                )
+                if (containsInvalidLink) {
+                    null
+                } else {
+                    AdapterAttachment.EndUserMessage(
+                        message = attachment.endUserMessage.message.message,
+                        link = if (link.isNotBlank()) {
+                            AdapterAttachment.Link(
+                                link = URI.create(link),
+                                name = attachment.endUserMessage.linkName.ifBlank {
+                                    null
+                                }
+                            )
+                        } else {
+                            null
+                        }
+                    )
+                }
             }
 
             Adapter.Attachment.ValueCase.ERROR_CATEGORY -> {
-                when(attachment.errorCategory) {
+                when (attachment.errorCategory) {
                     Adapter.Attachment.ErrorCategory.API_ERROR -> AdapterAttachment.ErrorCategory.ApiError
                     Adapter.Attachment.ErrorCategory.THING_ERROR -> AdapterAttachment.ErrorCategory.ThingError
                     Adapter.Attachment.ErrorCategory.NETWORK_ERROR -> AdapterAttachment.ErrorCategory.NetworkError

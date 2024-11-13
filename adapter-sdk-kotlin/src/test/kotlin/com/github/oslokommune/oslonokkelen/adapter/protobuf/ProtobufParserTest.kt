@@ -1,16 +1,15 @@
 package com.github.oslokommune.oslonokkelen.adapter.protobuf
 
-import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.BackendTokenGeneratorTest
 import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterActionRequest
 import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
+import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.BackendTokenGeneratorTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.net.URI
 import java.time.Duration
-import java.time.Instant
 
 internal class ProtobufParserTest {
 
@@ -37,7 +36,7 @@ internal class ProtobufParserTest {
     }
 
     @Test
-    fun `Ignore link without http prefix`() {
+    fun `Ignores entire message if link is not valid`() {
         val parsed = ProtobufParser.parseAttachment(
             Adapter.Attachment.newBuilder()
                 .setEndUserMessage(
@@ -54,8 +53,7 @@ internal class ProtobufParserTest {
                 .build()
         )
 
-        val expected = AdapterAttachment.EndUserMessage(message = "Halla")
-        assertEquals(expected, parsed)
+        assertNull(parsed)
     }
 
     @Test
@@ -111,6 +109,29 @@ internal class ProtobufParserTest {
                 link = URI.create("https://vg.no"),
                 name = "vg"
             )
+        )
+
+        assertEquals(expected, parsed)
+    }
+
+    @Test
+    fun `Parse message without link`() {
+        val parsed = ProtobufParser.parseAttachment(
+            Adapter.Attachment.newBuilder()
+                .setEndUserMessage(
+                    Adapter.Attachment.EndUserMessage.newBuilder()
+                        .setMessage(
+                            Adapter.TextContent.newBuilder()
+                                .setMessage("Halla")
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+        )
+
+        val expected = AdapterAttachment.EndUserMessage(
+            message = "Halla"
         )
 
         assertEquals(expected, parsed)
