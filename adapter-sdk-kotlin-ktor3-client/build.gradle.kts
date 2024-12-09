@@ -12,7 +12,7 @@ plugins {
 }
 
 description = "Ktor client for fetching public keys"
-val ktorVersion = "3.0.1"
+val ktorVersion = "3.0.2"
 
 
 dependencies {
