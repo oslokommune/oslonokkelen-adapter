@@ -6,7 +6,7 @@ plugins {
     id("org.asciidoctor.jvm.convert") version "4.0.3"
     id("org.asciidoctor.jvm.pdf") version "4.0.3"
     id("org.asciidoctor.jvm.gems") version "4.0.3"
-    id("org.ysb33r.jruby.resolver") version "1.0.2" apply false
+    id("org.ysb33r.jruby.resolver") version "2.0.0" apply false
 
 }
 
