@@ -67,6 +67,15 @@ object ProtobufParser {
                     null
                 }
             })
+            .putAllParameters(requireMap(requestClaim, "parameters").mapNotNull {
+                val key = it.key as? String
+                val value = it.value as? String
+                if(key != null && value != null) {
+                    key to value
+                } else {
+                    null
+                }
+            }.toMap())
 
         return requestBuilder.build()
     }
@@ -90,6 +99,11 @@ object ProtobufParser {
         return value ?: throw missingKey(key, requestClaim)
     }
 
+    private fun requireMap(requestClaim: Map<String, Any>, key: String): Map<*, *> {
+        val value = requestClaim[key] as? Map<*, *>
+        return value ?: throw missingKey(key, requestClaim)
+    }
+
     private fun missingKey(key: String, requestClaim: Map<*, *>): IllegalStateException {
         return IllegalStateException("Missing key $key (found: ${requestClaim.keys.joinToString(", ")})")
     }
@@ -101,7 +115,8 @@ object ProtobufParser {
             timeBudget = Duration.ofMillis(serializedRequest.timeBudgetMillis.toLong()),
             attachments = serializedRequest.attachmentsList.mapNotNull { attachment ->
                 parseAttachment(attachment)
-            }
+            },
+            parameters = serializedRequest.parametersMap
         )
     }
 
@@ -224,7 +239,8 @@ object ProtobufParser {
                     id = thing.id.createActionId(serializedAction.id),
                     description = serializedAction.description,
                     requiredAttachmentTypes = serializedAction.requiredInputAttachmentTypesList.toSet(),
-                    possibleOutputAttachmentTypes = serializedAction.possibleOutputAttachmentTypesList.toSet()
+                    possibleOutputAttachmentTypes = serializedAction.possibleOutputAttachmentTypesList.toSet(),
+                    parameters = serializedAction.acceptedParametersList
                 )
 
                 thingActions = thingActions.put(action.id, action)

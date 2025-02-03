@@ -21,7 +21,8 @@ internal class ProtobufParserTest {
             timeBudget = Duration.ofMillis(2400),
             attachments = listOf(
                 AdapterAttachment.NorwegianFodselsnummer("12345678912")
-            )
+            ),
+            parameters = mapOf("test" to "testValue")
         )
 
         val token = BackendTokenGeneratorTest.testGenerator.createActionRequestToken(

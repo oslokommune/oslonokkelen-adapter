@@ -167,6 +167,9 @@ A request consists of the following fields.
 | Attachments
 | Any number of attachments. See table below for a list of possible request attachments.
 
+| Parameters
+| A list of arbitrary attachments requested by the action
+
 | Time budget
 | The app will use a time out if no response is received within x seconds after the user triggered an operation.
 Each action request will contain an estimated time budget the adapter should strive to respond within.

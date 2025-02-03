@@ -79,6 +79,9 @@ message AdapterManifest {
 
     reserved 5;
 
+    // A list of arbitrary parameters this action can accept as input
+    repeated ParameterDefinition accepted_parameters = 6;
+
   }
 
 
@@ -95,6 +98,20 @@ message AdapterManifest {
     // when this code will be returned.
     string description = 2;
 
+  }
+
+  // An arbitrary parameter that this action can accept
+  // Example
+  // ---------
+  // Name: colour
+  // Description: A colour (red|blue|green|yellow|pink|cyan|white)
+  message ParameterDefinition {
+
+    // The name of the parameter
+    string name = 1;
+
+    // A helpful description of what the parameter is
+    string description = 2;
   }
 
 }
@@ -122,6 +139,9 @@ message ActionRequest {
   // hard to return within this time budget. Returning a timeout
   // error is better then not returning anything.
   int32 time_budget_millis = 4;
+
+  // Arbitrary map of parameters and their values as requested by the action manifest
+  map<string, string> parameters = 6;
 
 }
 
