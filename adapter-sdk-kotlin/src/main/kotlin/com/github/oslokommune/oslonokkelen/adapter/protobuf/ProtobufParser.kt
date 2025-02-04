@@ -67,7 +67,7 @@ object ProtobufParser {
                     null
                 }
             })
-            .putAllParameters(requireMap(requestClaim, "parameters").mapNotNull {
+            .putAllParameters(optionalMap(requestClaim, "parameters")?.mapNotNull {
                 val key = it.key as? String
                 val value = it.value as? String
                 if(key != null && value != null) {
@@ -75,7 +75,7 @@ object ProtobufParser {
                 } else {
                     null
                 }
-            }.toMap())
+            }?.toMap() ?: emptyMap())
 
         return requestBuilder.build()
     }
@@ -99,9 +99,8 @@ object ProtobufParser {
         return value ?: throw missingKey(key, requestClaim)
     }
 
-    private fun requireMap(requestClaim: Map<String, Any>, key: String): Map<*, *> {
-        val value = requestClaim[key] as? Map<*, *>
-        return value ?: throw missingKey(key, requestClaim)
+    private fun optionalMap(requestClaim: Map<String, Any>, key: String): Map<*, *>? {
+       return requestClaim[key] as? Map<*, *>
     }
 
     private fun missingKey(key: String, requestClaim: Map<*, *>): IllegalStateException {
