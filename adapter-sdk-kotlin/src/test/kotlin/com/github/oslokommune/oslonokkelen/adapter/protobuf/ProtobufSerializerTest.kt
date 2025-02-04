@@ -35,7 +35,8 @@ internal class ProtobufSerializerTest {
                 timeBudget = Duration.ofSeconds(3),
                 attachments = listOf(
                     AdapterAttachment.NorwegianFodselsnummer("30098602247")
-                )
+                ),
+                parameters = mapOf("test" to "testValue")
             )
 
             val serializedRequest = ProtobufSerializer.serialize(request)

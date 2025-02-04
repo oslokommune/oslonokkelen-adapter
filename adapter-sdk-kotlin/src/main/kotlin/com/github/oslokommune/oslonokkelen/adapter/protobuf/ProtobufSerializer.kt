@@ -24,6 +24,7 @@ object ProtobufSerializer {
             .setRequestId(request.requestId)
             .setThingId(request.actionId.thingId.value)
             .setActionId(request.actionId.value)
+            .putAllParameters(request.parameters)
             .build()
     }
 
@@ -318,6 +319,7 @@ object ProtobufSerializer {
                 .setDescription(action.description)
                 .addAllRequiredInputAttachmentTypes(action.requiredAttachmentTypes.toList())
                 .addAllPossibleOutputAttachmentTypes(action.possibleOutputAttachmentTypes.toList())
+                .addAllAcceptedParameters(action.parameters)
                 .build()
         } ?: emptyList()
 

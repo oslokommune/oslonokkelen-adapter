@@ -63,7 +63,8 @@ class BackendTokenGenerator(
                     is AdapterAttachment.ErrorDescription,
                     is AdapterAttachment.ErrorCategory -> null
                 }
-            }
+            },
+            "parameters" to request.parameters
         )
 
         return buildToken {

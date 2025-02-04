@@ -34,7 +34,8 @@ class BackendTokenGeneratorTest {
                 timeBudget = Duration.ofSeconds(2),
                 attachments = listOf(
                     AdapterAttachment.NorwegianFodselsnummer("30098602247")
-                )
+                ),
+                parameters = mapOf("test" to "testValue")
             )
         )
 
