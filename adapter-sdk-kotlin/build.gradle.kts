@@ -14,7 +14,7 @@ plugins {
 
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
-val slf4jVersion = "2.0.16"
+val slf4jVersion = "2.0.17"
 
 dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
