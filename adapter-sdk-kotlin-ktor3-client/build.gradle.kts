@@ -6,27 +6,26 @@ plugins {
     `maven-publish`
     idea
 
-    id("org.jetbrains.kotlin.jvm")
-    id("com.adarshr.test-logger")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.testLogger)
     id("java")
 }
 
 description = "Ktor client for fetching public keys"
-val ktorVersion = "3.1.2"
-
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:2.0.17")
-    api("com.nimbusds:nimbus-jose-jwt:10.2")
+    implementation(platform(libs.slf4j.bom))
+    implementation(libs.slf4j.api)
+    api(libs.jwt)
 
-    implementation("io.ktor:ktor-client-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.jvm)
+    implementation(libs.ktor.client.contentNegotiation)
+    implementation(libs.ktor.kotlinx.json)
 
-    testImplementation("org.slf4j:slf4j-simple:2.0.17")
-    testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation(libs.slf4j.simple)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.bundles.testing)
 }
 
 plugins.withType<TestLoggerPlugin> {
