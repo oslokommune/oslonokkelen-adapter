@@ -7,24 +7,23 @@ plugins {
     `maven-publish`
     idea
 
-    id("org.jetbrains.kotlin.jvm")
-    id("com.adarshr.test-logger")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.testLogger)
     id("java")
 }
 
 description = "Oslonøkkelen Adapter Kotlin SDK"
 
-val slf4jVersion = "2.0.17"
-
 dependencies {
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
-    api(project(":adapter-protobuf-java"))
-    api("com.nimbusds:nimbus-jose-jwt:10.2")
-    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8")
+    implementation(platform(libs.slf4j.bom))
+    implementation(libs.slf4j.api)
+    api(projects.adapterProtobufJava)
+    api(libs.jwt)
+    api(libs.kotlinx.collections)
 
-    testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
-    testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation(libs.slf4j.simple)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.bundles.testing)
 }
 
 plugins.withType<TestLoggerPlugin> {

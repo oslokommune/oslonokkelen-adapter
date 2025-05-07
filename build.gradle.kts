@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("idea")
     id("jacoco")
-    id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    id("com.adarshr.test-logger") version "4.0.0"
-    id("com.google.protobuf") version "0.9.5"
-    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.testLogger)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.ktlint)
 }
 
 allprojects {
@@ -32,4 +32,3 @@ allprojects {
         }
     }
 }
-
