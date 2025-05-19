@@ -1,3 +1,4 @@
 * @kimble @lily-es
 # Exclude gradle files
 *.gradle.kts
+/gradle/libs.versions.toml
