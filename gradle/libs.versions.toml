@@ -34,4 +34,4 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "13.0.0" }
 asciidoc-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoc" }
 asciidoc-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoc" }
 asciidoc-gems = { id = "org.asciidoctor.jvm.gems", version.ref = "asciidoc" }
-jrubyResolver = { id = "org.ysb33r.jruby.resolver", version = "1.0.2" }
+jrubyResolver = { id = "org.ysb33r.jruby.resolver", version = "2.1.2" }
