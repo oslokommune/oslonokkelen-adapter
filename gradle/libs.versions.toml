@@ -1,7 +1,7 @@
 [versions]
 asciidoc = "4.0.4"
 protobuf-java = "4.32.1"
-ktor = "3.2.3"
+ktor = "3.3.0"
 
 [libraries]
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf-java" }
