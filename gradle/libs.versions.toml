@@ -1,6 +1,6 @@
 [versions]
 asciidoc = "4.0.5"
-protobuf-java = "4.35.0"
+protobuf-java = "4.35.1"
 ktor = "3.5.0"
 
 [libraries]
