@@ -242,7 +242,7 @@ object ProtobufParser {
                     parameters = serializedAction.acceptedParametersList
                 )
 
-                thingActions = thingActions.put(action.id, action)
+                thingActions = thingActions.putting(action.id, action)
             }
 
             // State
@@ -370,18 +370,18 @@ object ProtobufParser {
                 }
 
                 if (state != null) {
-                    thingStates = thingStates.put(state.key, state)
+                    thingStates = thingStates.putting(state.key, state)
                 }
             }
 
 
-            things = things.put(thing.id, thing)
+            things = things.putting(thing.id, thing)
 
             if (thingActions.isNotEmpty()) {
-                actions = actions.put(thing.id, thingActions)
+                actions = actions.putting(thing.id, thingActions)
             }
             if (thingStates.isNotEmpty()) {
-                allThingState = allThingState.put(thing.id, ThingStateSnapshot(thing.id, thingStates))
+                allThingState = allThingState.putting(thing.id, ThingStateSnapshot(thing.id, thingStates))
             }
         }
 

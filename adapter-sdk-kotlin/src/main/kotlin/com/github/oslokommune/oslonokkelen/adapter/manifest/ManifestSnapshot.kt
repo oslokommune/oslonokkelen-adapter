@@ -54,7 +54,7 @@ data class ManifestSnapshot(
         } else {
             copy(
                 version = version + 1,
-                things = things.put(description.id, description)
+                things = things.putting(description.id, description)
             )
         }
     }
@@ -67,9 +67,9 @@ data class ManifestSnapshot(
 
             copy(
                 version = version + 1,
-                things = things.remove(id),
-                thingStates = thingStates.remove(id),
-                actions = actions.remove(id)
+                things = things.removing(id),
+                thingStates = thingStates.removing(id),
+                actions = actions.removing(id)
             )
         }
     }
@@ -87,11 +87,11 @@ data class ManifestSnapshot(
             this
         } else {
             val thingActions = actions[description.id.thingId] ?: persistentMapOf()
-            val updatedThingActions = thingActions.put(description.id, description)
+            val updatedThingActions = thingActions.putting(description.id, description)
 
             copy(
                 version = version + 1,
-                actions = actions.put(description.id.thingId, updatedThingActions)
+                actions = actions.putting(description.id.thingId, updatedThingActions)
             )
         }
     }
@@ -101,7 +101,7 @@ data class ManifestSnapshot(
         val thingActions = actions[thingId]
 
         return if (thingActions?.containsKey(actionId) == true) {
-            val updatedThingActions = thingActions.remove(actionId)
+            val updatedThingActions = thingActions.removing(actionId)
             val stateToRemove = thingStates[thingId]
                 ?.data
                 ?.values
@@ -118,12 +118,12 @@ data class ManifestSnapshot(
             if (updatedThingActions.isEmpty()) {
                 tmp.copy(
                     version = version + 1,
-                    actions = actions.remove(thingId)
+                    actions = actions.removing(thingId)
                 )
             } else {
                 tmp.copy(
                     version = version + 1,
-                    actions = actions.put(thingId, updatedThingActions)
+                    actions = actions.putting(thingId, updatedThingActions)
                 )
             }
         } else {
@@ -153,7 +153,7 @@ data class ManifestSnapshot(
 
             copy(
                 version = version + 1,
-                thingStates = thingStates.put(newState.thingId, updatedThingState)
+                thingStates = thingStates.putting(newState.thingId, updatedThingState)
             )
         }
     }
@@ -175,12 +175,12 @@ data class ManifestSnapshot(
                 if (updatedStateForThing != null) {
                     copy(
                         version = version + 1,
-                        thingStates = thingStates.put(thingId, updatedStateForThing)
+                        thingStates = thingStates.putting(thingId, updatedStateForThing)
                     )
                 } else {
                     copy(
                         version = version + 1,
-                        thingStates = thingStates.remove(thingId)
+                        thingStates = thingStates.removing(thingId)
                     )
                 }
             }

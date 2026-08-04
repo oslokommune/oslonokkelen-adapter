@@ -27,7 +27,7 @@ data class ThingStateSnapshot(
     }
 
     operator fun minus(key: ThingState.Key): ThingStateSnapshot? {
-        val updated = data.remove(key)
+        val updated = data.removing(key)
 
         return if (updated.isEmpty()) {
             null
@@ -51,15 +51,15 @@ data class ThingStateSnapshot(
                     log.info("{} -> {}", previous, state)
                 }
 
-                copy(data = data.put(state.key, state))
+                copy(data = data.putting(state.key, state))
             }
             null -> {
                 log.info("Adding {}", state)
-                copy(data = data.put(state.key, state))
+                copy(data = data.putting(state.key, state))
             }
             else -> {
                 log.info("Replacing {} -> {}", previous, state)
-                copy(data = data.put(state.key, state))
+                copy(data = data.putting(state.key, state))
             }
         }
     }

@@ -92,10 +92,10 @@ sealed class ThingState {
     ) : ThingState() {
 
         operator fun plus(line: Line): DebugLog {
-            var updatedLines = lines.add(line)
+            var updatedLines = lines.adding(line)
 
             if (updatedLines.size > maxLength) {
-                updatedLines = updatedLines.removeAt(0)
+                updatedLines = updatedLines.removingAt(0)
             }
 
             return copy(lines = updatedLines)

@@ -13,7 +13,7 @@ data class ErrorCodes(val codes: PersistentMap<ErrorCode, ErrorCodeDescription> 
             this
         } else {
             copy(
-                codes = codes.put(description.code, description)
+                codes = codes.putting(description.code, description)
             )
         }
     }
@@ -21,7 +21,7 @@ data class ErrorCodes(val codes: PersistentMap<ErrorCode, ErrorCodeDescription> 
     operator fun minus(code: ErrorCode): ErrorCodes {
         return if (codes.containsKey(code)) {
             copy(
-                codes = codes.remove(code)
+                codes = codes.removing(code)
             )
         } else {
             this
