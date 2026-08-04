@@ -13,6 +13,7 @@ import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier
 import com.nimbusds.jwt.proc.DefaultJWTProcessor
 import java.net.URI
 import java.text.ParseException
+import kotlin.time.toKotlinInstant
 
 /**
  * @param expectedAudience Our adapters public uri
@@ -52,7 +53,7 @@ class TokenVerifierFactory(
 
                 replayDetector.append(
                     tokenId = validatedClaims.jwtid,
-                    expiresAt = validatedClaims.expirationTime.toInstant()
+                    expiresAt = validatedClaims.expirationTime.toInstant().toKotlinInstant()
                 )
 
                 validatedClaims

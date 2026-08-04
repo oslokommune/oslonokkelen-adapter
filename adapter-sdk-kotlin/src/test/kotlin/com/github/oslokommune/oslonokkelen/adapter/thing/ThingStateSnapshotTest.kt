@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 internal class ThingStateSnapshotTest {
 
-    private val timestamp = Instant.now()
+    private val timestamp = Clock.System.now()
 
     @Test
     fun `Can add state to an empty snapshot`() {
@@ -38,7 +39,7 @@ internal class ThingStateSnapshotTest {
         val openFrontDoor = ThingState.OpenPosition(timestamp, frontDoor, open = true)
         val modifiedSnapshot = snapshot + openFrontDoor
 
-        val stillOpenFrontDoor = openFrontDoor.copy(timestamp = openFrontDoor.timestamp.plusSeconds(30))
+        val stillOpenFrontDoor = openFrontDoor.copy(timestamp = openFrontDoor.timestamp.plus(30.seconds))
         val newModifiedSnapshot = modifiedSnapshot + stillOpenFrontDoor
 
         assertThat(newModifiedSnapshot).isEqualTo(
@@ -55,7 +56,7 @@ internal class ThingStateSnapshotTest {
         val openFrontDoor = ThingState.OpenPosition(timestamp, frontDoor, open = true)
         val modifiedSnapshot = snapshot + openFrontDoor
 
-        val closedFrontDoor = ThingState.OpenPosition(timestamp.plusSeconds(40), frontDoor, open = false)
+        val closedFrontDoor = ThingState.OpenPosition(timestamp.plus(40.seconds), frontDoor, open = false)
         val newModifiedSnapshot = modifiedSnapshot + closedFrontDoor
 
         assertThat(newModifiedSnapshot).isEqualTo(

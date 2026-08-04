@@ -4,7 +4,7 @@ import com.github.oslokommune.oslonokkelen.adapter.action.ActionId
 import com.github.oslokommune.oslonokkelen.adapter.proto.Adapter
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import java.time.Instant
+import kotlin.time.Instant
 
 sealed class ThingState {
 

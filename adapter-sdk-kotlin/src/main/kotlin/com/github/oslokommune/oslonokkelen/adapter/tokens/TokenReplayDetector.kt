@@ -1,6 +1,6 @@
 package com.github.oslokommune.oslonokkelen.adapter.tokens
 
-import java.time.Instant
+import kotlin.time.Instant
 
 /**
  * Used to prevent someone using re-using a valid token.

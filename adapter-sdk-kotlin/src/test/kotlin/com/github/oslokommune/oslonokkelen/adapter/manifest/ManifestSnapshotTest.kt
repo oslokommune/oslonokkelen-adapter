@@ -9,7 +9,6 @@ import com.github.oslokommune.oslonokkelen.adapter.thing.ThingDescription
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingState
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingStateSnapshot
-import java.time.Instant
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.assertj.core.api.Assertions.assertThat
@@ -18,6 +17,8 @@ import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 internal class ManifestSnapshotTest {
 
@@ -239,7 +240,7 @@ internal class ManifestSnapshotTest {
             )
 
             private val lockedFrontDoor = ThingState.Lock(
-                timestamp = Instant.now(),
+                timestamp = Clock.System.now(),
                 thingId = frontDoor.id,
                 locked = true
             )
@@ -252,7 +253,7 @@ internal class ManifestSnapshotTest {
             private val unlockHealthy = ThingState.ActionHealth(
                 debugMessage = "Not doing so well..",
                 actionId = unlockFrontDoor.id,
-                timestamp = Instant.now(),
+                timestamp = Clock.System.now(),
                 healthy = false
             )
 
@@ -293,7 +294,7 @@ internal class ManifestSnapshotTest {
             @Test
             fun `Confirming exactly the same state later will bump manifest`() {
                 val original = ManifestSnapshot()
-                val updatedLockedFrontDoor = lockedFrontDoor.copy(timestamp = lockedFrontDoor.timestamp.plusSeconds(20))
+                val updatedLockedFrontDoor = lockedFrontDoor.copy(timestamp = lockedFrontDoor.timestamp.plus(20.seconds))
                 val withState = original + frontDoor + lockedFrontDoor + updatedLockedFrontDoor
 
                 assertThat(withState).isEqualTo(
@@ -437,7 +438,7 @@ internal class ManifestSnapshotTest {
             val originalDoor = createThingDescription("door", "First door description")
             val updatedDoor = createThingDescription("door", "Second door description")
             val withOriginalDoor = original + originalDoor
-            val openState = ThingState.OpenPosition(timestamp = Instant.now(), originalDoor.id, open = true)
+            val openState = ThingState.OpenPosition(timestamp = Clock.System.now(), originalDoor.id, open = true)
             val withOriginalDoorAndState = withOriginalDoor + openState
             val withUpdatedDoorAndState = withOriginalDoorAndState + updatedDoor
 

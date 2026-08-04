@@ -2,8 +2,9 @@ package com.github.oslokommune.oslonokkelen.adapter.tokens
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * This implementation can be used only if you run a single
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class InMemoryTokenReplayDetector(
     private val capacity: Int = 1000,
-    private val timestamper: () -> Instant = { Instant.now() }
+    private val timestamper: () -> Instant = { Clock.System.now() }
 ) : TokenReplayDetector {
 
     private val entries = ConcurrentHashMap<String, Instant>(capacity)

@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.net.URI
-import java.time.Duration
-import java.time.Instant
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 internal class ProtobufSerializerTest {
 
@@ -32,7 +32,7 @@ internal class ProtobufSerializerTest {
             val request = AdapterActionRequest(
                 requestId = "request-1",
                 actionId = ActionId("door", "open"),
-                timeBudget = Duration.ofSeconds(3),
+                timeBudget = 3.seconds,
                 attachments = listOf(
                     AdapterAttachment.NorwegianFodselsnummer("30098602247")
                 ),
@@ -185,7 +185,7 @@ internal class ProtobufSerializerTest {
             description = "Unlock the front door"
         )
 
-        private val timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS)
+        private val timestamp = Instant.fromEpochSeconds(Clock.System.now().epochSeconds)
 
         private val deviceType = ThingState.DeviceType(
             timestamp = timestamp,
@@ -266,7 +266,7 @@ internal class ProtobufSerializerTest {
                         level = Adapter.ThingState.DebugLog.Level.INFO
                     ),
                     ThingState.DebugLog.Line(
-                        timestamp = timestamp.plusSeconds(1),
+                        timestamp = timestamp.plus(1.seconds),
                         message = "Some warning",
                         level = Adapter.ThingState.DebugLog.Level.WARNING
                     )

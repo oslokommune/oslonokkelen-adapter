@@ -1,7 +1,7 @@
 package com.github.oslokommune.oslonokkelen.adapter.thing
 
 import java.net.URI
-import java.time.Duration
+import kotlin.time.Duration
 
 
 /**

@@ -10,8 +10,8 @@ import com.nimbusds.jose.proc.SecurityContext
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.net.URI
-import java.time.Duration
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 internal class TokenVerifierFactoryTest {
 
@@ -70,8 +70,8 @@ internal class TokenVerifierFactoryTest {
 
         val tokenGenerator = BackendTokenGenerator(
             oslonokkelenBackendUri = backendUri,
-            timestamper = { Instant.now().minusSeconds(61) },
-            tokenExpireTime = Duration.ofSeconds(60),
+            timestamper = { Clock.System.now().minus(61.seconds) },
+            tokenExpireTime = 60.seconds,
             tokenSigningKeySupplier = { key }
         )
 
@@ -173,7 +173,7 @@ internal class TokenVerifierFactoryTest {
         keySource: JWKSource<SecurityContext> = ImmutableJWKSet(JWKSet()),
         replayDetector: TokenReplayDetector = InMemoryTokenReplayDetector(
             capacity = 3,
-            timestamper = { Instant.now() })
+            timestamper = { Clock.System.now() })
     ): TokenVerifierFactory {
         return TokenVerifierFactory(
             expectedIssuer = expectedIssuer,

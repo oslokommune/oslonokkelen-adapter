@@ -1,8 +1,7 @@
 package com.github.oslokommune.oslonokkelen.adapter.action
 
-import java.time.Duration
-import java.time.Instant
 import java.util.UUID
+import kotlin.time.Duration
 
 data class AdapterActionRequest(
     val requestId: String = UUID.randomUUID().toString(),

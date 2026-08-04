@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.net.URI
-import java.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class ProtobufParserTest {
 
@@ -18,7 +18,7 @@ internal class ProtobufParserTest {
         val request = AdapterActionRequest(
             actionId = ActionId("door", "open"),
             requestId = "r-1",
-            timeBudget = Duration.ofMillis(2400),
+            timeBudget = 2400.milliseconds,
             attachments = listOf(
                 AdapterAttachment.NorwegianFodselsnummer("12345678912")
             ),

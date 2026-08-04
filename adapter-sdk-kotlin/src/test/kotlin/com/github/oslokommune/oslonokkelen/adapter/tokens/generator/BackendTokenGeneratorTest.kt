@@ -6,8 +6,8 @@ import com.github.oslokommune.oslonokkelen.adapter.action.AdapterAttachment
 import com.nimbusds.jose.jwk.JWK
 import org.junit.jupiter.api.Test
 import java.net.URI
-import java.time.Duration
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * No real test, just here so you can experiment and see
@@ -31,7 +31,7 @@ class BackendTokenGeneratorTest {
             request = AdapterActionRequest(
                 requestId = "r1",
                 actionId = ActionId("door", "open"),
-                timeBudget = Duration.ofSeconds(2),
+                timeBudget = 2.seconds,
                 attachments = listOf(
                     AdapterAttachment.NorwegianFodselsnummer("30098602247")
                 ),
@@ -45,7 +45,7 @@ class BackendTokenGeneratorTest {
 
     companion object {
 
-        private val rightNow = Instant.now()
+        private val rightNow = Clock.System.now()
 
         val testGenerator = BackendTokenGenerator(
             tokenSigningKeySupplier = {
@@ -66,7 +66,7 @@ class BackendTokenGeneratorTest {
                 ).toECKey()
             },
             oslonokkelenBackendUri = URI.create("https://oslonokkelen.oslo.kommune.no"),
-            tokenExpireTime = Duration.ofSeconds(30),
+            tokenExpireTime = 30.seconds,
             timestamper = { rightNow }
         )
 

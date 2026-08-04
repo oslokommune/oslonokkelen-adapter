@@ -20,7 +20,7 @@ object ProtobufSerializer {
     fun serialize(request: AdapterActionRequest): Adapter.ActionRequest {
         return Adapter.ActionRequest.newBuilder()
             .addAllAttachments(request.attachments.map { serializeAttachment(it) })
-            .setTimeBudgetMillis(request.timeBudget.toMillis().toInt())
+            .setTimeBudgetMillis(request.timeBudget.inWholeMilliseconds.toInt())
             .setRequestId(request.requestId)
             .setThingId(request.actionId.thingId.value)
             .setActionId(request.actionId.value)
@@ -127,7 +127,7 @@ object ProtobufSerializer {
             }
             if (thing.timeWithoutMessageBeforeAlert != null) {
                 thingBuilder.setSecondsWithoutMessageBeforeAlert(
-                    thing.timeWithoutMessageBeforeAlert.toSeconds().toInt()
+                    thing.timeWithoutMessageBeforeAlert.inWholeSeconds.toInt()
                 )
             }
 
@@ -185,7 +185,7 @@ object ProtobufSerializer {
                                 .addAllLines(
                                     state.lines.map { line ->
                                         Adapter.ThingState.DebugLog.Line.newBuilder()
-                                            .setTimestampEpochMillis(line.timestamp.toEpochMilli())
+                                            .setTimestampEpochMillis(line.timestamp.toEpochMilliseconds())
                                             .setMessage(line.message)
                                             .setLevel(
                                                 when (line.level) {
@@ -285,10 +285,10 @@ object ProtobufSerializer {
                         networkBuilder.setRssi(rssi)
                     }
                     state.lastConnectedAt?.let { timestamp ->
-                        networkBuilder.setLastConnectAtEpochSeconds(timestamp.epochSecond)
+                        networkBuilder.setLastConnectAtEpochSeconds(timestamp.epochSeconds)
                     }
                     state.lastDisconnectedAt?.let { timestamp ->
-                        networkBuilder.setLastDisconnectAtEpochSeconds(timestamp.epochSecond)
+                        networkBuilder.setLastDisconnectAtEpochSeconds(timestamp.epochSeconds)
                     }
 
                     Adapter.ThingState.newBuilder()

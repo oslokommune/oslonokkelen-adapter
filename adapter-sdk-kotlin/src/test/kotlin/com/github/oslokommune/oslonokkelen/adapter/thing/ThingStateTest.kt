@@ -3,7 +3,7 @@ package com.github.oslokommune.oslonokkelen.adapter.thing
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.Instant
+import kotlin.time.Clock
 
 internal class ThingStateTest {
 
@@ -11,7 +11,7 @@ internal class ThingStateTest {
     @Nested
     inner class ThingLog {
 
-        private val now = Instant.now()
+        private val now = Clock.System.now()
         private val thingId = ThingId("front-door")
         private val emptyLog = ThingState.DebugLog(thingId, maxLength = 3)
 

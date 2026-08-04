@@ -26,9 +26,10 @@ import kotlinx.collections.immutable.toPersistentList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
-import java.time.Duration
-import java.time.Instant
 import java.time.ZonedDateTime
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 object ProtobufParser {
 
@@ -111,7 +112,7 @@ object ProtobufParser {
         return AdapterActionRequest(
             requestId = serializedRequest.requestId,
             actionId = ActionId(serializedRequest.thingId, serializedRequest.actionId),
-            timeBudget = Duration.ofMillis(serializedRequest.timeBudgetMillis.toLong()),
+            timeBudget = serializedRequest.timeBudgetMillis.toLong().milliseconds,
             attachments = serializedRequest.attachmentsList.mapNotNull { attachment ->
                 parseAttachment(attachment)
             },
@@ -224,7 +225,7 @@ object ProtobufParser {
                     null
                 },
                 timeWithoutMessageBeforeAlert = if (serializedThing.secondsWithoutMessageBeforeAlert > 0) {
-                    Duration.ofSeconds(serializedThing.secondsWithoutMessageBeforeAlert.toLong())
+                    serializedThing.secondsWithoutMessageBeforeAlert.toLong().seconds
                 } else {
                     null
                 }
@@ -282,7 +283,7 @@ object ProtobufParser {
                             thingId = thing.id,
                             lines = serializedState.debugLog.linesList.map { line ->
                                 ThingState.DebugLog.Line(
-                                    timestamp = Instant.ofEpochMilli(line.timestampEpochMillis),
+                                    timestamp = Instant.fromEpochMilliseconds(line.timestampEpochMillis),
                                     message = line.message,
                                     level = line.level
                                 )
@@ -342,12 +343,12 @@ object ProtobufParser {
                                 null
                             },
                             lastConnectedAt = if (serializedState.network.lastConnectAtEpochSeconds > 0) {
-                                Instant.ofEpochSecond(serializedState.network.lastConnectAtEpochSeconds)
+                                Instant.fromEpochSeconds(serializedState.network.lastConnectAtEpochSeconds)
                             } else {
                                 null
                             },
                             lastDisconnectedAt = if (serializedState.network.lastDisconnectAtEpochSeconds > 0) {
-                                Instant.ofEpochSecond(serializedState.network.lastDisconnectAtEpochSeconds)
+                                Instant.fromEpochSeconds(serializedState.network.lastDisconnectAtEpochSeconds)
                             } else {
                                 null
                             }
