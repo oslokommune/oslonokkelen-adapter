@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.asciidoc.convert)
     alias(libs.plugins.asciidoc.pdf)
     alias(libs.plugins.asciidoc.gems)
-    alias(libs.plugins.jrubyResolver) apply false
 
 }
 
