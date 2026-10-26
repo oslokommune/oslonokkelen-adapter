@@ -13,10 +13,6 @@ allprojects {
     group = "com.github.oslokommune.oslonokkelen.adapter"
     version = "1.0.0-SNAPSHOT"
 
-    repositories {
-        mavenCentral()
-    }
-
     pluginManager.withPlugin("kotlin") {
         tasks.withType<KotlinCompile> {
             compilerOptions {

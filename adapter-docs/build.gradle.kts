@@ -9,10 +9,6 @@ plugins {
 
 }
 
-repositories {
-    mavenCentral()
-}
-
 tasks {
     "asciidoctor"(AsciidoctorTask::class) {
         setOutputDir(file("../docs"))
