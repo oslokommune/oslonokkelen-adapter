@@ -275,6 +275,22 @@ internal class ProtobufSerializerTest {
         }
 
         @Test
+        fun `Empty debug log is left out of serialized manifest`() {
+            val lockedDoor = ThingState.Lock(
+                timestamp = timestamp,
+                thingId = frontDoor.id,
+                locked = true
+            )
+            val emptyDebugLog = ThingState.DebugLog(thingId = frontDoor.id)
+
+            val serialized = ProtobufSerializer.serialize(ManifestSnapshot() + frontDoor + lockedDoor + emptyDebugLog)
+            val restored = ProtobufParser.parse(serialized)
+
+            assertEquals(listOf(Adapter.ThingState.ValueCase.LOCKED), serialized.thingsList.single().stateList.map { it.valueCase })
+            assertEquals(ManifestSnapshot() + frontDoor + lockedDoor, restored.copy(version = 3))
+        }
+
+        @Test
         fun `Serialize manifest with error codes`() {
             test(ManifestSnapshot() + ErrorCodeDescription("some.error", "Some error"))
         }

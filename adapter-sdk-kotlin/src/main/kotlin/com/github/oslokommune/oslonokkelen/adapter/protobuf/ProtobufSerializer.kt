@@ -153,7 +153,7 @@ object ProtobufSerializer {
     }
 
     private fun serializeThingState(manifest: ManifestSnapshot, thing: ThingDescription): List<Adapter.ThingState> {
-        return manifest.thingStates[thing.id]?.data?.map { (_, state) ->
+        return manifest.thingStates[thing.id]?.data?.values?.mapNotNull { state ->
             when (state) {
                 is ThingState.ActionHealth -> {
                     Adapter.ThingState.newBuilder()
@@ -181,7 +181,8 @@ object ProtobufSerializer {
                         .build()
                 }
 
-                is ThingState.DebugLog -> {
+                // An empty log has nothing to report and no timestamp
+                is ThingState.DebugLog -> if (state.lines.isEmpty()) null else {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
                         .setDebugLog(
