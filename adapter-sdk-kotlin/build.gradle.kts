@@ -6,6 +6,6 @@ description = "Oslonøkkelen Adapter Kotlin SDK"
 
 dependencies {
     api(projects.adapterProtobufJava)
-    api(libs.jwt)
-    api(libs.kotlinx.collections)
+    api(libs.nimbus.jose.jwt)
+    api(libs.kotlinx.collections.immutable)
 }

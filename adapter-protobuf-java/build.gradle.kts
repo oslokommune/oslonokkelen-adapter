@@ -7,7 +7,7 @@ project.description = "Defines protobuf messages used in api"
 
 dependencies {
     api(libs.protobuf.java)
-    api(libs.protobuf.javaUtil)
+    api(libs.protobuf.java.util)
 }
 
 protobuf {
