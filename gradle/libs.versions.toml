@@ -2,6 +2,9 @@
 asciidoc = "4.0.5"
 protobuf-java = "4.36.2"
 ktor = "3.6.0"
+kotlin = "2.4.21"
+test-logger = "4.0.0"
+ktlint-gradle = "14.2.0"
 
 [libraries]
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf-java" }
@@ -22,15 +25,15 @@ ktor-client-jvm = { group = "io.ktor", name = "ktor-client-core-jvm", version.re
 ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+test-logger-gradle-plugin = { group = "com.adarshr", name = "gradle-test-logger-plugin", version.ref = "test-logger" }
+ktlint-gradle-plugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint-gradle" }
 
 [bundles]
 testing = ["junit", "assertj"]
 
 [plugins]
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.4.21" }
 protobuf = { id = "com.google.protobuf", version = "0.10.0" }
-testLogger = { id = "com.adarshr.test-logger", version = "4.0.0" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.2.0" }
 asciidoc-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoc" }
 asciidoc-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoc" }
 asciidoc-gems = { id = "org.asciidoctor.jvm.gems", version.ref = "asciidoc" }
