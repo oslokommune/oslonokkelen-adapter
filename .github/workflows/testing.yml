@@ -26,4 +26,4 @@ jobs:
         uses: "gradle/actions/setup-gradle@v6.4.0"
 
       - name: "Run the tests"
-        run: "./gradlew test --configuration-cache --build-cache --no-watch-fs --stacktrace --scan"
+        run: "./gradlew test --no-watch-fs --stacktrace --scan"
