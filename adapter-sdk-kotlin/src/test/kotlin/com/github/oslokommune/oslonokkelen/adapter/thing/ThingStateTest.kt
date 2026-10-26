@@ -7,7 +7,6 @@ import kotlin.time.Clock
 
 internal class ThingStateTest {
 
-
     @Nested
     inner class ThingLog {
 
@@ -29,8 +28,5 @@ internal class ThingStateTest {
             assertThat(log4.lines.map { it.message }).containsExactly("Line 2", "Line 3", "Line 4")
             assertThat(log5.lines.map { it.message }).containsExactly("Line 3", "Line 4", "Line 5")
         }
-
     }
-
-
 }

@@ -35,7 +35,6 @@ object ProtobufParser {
 
     private val log: Logger = LoggerFactory.getLogger(ProtobufParser::class.java)
 
-
     fun parseActionRequestFromClaims(verifiedClaims: JWTClaimsSet): Adapter.ActionRequest {
         val requestClaim = verifiedClaims.getJSONObjectClaim("request")
         val requestBuilder = Adapter.ActionRequest.newBuilder()
@@ -43,40 +42,44 @@ object ProtobufParser {
             .setThingId(requireString(requestClaim, "thingId"))
             .setActionId(requireString(requestClaim, "actionId"))
             .setTimeBudgetMillis(requireLong(requestClaim, "timeBudgetMillis").toInt())
-            .addAllAttachments(requireList(requestClaim, "attachments").mapNotNull { attachment ->
-                if (attachment is Map<*, *>) {
-                    val key = attachment.keys.firstOrNull() as? String
+            .addAllAttachments(
+                requireList(requestClaim, "attachments").mapNotNull { attachment ->
+                    if (attachment is Map<*, *>) {
+                        val key = attachment.keys.firstOrNull() as? String
 
-                    when (key) {
-                        "norwegianFodselsnummer" -> {
-                            val value = attachment.values.firstOrNull() as Map<*, *>
+                        when (key) {
+                            "norwegianFodselsnummer" -> {
+                                val value = attachment.values.firstOrNull() as Map<*, *>
 
-                            Adapter.Attachment.newBuilder()
-                                .setNorwegianFodselsnummer(
-                                    Adapter.Attachment.NorwegianFodselsnummer.newBuilder()
-                                        .setNumber(requireString(value, "number"))
-                                        .build()
-                                )
-                                .build()
+                                Adapter.Attachment.newBuilder()
+                                    .setNorwegianFodselsnummer(
+                                        Adapter.Attachment.NorwegianFodselsnummer.newBuilder()
+                                            .setNumber(requireString(value, "number"))
+                                            .build()
+                                    )
+                                    .build()
+                            }
+
+                            else -> {
+                                null
+                            }
                         }
-
-                        else -> {
-                            null
-                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
                 }
-            })
-            .putAllParameters(optionalMap(requestClaim, "parameters")?.mapNotNull {
-                val key = it.key as? String
-                val value = it.value as? String
-                if(key != null && value != null) {
-                    key to value
-                } else {
-                    null
-                }
-            }?.toMap() ?: emptyMap())
+            )
+            .putAllParameters(
+                optionalMap(requestClaim, "parameters")?.mapNotNull {
+                    val key = it.key as? String
+                    val value = it.value as? String
+                    if (key != null && value != null) {
+                        key to value
+                    } else {
+                        null
+                    }
+                }?.toMap() ?: emptyMap()
+            )
 
         return requestBuilder.build()
     }
@@ -101,7 +104,7 @@ object ProtobufParser {
     }
 
     private fun optionalMap(requestClaim: Map<String, Any>, key: String): Map<*, *>? {
-       return requestClaim[key] as? Map<*, *>
+        return requestClaim[key] as? Map<*, *>
     }
 
     private fun missingKey(key: String, requestClaim: Map<*, *>): IllegalStateException {
@@ -121,9 +124,11 @@ object ProtobufParser {
     }
 
     fun parse(serializedResponse: Adapter.ActionResponse): ActionResponseMessage {
-        return ActionResponseMessage(serializedResponse.attachmentsList.mapNotNull { attachment ->
-            parseAttachment(attachment)
-        })
+        return ActionResponseMessage(
+            serializedResponse.attachmentsList.mapNotNull { attachment ->
+                parseAttachment(attachment)
+            }
+        )
     }
 
     internal fun parseAttachment(attachment: Adapter.Attachment): AdapterAttachment? {
@@ -367,14 +372,12 @@ object ProtobufParser {
                         log.warn("Unsupported thing state detected: {}", serializedState.valueCase)
                         null
                     }
-
                 }
 
                 if (state != null) {
                     thingStates = thingStates.putting(state.key, state)
                 }
             }
-
 
             things = things.putting(thing.id, thing)
 
@@ -401,6 +404,4 @@ object ProtobufParser {
             things = things
         )
     }
-
-
 }

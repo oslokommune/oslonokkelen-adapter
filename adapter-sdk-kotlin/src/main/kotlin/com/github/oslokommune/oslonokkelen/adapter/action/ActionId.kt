@@ -2,7 +2,6 @@ package com.github.oslokommune.oslonokkelen.adapter.action
 
 import com.github.oslokommune.oslonokkelen.adapter.thing.ThingId
 
-
 data class ActionId(val thingId: ThingId, val value: String) {
 
     constructor(thingId: String, actionId: String) : this(ThingId(thingId), actionId)

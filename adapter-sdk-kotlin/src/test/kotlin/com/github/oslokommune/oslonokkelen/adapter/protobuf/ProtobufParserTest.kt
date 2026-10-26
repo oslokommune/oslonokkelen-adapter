@@ -137,5 +137,4 @@ internal class ProtobufParserTest {
 
         assertEquals(expected, parsed)
     }
-
 }

@@ -73,13 +73,15 @@ internal class ErrorCodeDescriptionTest {
 
         val response = errorDescription.createActionResponse()
 
-        assertThat(response).isEqualTo(ActionResponseMessage(
-            AdapterAttachment.ErrorDescription(
-                code = "bad.really.bad",
-                debugMessage = "This is bad..",
-                permanent = true
+        assertThat(response).isEqualTo(
+            ActionResponseMessage(
+                AdapterAttachment.ErrorDescription(
+                    code = "bad.really.bad",
+                    debugMessage = "This is bad..",
+                    permanent = true
+                )
             )
-        ))
+        )
     }
 
     @Test
@@ -92,13 +94,15 @@ internal class ErrorCodeDescriptionTest {
 
         val response = errorDescription.createActionResponse()
 
-        assertThat(response).isEqualTo(ActionResponseMessage(
-            AdapterAttachment.ErrorDescription(
-                code = "semi.bad",
-                debugMessage = "This is semi bad..",
-                permanent = false
+        assertThat(response).isEqualTo(
+            ActionResponseMessage(
+                AdapterAttachment.ErrorDescription(
+                    code = "semi.bad",
+                    debugMessage = "This is semi bad..",
+                    permanent = false
+                )
             )
-        ))
+        )
     }
 
     @Test
@@ -111,13 +115,15 @@ internal class ErrorCodeDescriptionTest {
 
         val response = errorDescription.createActionResponse("Could be worse...")
 
-        assertThat(response).isEqualTo(ActionResponseMessage(
-            AdapterAttachment.ErrorDescription(
-                code = "semi.bad",
-                debugMessage = "Could be worse...",
-                permanent = false
+        assertThat(response).isEqualTo(
+            ActionResponseMessage(
+                AdapterAttachment.ErrorDescription(
+                    code = "semi.bad",
+                    debugMessage = "Could be worse...",
+                    permanent = false
+                )
             )
-        ))
+        )
     }
 
     @Test
@@ -130,12 +136,14 @@ internal class ErrorCodeDescriptionTest {
 
         val response = errorDescription.createActionResponse("Members only")
 
-        assertThat(response).isEqualTo(ActionResponseMessage(
-            AdapterAttachment.DeniedReason(
-                debugMessage = "Members only",
-                code = "no.access"
+        assertThat(response).isEqualTo(
+            ActionResponseMessage(
+                AdapterAttachment.DeniedReason(
+                    debugMessage = "Members only",
+                    code = "no.access"
+                )
             )
-        ))
+        )
     }
 
     @Test
@@ -147,13 +155,14 @@ internal class ErrorCodeDescriptionTest {
 
         val response = errorDescription.createActionResponse(IllegalStateException("You didn't see this coming!"))
 
-        assertThat(response).isEqualTo(ActionResponseMessage(
-            AdapterAttachment.ErrorDescription(
-                code = "unexpected",
-                debugMessage = "java.lang.IllegalStateException: You didn't see this coming!",
-                permanent = true
+        assertThat(response).isEqualTo(
+            ActionResponseMessage(
+                AdapterAttachment.ErrorDescription(
+                    code = "unexpected",
+                    debugMessage = "java.lang.IllegalStateException: You didn't see this coming!",
+                    permanent = true
+                )
             )
-        ))
+        )
     }
-
 }

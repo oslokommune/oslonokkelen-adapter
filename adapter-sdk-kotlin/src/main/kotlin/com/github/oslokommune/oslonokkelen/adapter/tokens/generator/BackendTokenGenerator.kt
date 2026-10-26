@@ -33,7 +33,6 @@ class BackendTokenGenerator(
     private val jwtIdGenerator: () -> String = { UUID.randomUUID().toString() }
 ) {
 
-
     fun createManifestScrapeToken(remoteUri: URI): SignedJWT {
         return buildToken {
             audience("${remoteUri.scheme}://${remoteUri.host}")
@@ -110,7 +109,6 @@ class BackendTokenGenerator(
         return signedJWT
     }
 
-
     companion object {
 
         private val generator = ECKeyGenerator(Curve.P_256)
@@ -124,7 +122,5 @@ class BackendTokenGenerator(
                 generator.keyIDFromThumbprint(true).generate()
             }
         }
-
     }
-
 }

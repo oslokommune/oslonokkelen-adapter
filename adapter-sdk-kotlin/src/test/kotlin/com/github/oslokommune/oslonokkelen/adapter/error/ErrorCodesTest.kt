@@ -54,5 +54,4 @@ internal class ErrorCodesTest {
 
         assertEquals(expected, rev2)
     }
-
 }

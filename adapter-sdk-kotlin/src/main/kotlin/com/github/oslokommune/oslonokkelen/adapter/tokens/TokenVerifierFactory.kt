@@ -28,7 +28,6 @@ class TokenVerifierFactory(
     private val keySource: JWKSource<SecurityContext>
 ) {
 
-
     fun createVerifierForScopes(requiredScope: String): TokenVerifier {
         val requiredClaims = setOf("iat", "exp", "jti")
 
@@ -68,6 +67,4 @@ class TokenVerifierFactory(
             }
         }
     }
-
 }
-

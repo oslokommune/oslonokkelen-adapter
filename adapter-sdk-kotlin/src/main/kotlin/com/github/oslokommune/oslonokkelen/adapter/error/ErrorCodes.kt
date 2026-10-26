@@ -27,5 +27,4 @@ data class ErrorCodes(val codes: PersistentMap<ErrorCode, ErrorCodeDescription> 
             this
         }
     }
-
 }

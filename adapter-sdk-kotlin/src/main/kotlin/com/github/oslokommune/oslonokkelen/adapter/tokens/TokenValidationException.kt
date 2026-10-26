@@ -8,10 +8,9 @@ sealed class TokenValidationException(message: String, cause: Throwable? = null)
 
     class Unknown(cause: Exception) : TokenValidationException("Unknown token validation exception", cause)
 
-    class TokenReplayDetectorCapacityExceeded(size: Int)
-        : TokenValidationException("Token replay detector capacity exceeded ($size tokens)")
+    class TokenReplayDetectorCapacityExceeded(size: Int) :
+        TokenValidationException("Token replay detector capacity exceeded ($size tokens)")
 
-    class TokenReplayDetected(id: String)
-        : TokenValidationException("Token $id has already been used")
-
+    class TokenReplayDetected(id: String) :
+        TokenValidationException("Token $id has already been used")
 }

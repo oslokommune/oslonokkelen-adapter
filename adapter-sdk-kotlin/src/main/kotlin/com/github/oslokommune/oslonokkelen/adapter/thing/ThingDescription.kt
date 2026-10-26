@@ -3,7 +3,6 @@ package com.github.oslokommune.oslonokkelen.adapter.thing
 import java.net.URI
 import kotlin.time.Duration
 
-
 /**
  * @param id Unique within the adapter
  * @param description Short one-line description (example: door 2 on second floor)

@@ -42,7 +42,6 @@ class BackendTokenGeneratorTest {
         println(token.serialize())
     }
 
-
     companion object {
 
         private val rightNow = Clock.System.now()
@@ -69,7 +68,5 @@ class BackendTokenGeneratorTest {
             tokenExpireTime = 30.seconds,
             timestamper = { rightNow }
         )
-
     }
-
 }

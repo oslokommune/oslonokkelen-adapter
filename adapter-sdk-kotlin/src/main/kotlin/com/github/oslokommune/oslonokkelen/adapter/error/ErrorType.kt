@@ -5,5 +5,4 @@ enum class ErrorType {
     DENIED,
     PERMANENT_ERROR,
     TEMPORARY_ERROR
-
 }

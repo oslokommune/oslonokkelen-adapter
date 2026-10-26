@@ -77,7 +77,8 @@ internal class ThingStateSnapshotTest {
 
         assertThat(modifiedSnapshot).isEqualTo(
             ThingStateSnapshot(
-                closedFrontDoor, lockedFrontDoor
+                closedFrontDoor,
+                lockedFrontDoor
             )
         )
     }
@@ -94,5 +95,4 @@ internal class ThingStateSnapshotTest {
 
         assertThat(ex).hasMessage("Tried to add state belonging to thing: back-door to thing: front-door")
     }
-
 }

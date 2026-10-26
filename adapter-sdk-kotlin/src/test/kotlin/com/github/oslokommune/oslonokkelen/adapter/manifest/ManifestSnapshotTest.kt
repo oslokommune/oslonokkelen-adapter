@@ -77,7 +77,6 @@ internal class ManifestSnapshotTest {
 
             assertThat(updated).isEqualTo(ManifestSnapshot(version = 3))
         }
-
     }
 
     @Nested
@@ -147,7 +146,6 @@ internal class ManifestSnapshotTest {
                 ManifestSnapshot(version = 3)
             )
         }
-
 
         @Nested
         inner class Actions {
@@ -228,7 +226,6 @@ internal class ManifestSnapshotTest {
 
                 assertSame(original, same)
             }
-
         }
 
         @Nested
@@ -393,11 +390,8 @@ internal class ManifestSnapshotTest {
 
                 assertSame(original, same)
             }
-
         }
-
     }
-
 
     @Nested
     inner class Debug {
@@ -450,7 +444,6 @@ internal class ManifestSnapshotTest {
 
             assertEquals(expectedManifest, withUpdatedDoorAndState)
         }
-
     }
 
     private fun createThingDescription(id: String, description: String = "Description of $id"): ThingDescription {
@@ -463,5 +456,4 @@ internal class ManifestSnapshotTest {
             timeWithoutMessageBeforeAlert = null
         )
     }
-
 }

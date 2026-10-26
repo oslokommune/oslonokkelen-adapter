@@ -39,5 +39,4 @@ internal class InMemoryTokenReplayDetectorTest {
             detector.append("t1", now.plus(10.seconds))
         }
     }
-
 }

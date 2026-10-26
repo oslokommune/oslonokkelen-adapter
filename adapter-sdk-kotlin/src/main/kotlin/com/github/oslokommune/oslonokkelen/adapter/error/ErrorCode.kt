@@ -20,6 +20,5 @@ data class ErrorCode(val code: String) {
         const val CODE_MAX_LENGTH = 100
 
         private val validationPattern = Regex("^[a-z0-9\\-]{1,30}$")
-
     }
 }

@@ -1,8 +1,6 @@
 package com.github.oslokommune.oslonokkelen.adapter.tokens
 
 import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.BackendTokenGenerator
-import com.github.oslokommune.oslonokkelen.adapter.tokens.generator.TokenSigningKeySupplier
-import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet
 import com.nimbusds.jose.jwk.source.JWKSource
@@ -166,14 +164,14 @@ internal class TokenVerifierFactoryTest {
         }
     }
 
-
     private fun createVerificationFactory(
         expectedIssuer: URI = backendUri,
         expectedAudience: URI = adapterUri,
         keySource: JWKSource<SecurityContext> = ImmutableJWKSet(JWKSet()),
         replayDetector: TokenReplayDetector = InMemoryTokenReplayDetector(
             capacity = 3,
-            timestamper = { Clock.System.now() })
+            timestamper = { Clock.System.now() }
+        )
     ): TokenVerifierFactory {
         return TokenVerifierFactory(
             expectedIssuer = expectedIssuer,
@@ -182,5 +180,4 @@ internal class TokenVerifierFactoryTest {
             keySource = keySource
         )
     }
-
 }

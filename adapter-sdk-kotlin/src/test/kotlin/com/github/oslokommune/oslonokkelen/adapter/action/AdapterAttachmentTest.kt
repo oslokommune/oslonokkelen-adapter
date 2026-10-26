@@ -42,7 +42,7 @@ internal class AdapterAttachmentTest {
     }
 
     @Test
-    fun `Can add error source to error description` () {
+    fun `Can add error source to error description`() {
         val errorDescription = AdapterAttachment.ErrorDescription("Test", "Test")
         val response = errorDescription + AdapterAttachment.ErrorCategory.ThingError
 
@@ -64,5 +64,4 @@ internal class AdapterAttachmentTest {
             source + AdapterAttachment.ErrorCategory.ThingError
         }
     }
-
 }

@@ -4,7 +4,5 @@ import com.nimbusds.jwt.JWTClaimsSet
 
 fun interface TokenVerifier {
 
-    fun verify(rawToken: String) : JWTClaimsSet
-
+    fun verify(rawToken: String): JWTClaimsSet
 }
-

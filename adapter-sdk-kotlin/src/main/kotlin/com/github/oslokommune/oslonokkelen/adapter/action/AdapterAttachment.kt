@@ -94,7 +94,9 @@ sealed class AdapterAttachment {
     data class ErrorCategory(val value: Value) : AdapterAttachment() {
 
         enum class Value {
-            API_ERROR, THING_ERROR, NETWORK_ERROR;
+            API_ERROR,
+            THING_ERROR,
+            NETWORK_ERROR
         }
 
         companion object {

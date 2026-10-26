@@ -6,7 +6,6 @@ data class ActionResponseMessage(val attachments: List<AdapterAttachment> = empt
 
     constructor(vararg attachments: AdapterAttachment) : this(attachments.toList())
 
-
     val status: Adapter.ActionResponse.Status
         get() {
             for (attachment in attachments) {

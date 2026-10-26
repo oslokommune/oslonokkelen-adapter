@@ -23,7 +23,6 @@ import kotlin.time.Instant
 
 internal class ProtobufSerializerTest {
 
-
     @Nested
     inner class Action {
 
@@ -167,7 +166,6 @@ internal class ProtobufSerializerTest {
             assertEquals(response, parsedResponse)
             assertEquals(Adapter.ActionResponse.Status.SUCCESS, parsedResponse.status)
         }
-
     }
 
     @Nested
@@ -281,14 +279,11 @@ internal class ProtobufSerializerTest {
             test(ManifestSnapshot() + ErrorCodeDescription("some.error", "Some error"))
         }
 
-
         private fun test(originalSnapshot: ManifestSnapshot) {
             val serialized = ProtobufSerializer.serialize(originalSnapshot)
             val restored = ProtobufParser.parse(serialized)
 
             assertEquals(originalSnapshot, restored)
         }
-
     }
-
 }

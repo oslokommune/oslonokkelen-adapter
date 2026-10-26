@@ -15,7 +15,7 @@ data class ErrorCodeDescription(
     val type: ErrorType = PERMANENT_ERROR
 ) {
 
-    fun createActionResponse(trouble: Throwable) : ActionResponseMessage {
+    fun createActionResponse(trouble: Throwable): ActionResponseMessage {
         return createActionResponse("${trouble.javaClass.canonicalName}: ${trouble.message}")
     }
 
@@ -58,11 +58,8 @@ data class ErrorCodeDescription(
         }
     }
 
-
     companion object {
 
         const val DESCRIPTION_MAX_LENGTH = 1000
-
     }
-
 }

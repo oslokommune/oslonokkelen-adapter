@@ -46,7 +46,6 @@ sealed class ThingState {
         override fun toString(): String {
             return "${thingId.value} locked: $locked"
         }
-
     }
 
     data class OpenPosition(
@@ -127,9 +126,7 @@ sealed class ThingState {
         companion object {
 
             const val DEFAULT_MAX_LENGTH = 10
-
         }
-
     }
 
     data class BatteryStatus(
@@ -141,15 +138,16 @@ sealed class ThingState {
         override val key = Key(thingId, "thing.${thingId.value}.battery")
 
         enum class State {
-            EMPTY, GOOD, POOR
+            EMPTY,
+            GOOD,
+            POOR
         }
-
     }
 
     data class Online(
         override val timestamp: Instant,
         override val thingId: ThingId,
-        val status : Status,
+        val status: Status,
         val lastSeen: Instant?,
         val explanation: String?
     ) : ThingState(), ComparableThingState {
@@ -161,7 +159,9 @@ sealed class ThingState {
         }
 
         enum class Status {
-            REPORTED_ONLINE, REPORTED_OFFLINE, ONLINE_STATUS_UNSUPPORTED
+            REPORTED_ONLINE,
+            REPORTED_OFFLINE,
+            ONLINE_STATUS_UNSUPPORTED
         }
     }
 
@@ -179,7 +179,6 @@ sealed class ThingState {
             return other is DeviceType && manufacturer == other.manufacturer && model == other.model && firmwareVersion == other.firmwareVersion
         }
     }
-
 
     data class Key(
         val thingId: ThingId,
@@ -202,6 +201,5 @@ sealed class ThingState {
         override fun hasSameStateAs(other: ThingState): Boolean {
             return other is Properties && props == other.props
         }
-
     }
 }

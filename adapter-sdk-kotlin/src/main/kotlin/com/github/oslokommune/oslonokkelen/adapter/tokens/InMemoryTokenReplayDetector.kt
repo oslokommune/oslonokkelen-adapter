@@ -62,9 +62,7 @@ class InMemoryTokenReplayDetector(
         log.info("Purged {} expired tokens", removed)
     }
 
-
     companion object {
-        private val log : Logger = LoggerFactory.getLogger(InMemoryTokenReplayDetector::class.java)
+        private val log: Logger = LoggerFactory.getLogger(InMemoryTokenReplayDetector::class.java)
     }
-
 }

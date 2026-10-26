@@ -42,21 +42,23 @@ object ProtobufSerializer {
 
             is AdapterAttachment.Code -> {
                 Adapter.Attachment.newBuilder()
-                    .setCode(Adapter.Attachment.Code.newBuilder().run {
-                        code = attachment.code
-                        id = attachment.id
+                    .setCode(
+                        Adapter.Attachment.Code.newBuilder().run {
+                            code = attachment.code
+                            id = attachment.id
 
-                        if (attachment.expiresAt != null) {
-                            expiresAt = attachment.expiresAt.toString()
+                            if (attachment.expiresAt != null) {
+                                expiresAt = attachment.expiresAt.toString()
+                            }
+                            if (attachment.headerText != null) {
+                                headerText = attachment.headerText
+                            }
+                            if (attachment.footerText != null) {
+                                footerText = attachment.footerText
+                            }
+                            build()
                         }
-                        if (attachment.headerText != null) {
-                            headerText = attachment.headerText
-                        }
-                        if (attachment.footerText != null) {
-                            footerText = attachment.footerText
-                        }
-                        build()
-                    })
+                    )
                     .build()
             }
 
@@ -73,21 +75,23 @@ object ProtobufSerializer {
 
             is AdapterAttachment.EndUserMessage -> {
                 Adapter.Attachment.newBuilder()
-                    .setEndUserMessage(Adapter.Attachment.EndUserMessage.newBuilder().run {
-                        message = Adapter.TextContent.newBuilder()
-                            .setContentType(Adapter.TextContent.ContentType.PLAIN_TEXT)
-                            .setMessage(attachment.message)
-                            .build()
+                    .setEndUserMessage(
+                        Adapter.Attachment.EndUserMessage.newBuilder().run {
+                            message = Adapter.TextContent.newBuilder()
+                                .setContentType(Adapter.TextContent.ContentType.PLAIN_TEXT)
+                                .setMessage(attachment.message)
+                                .build()
 
-                        if (attachment.link != null) {
-                            link = attachment.link.link.toString()
+                            if (attachment.link != null) {
+                                link = attachment.link.link.toString()
 
-                            if (attachment.link.name != null) {
-                                linkName = attachment.link.name
+                                if (attachment.link.name != null) {
+                                    linkName = attachment.link.name
+                                }
                             }
+                            build()
                         }
-                        build()
-                    })
+                    )
                     .build()
             }
 
@@ -104,7 +108,7 @@ object ProtobufSerializer {
             }
 
             is AdapterAttachment.ErrorCategory -> {
-                when(attachment.value) {
+                when (attachment.value) {
                     AdapterAttachment.ErrorCategory.Value.THING_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.THING_ERROR).build()
                     AdapterAttachment.ErrorCategory.Value.API_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.API_ERROR).build()
                     AdapterAttachment.ErrorCategory.Value.NETWORK_ERROR -> Adapter.Attachment.newBuilder().setErrorCategory(Adapter.Attachment.ErrorCategory.NETWORK_ERROR).build()
@@ -300,19 +304,18 @@ object ProtobufSerializer {
                 is ThingState.Properties -> {
                     Adapter.ThingState.newBuilder()
                         .setLastUpdate(state.timestamp.toString())
-                        .setProperties(Adapter.ThingState.Properties.newBuilder()
-                            .putAllProps(state.props)
-                            .build())
+                        .setProperties(
+                            Adapter.ThingState.Properties.newBuilder()
+                                .putAllProps(state.props)
+                                .build()
+                        )
                         .build()
                 }
             }
         } ?: emptyList()
     }
 
-    private fun serializeActions(
-        manifest: ManifestSnapshot,
-        thing: ThingDescription
-    ): List<Adapter.AdapterManifest.Action> {
+    private fun serializeActions(manifest: ManifestSnapshot, thing: ThingDescription): List<Adapter.AdapterManifest.Action> {
         val actionList = manifest.actions[thing.id]?.map { (_, action) ->
             Adapter.AdapterManifest.Action.newBuilder()
                 .setId(action.id.value)
@@ -325,5 +328,4 @@ object ProtobufSerializer {
 
         return actionList.sortedBy { it.id }
     }
-
 }

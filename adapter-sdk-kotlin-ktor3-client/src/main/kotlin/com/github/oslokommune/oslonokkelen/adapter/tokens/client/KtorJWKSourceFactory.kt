@@ -32,11 +32,7 @@ object KtorJWKSourceFactory {
         val url = "$backendUri/adapter/v2/keys"
 
         return JWKSourceBuilder.create(object : JWKSetSource<SecurityContext> {
-            override fun getJWKSet(
-                refreshEvaluator: JWKSetCacheRefreshEvaluator?,
-                currentTime: Long,
-                context: SecurityContext?
-            ): JWKSet {
+            override fun getJWKSet(refreshEvaluator: JWKSetCacheRefreshEvaluator?, currentTime: Long, context: SecurityContext?): JWKSet {
                 return runBlocking {
                     log.info("Downloading all the keys from {}", url)
                     val response = httpClient.get(url) {
@@ -60,5 +56,4 @@ object KtorJWKSourceFactory {
             .rateLimited(rateLimited)
             .build()
     }
-
 }

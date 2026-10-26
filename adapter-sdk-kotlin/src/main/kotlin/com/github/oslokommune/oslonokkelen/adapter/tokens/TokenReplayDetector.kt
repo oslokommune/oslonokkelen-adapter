@@ -12,6 +12,4 @@ fun interface TokenReplayDetector {
      * expire date before invoking this.
      */
     fun append(tokenId: String, expiresAt: Instant)
-
 }
-
