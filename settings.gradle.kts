@@ -14,6 +14,7 @@ pluginManagement {
             forRepository { gradlePluginPortal() }
             filter {
                 includeGroupAndSubgroups("com.adarshr")
+                includeGroupAndSubgroups("com.gradle")
                 includeGroupAndSubgroups("com.google.protobuf")
                 includeGroupAndSubgroups("org.asciidoctor")
                 includeGroupAndSubgroups("org.gradle.toolchains")
