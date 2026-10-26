@@ -1,5 +1,4 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("oslonokkelen.java-library")
@@ -9,12 +8,6 @@ plugins {
 }
 
 val libs = versionCatalogs.named("libs")
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
-    }
-}
 
 dependencies {
     implementation(platform(libs.findLibrary("slf4j-bom").get()))

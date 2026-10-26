@@ -16,12 +16,17 @@ pluginManagement {
                 includeGroupAndSubgroups("com.adarshr")
                 includeGroupAndSubgroups("com.google.protobuf")
                 includeGroupAndSubgroups("org.asciidoctor")
+                includeGroupAndSubgroups("org.gradle.toolchains")
                 includeGroupAndSubgroups("org.jlleitschuh.gradle")
                 includeGroupAndSubgroups("org.ysb33r")
             }
         }
         mavenCentral()
     }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 dependencyResolutionManagement {
