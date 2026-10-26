@@ -1,4 +1,3 @@
-import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import java.io.InputStream
 import java.util.concurrent.TimeUnit.SECONDS
 
@@ -6,95 +5,58 @@ plugins {
     alias(libs.plugins.asciidoc.convert)
     alias(libs.plugins.asciidoc.pdf)
     alias(libs.plugins.asciidoc.gems)
-
 }
 
-tasks {
-    "asciidoctor"(AsciidoctorTask::class) {
-        setOutputDir(file("../docs"))
-        outputOptions {
-            if (project.hasProperty("pdf")) {
-                backends("pdf")
-            } else {
-                backends("html5")
-            }
+tasks.asciidoctor {
+    setOutputDir(file("../docs"))
+    outputOptions {
+        if (project.hasProperty("pdf")) {
+            backends("pdf")
+        } else {
+            backends("html5")
         }
-        resources {
-            include("images/**")
-        }
-        attributes(
-            mapOf(
-                "toc" to "left",
-                "toclevels" to "3",
-                "source-highlighter" to "highlightjs"
-            )
+    }
+    resources {
+        include("images/**")
+    }
+    attributes(
+        mapOf(
+            "toc" to "left",
+            "toclevels" to "3",
+            "source-highlighter" to "highlightjs"
         )
-        setBaseDir(file("src/docs/asciidoc"))
+    )
+    setBaseDir(file("src/docs/asciidoc"))
 
-        dependsOn("docs-verify-graphviz")
-        dependsOn("docs-verify-seqdiag")
-        dependsOn("docs-verify-blockdiag")
-        dependsOn("docs-verify-bob")
+    doFirst {
+        ProcessUtil.requireTool("graphviz", "sudo apt install graphviz", "dot", "-V")
+        ProcessUtil.requireTool("seqdiag", "sudo pip3 install seqdiag", "seqdiag", "--version")
+        ProcessUtil.requireTool("blockdiag", "sudo pip3 install blockdiag", "blockdiag", "--version")
+        ProcessUtil.requireTool(
+            "svgbob",
+            "cargo install --git https://github.com/ivanceras/svgbob --rev 2bf94a2eddff2215b5f43e21658502c98d945941",
+            "svgbob",
+            "--help"
+        )
     }
 }
 
 
 asciidoctorj {
-    setVersion("2.5.2")
-    modules.diagram.setVersion("2.2.1")
+    setVersion(libs.versions.asciidoctorj.asProvider().get())
+    modules.diagram.setVersion(libs.versions.asciidoctorj.diagram.get())
     logLevel = LogLevel.INFO
-}
-
-
-tasks.register<DefaultTask>("docs-verify-graphviz") {
-    doFirst {
-        try {
-            ProcessUtil.execute("dot", "-V")
-        } catch (ignored: Exception) {
-            throw GradleException("Unable to find 'dot'. Please install graphviz.\nThis is required for generating documentation diagrams.\n\n\u001B[91msudo apt install graphviz\u001B[0m")
-        }
-    }
-}
-
-tasks.register<DefaultTask>("docs-verify-seqdiag") {
-    doFirst {
-        try {
-            ProcessUtil.execute("seqdiag", "--version")
-        } catch (ignored: Exception) {
-            throw GradleException("Unable to find 'seqdiag'. Please install seqdiag3.\nThis is required for generating documentation diagrams.\n\n\u001B[91msudo pip3 install seqdiag\u001B[0m")
-        }
-    }
-}
-
-tasks.register<DefaultTask>("docs-verify-blockdiag") {
-    doFirst {
-        try {
-            ProcessUtil.execute("blockdiag", "--version")
-        } catch (ignored: Exception) {
-            throw GradleException("Unable to find 'blockdiagat '. Please install seqdiag3.\nThis is required for generating documentation diagrams.\n\n\u001B[91msudo pip3 install blockdiag\u001B[0m")
-        }
-    }
-}
-
-tasks.register<DefaultTask>("docs-verify-bob") {
-    doFirst {
-        try {
-            ProcessUtil.execute("svgbob", "--help")
-        } catch (ignored: Exception) {
-            throw GradleException("Unable to find 'svgbob'. Please install it.\nThis is required for generating documentation diagrams.\n\n\u001B[91mcargo install --git https://github.com/ivanceras/svgbob --rev 2bf94a2eddff2215b5f43e21658502c98d945941\u001B[0m")
-        }
-    }
 }
 
 
 object ProcessUtil {
 
-    fun execute(workingDirectory: File, vararg command: String): ProcessOutput {
-        val process = ProcessBuilder(*command)
-            .directory(workingDirectory)
-            .start()
-
-        return execute(process, command)
+    fun requireTool(name: String, installHint: String, vararg command: String) {
+        try {
+            execute(*command)
+        } catch (ignored: Exception) {
+            throw GradleException("Unable to find '${command.first()}'. Please install $name.\nThis is required for generating documentation diagrams.\n\n\u001B[91m$installHint\u001B[0m")
+        }
     }
 
     fun execute(vararg command: String): ProcessOutput {
