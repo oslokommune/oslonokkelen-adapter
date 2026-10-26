@@ -8,6 +8,7 @@ plugins {
 }
 
 tasks.asciidoctor {
+    notCompatibleWithConfigurationCache("The Asciidoctor Gradle plugin holds references to Project and other build model types")
     setOutputDir(file("../docs"))
     outputOptions {
         if (project.hasProperty("pdf")) {
