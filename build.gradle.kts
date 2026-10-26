@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("idea")
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.testLogger)
-    alias(libs.plugins.protobuf)
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.testLogger) apply false
+    alias(libs.plugins.protobuf) apply false
     alias(libs.plugins.ktlint)
 }
 

@@ -9,6 +9,7 @@ plugins {
 
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.testLogger)
+    alias(libs.plugins.ktlint)
     id("java")
 }
 
