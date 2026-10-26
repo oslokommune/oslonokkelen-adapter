@@ -2,7 +2,6 @@ package com.github.oslokommune.oslonokkelen.adapter.tokens
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -20,14 +19,18 @@ class InMemoryTokenReplayDetector(
     private val timestamper: () -> Instant = { Clock.System.now() }
 ) : TokenReplayDetector {
 
-    private val entries = ConcurrentHashMap<String, Instant>(capacity)
+    private val entries = HashMap<String, Instant>(capacity)
 
+    /**
+     * Synchronized so the capacity check and insert happen atomically.
+     */
+    @Synchronized
     override fun append(tokenId: String, expiresAt: Instant) {
-        if (entries.size == capacity) {
+        if (entries.size >= capacity) {
             log.info("Capacity reached, will purge expired tokens")
             purgeExpiredTokens()
 
-            if (entries.size == capacity) {
+            if (entries.size >= capacity) {
                 throw TokenValidationException.TokenReplayDetectorCapacityExceeded(entries.size)
             }
         }
@@ -44,7 +47,6 @@ class InMemoryTokenReplayDetector(
      * so it is safe to remove it from our list as re-using an
      * expired token is detected.
      */
-    @Synchronized
     private fun purgeExpiredTokens() {
         val iterator = entries.iterator()
         val now = timestamper()
