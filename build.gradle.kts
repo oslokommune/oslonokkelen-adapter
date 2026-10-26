@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("idea")
-    id("jacoco")
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.testLogger)
     alias(libs.plugins.protobuf)
