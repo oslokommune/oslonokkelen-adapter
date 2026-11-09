@@ -21,4 +21,4 @@ jobs:
           java-version-file: '.sdkmanrc'
 
       - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@v6.4.0
+        uses: gradle/actions/dependency-submission@v6.4.1
