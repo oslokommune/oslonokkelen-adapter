@@ -35,7 +35,7 @@ ktlint-gradle-plugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle
 testing = ["junit", "assertj"]
 
 [plugins]
-protobuf = { id = "com.google.protobuf", version = "0.10.0" }
+protobuf = { id = "com.google.protobuf", version = "0.10.1" }
 asciidoc-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoc" }
 asciidoc-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoc" }
 asciidoc-gems = { id = "org.asciidoctor.jvm.gems", version.ref = "asciidoc" }
